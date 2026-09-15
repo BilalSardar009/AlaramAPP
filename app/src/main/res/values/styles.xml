@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ShapeAppearance.Roza.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Roza.Card" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Roza.Hero" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">32dp</item>
+        <item name="cornerSizeBottomRight">32dp</item>
+    </style>
+
+    <!-- ===== Text ===== -->
+    <style name="TextAppearance.Roza.Display" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="TextAppearance.Roza.Clock" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <style name="TextAppearance.Roza.Caption" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:letterSpacing">0.14</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.Roza.Section" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.Roza.Urdu" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <!-- ===== Widgets ===== -->
+    <style name="Widget.Roza.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">22dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardUseCompatPadding">false</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.Roza.Chip.Day" parent="Widget.Material3.Chip.Filter">
+        <item name="chipMinHeight">40dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="chipStartPadding">2dp</item>
+        <item name="chipEndPadding">2dp</item>
+        <item name="android:checkable">true</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <style name="Widget.Roza.Chip.Choice" parent="Widget.Material3.Chip.Filter">
+        <item name="chipMinHeight">44dp</item>
+        <item name="checkedIconVisible">true</item>
+    </style>
+
+    <style name="Widget.Roza.SectionLabel" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.Roza.Section</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="Widget.Roza.Row" parent="">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.Roza.Button.Ring" parent="Widget.Material3.Button">
+        <item name="android:minHeight">60dp</item>
+        <item name="cornerRadius">30dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
+
+    <style name="Widget.Roza.Button.Ring.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">60dp</item>
+        <item name="cornerRadius">30dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

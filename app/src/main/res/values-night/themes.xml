@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.RozaAlarm" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_green_light</item>
+        <item name="colorOnPrimary">#00382B</item>
+        <item name="colorPrimaryContainer">#0F5443</item>
+        <item name="colorOnPrimaryContainer">#C7EEE0</item>
+
+        <item name="colorSecondary">@color/brand_gold</item>
+        <item name="colorOnSecondary">#402D00</item>
+        <item name="colorSecondaryContainer">#5C4413</item>
+        <item name="colorOnSecondaryContainer">@color/brand_gold_light</item>
+
+        <item name="colorTertiary">@color/brand_green_light</item>
+        <item name="colorOnTertiary">#00382B</item>
+
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorOnBackground">@color/dark_on_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnSurface">@color/dark_on_background</item>
+        <item name="colorSurfaceVariant">@color/dark_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/dark_on_surface_variant</item>
+        <item name="colorOutline">@color/dark_outline</item>
+        <item name="colorError">#FF8A7A</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="materialAlertDialogTheme">@style/Theme.RozaAlarm.Dialog</item>
+        <item name="materialTimePickerTheme">@style/Theme.RozaAlarm.TimePicker</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.RozaAlarm.BottomSheet</item>
+    </style>
+</resources>

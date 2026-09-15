@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="160dp"
+    android:height="160dp"
+    android:viewportWidth="160"
+    android:viewportHeight="160">
+
+    <!-- Night disc -->
+    <path android:pathData="M80,14 a66,66 0 1,1 -0.1,0 z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="80"
+                android:centerY="62"
+                android:gradientRadius="82"
+                android:startColor="#17624F"
+                android:centerColor="#0B3529"
+                android:endColor="#04140F" />
+        </aapt:attr>
+    </path>
+
+    <!-- Gold rim -->
+    <path
+        android:pathData="M80,8 a72,72 0 1,1 -0.1,0 z"
+        android:strokeWidth="3"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="12"
+                android:startY="12"
+                android:endX="148"
+                android:endY="148"
+                android:startColor="#F6D79B"
+                android:centerColor="#E3B662"
+                android:endColor="#8F6A22" />
+        </aapt:attr>
+    </path>
+
+    <!-- Inner hairline rim -->
+    <path
+        android:pathData="M80,20 a60,60 0 1,1 -0.1,0 z"
+        android:strokeWidth="1"
+        android:strokeColor="#40E3B662"
+        android:fillColor="#00000000" />
+
+    <!-- Hour ticks: the alarm half of the identity -->
+    <path android:pathData="M80,24 L80,32" android:strokeWidth="3" android:strokeColor="#CCE3B662" android:strokeLineCap="round" />
+    <path android:pathData="M80,128 L80,136" android:strokeWidth="3" android:strokeColor="#66E3B662" android:strokeLineCap="round" />
+    <path android:pathData="M24,80 L32,80" android:strokeWidth="3" android:strokeColor="#66E3B662" android:strokeLineCap="round" />
+    <path android:pathData="M128,80 L136,80" android:strokeWidth="3" android:strokeColor="#66E3B662" android:strokeLineCap="round" />
+
+    <!-- Crescent -->
+    <group
+        android:translateX="30.4"
+        android:translateY="28.4"
+        android:scaleX="4.3"
+        android:scaleY="4.3">
+        <path android:pathData="M12,3a9,9 0 1,0 9,9c0,-0.46 -0.04,-0.92 -0.1,-1.36a5.389,5.389 0 0,1 -4.4,2.26a5.403,5.403 0 0,1 -3.14,-9.8c-0.44,-0.06 -0.9,-0.1 -1.36,-0.1z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:type="linear"
+                    android:startX="3"
+                    android:startY="3"
+                    android:endX="21"
+                    android:endY="21"
+                    android:startColor="#FFF3D9"
+                    android:centerColor="#F0C978"
+                    android:endColor="#C89239" />
+            </aapt:attr>
+        </path>
+    </group>
+
+    <!-- Companion stars -->
+    <group android:translateX="98" android:translateY="36" android:scaleX="0.75" android:scaleY="0.75">
+        <path
+            android:fillColor="#FFF6E3B6"
+            android:pathData="M12,17.27L18.18,21l-1.64,-7.03L22,9.24l-7.19,-0.61L12,2 9.19,8.63 2,9.24l5.46,4.73L5.82,21z" />
+    </group>
+    <group android:translateX="34" android:translateY="96" android:scaleX="0.45" android:scaleY="0.45">
+        <path
+            android:fillColor="#B3F6E3B6"
+            android:pathData="M12,17.27L18.18,21l-1.64,-7.03L22,9.24l-7.19,-0.61L12,2 9.19,8.63 2,9.24l5.46,4.73L5.82,21z" />
+    </group>
+</vector>

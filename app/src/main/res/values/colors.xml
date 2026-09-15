@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== Brand ===== -->
+    <color name="brand_green">#0F6B54</color>
+    <color name="brand_green_deep">#08382C</color>
+    <color name="brand_green_night">#061613</color>
+    <color name="brand_green_light">#3FC79E</color>
+    <color name="brand_gold">#E3B662</color>
+    <color name="brand_gold_deep">#B98A31</color>
+    <color name="brand_gold_light">#F6D79B</color>
+    <color name="brand_teal">#12806A</color>
+
+    <!-- ===== Night sky gradient used by the splash, header and ring screens ===== -->
+    <color name="sky_top">#04120F</color>
+    <color name="sky_mid">#0A2C24</color>
+    <color name="sky_bottom">#124C3E</color>
+    <color name="sky_glow">#2A9C7C</color>
+
+    <!-- ===== Light scheme ===== -->
+    <color name="light_background">#F4F7F4</color>
+    <color name="light_surface">#FFFFFF</color>
+    <color name="light_surface_variant">#E4EDE8</color>
+    <color name="light_on_background">#101C18</color>
+    <color name="light_on_surface_variant">#4A5B54</color>
+    <color name="light_outline">#C9D8D1</color>
+
+    <!-- ===== Dark scheme ===== -->
+    <color name="dark_background">#071411</color>
+    <color name="dark_surface">#0E201B</color>
+    <color name="dark_surface_variant">#17302A</color>
+    <color name="dark_on_background">#E7F2EE</color>
+    <color name="dark_on_surface_variant">#A9C0B8</color>
+    <color name="dark_outline">#28423B</color>
+
+    <!-- ===== Fixed ===== -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="scrim_60">#99000000</color>
+    <color name="danger">#D3452F</color>
+    <color name="on_brand">#FFFFFF</color>
+</resources>

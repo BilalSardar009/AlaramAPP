@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.RozaAlarm" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">#C7EEE0</item>
+        <item name="colorOnPrimaryContainer">#00201A</item>
+
+        <item name="colorSecondary">@color/brand_gold_deep</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">#FBE7C2</item>
+        <item name="colorOnSecondaryContainer">#2A1C00</item>
+
+        <item name="colorTertiary">@color/brand_teal</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="android:colorBackground">@color/light_background</item>
+        <item name="colorOnBackground">@color/light_on_background</item>
+        <item name="colorSurface">@color/light_surface</item>
+        <item name="colorOnSurface">@color/light_on_background</item>
+        <item name="colorSurfaceVariant">@color/light_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/light_on_surface_variant</item>
+        <item name="colorOutline">@color/light_outline</item>
+        <item name="colorError">@color/danger</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="materialAlertDialogTheme">@style/Theme.RozaAlarm.Dialog</item>
+        <item name="materialTimePickerTheme">@style/Theme.RozaAlarm.TimePicker</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.RozaAlarm.BottomSheet</item>
+    </style>
+
+    <!-- Splash keeps the night sky behind it so there is no white flash before the animation. -->
+    <style name="Theme.RozaAlarm.Splash" parent="Theme.RozaAlarm">
+        <item name="android:windowBackground">@drawable/bg_night_sky</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/sky_bottom</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
+    <style name="Theme.RozaAlarm.Ring" parent="Theme.RozaAlarm">
+        <item name="android:windowBackground">@drawable/bg_night_sky</item>
+        <item name="android:windowShowWallpaper">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
+    <style name="Theme.RozaAlarm.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Roza.Dialog</item>
+    </style>
+
+    <style name="Theme.RozaAlarm.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="colorPrimary">@color/brand_green</item>
+    </style>
+
+    <style name="Theme.RozaAlarm.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog" />
+</resources>

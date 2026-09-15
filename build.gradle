@@ -1,0 +1,8 @@
+// Top-level build file for Afzal's Roza Alarm
+plugins {
+    id 'com.android.application' version '8.6.1' apply false
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
+}

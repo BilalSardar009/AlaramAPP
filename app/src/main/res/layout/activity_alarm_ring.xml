@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ringRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_night_sky">
+
+    <com.afzal.rozaalarm.ui.view.StarfieldView
+        android:id="@+id/ringStars"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingTop="56dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="40dp">
+
+        <TextView
+            android:id="@+id/ringClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="@color/white"
+            android:textSize="76sp"
+            tools:text="3:00" />
+
+        <TextView
+            android:id="@+id/ringDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="#B3FFFFFF"
+            android:textSize="14sp"
+            tools:text="Friday, 13 November 2026" />
+
+        <TextView
+            android:id="@+id/ringHijri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="#B3F6D79B"
+            android:textSize="13sp"
+            tools:text="13 Jumada al-Ula 1448 AH · ۱۳ جمادی الاول ۱۴۴۸ھ" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.afzal.rozaalarm.ui.view.PulseRingView
+                android:id="@+id/ringPulse"
+                android:layout_width="260dp"
+                android:layout_height="260dp"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:id="@+id/ringLogo"
+                android:layout_width="124dp"
+                android:layout_height="124dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/cd_app_logo"
+                android:src="@drawable/logo_roza" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/ringLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/brand_gold_light"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-light"
+            tools:text="Ayyam al-Beed Sehri" />
+
+        <TextView
+            android:id="@+id/ringMessageEnglish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:text="Suhoor time — your fasting alarm is ringing." />
+
+        <TextView
+            android:id="@+id/ringMessageUrdu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.6"
+            android:textColor="#D9F6D79B"
+            android:textSize="18sp"
+            tools:text="سحری کا وقت ہو گیا ہے — روزے کا الارم بج رہا ہے۔" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/snoozeButton"
+                style="@style/Widget.Roza.Button.Ring.Outlined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_snooze"
+                app:iconTint="@color/brand_gold"
+                app:strokeColor="#59F6D79B"
+                tools:text="Snooze 5 min" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dismissButton"
+                style="@style/Widget.Roza.Button.Ring"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/ring_dismiss"
+                android:textColor="#2A1C00"
+                app:backgroundTint="@color/brand_gold"
+                app:icon="@drawable/ic_close"
+                app:iconTint="#2A1C00" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

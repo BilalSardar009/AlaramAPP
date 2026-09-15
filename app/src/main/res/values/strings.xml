@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Afzal\'s Roza Alarm</string>
+    <string name="app_tagline">Never miss a fast</string>
+    <string name="bismillah">بِسْمِ اللہِ الرَّحْمٰنِ الرَّحِیْم</string>
+
+    <!-- ======================= Home ======================= -->
+    <string name="greeting_salaam">Assalam-u-Alaikum</string>
+    <string name="home_subtitle">Your fasting alarms</string>
+    <string name="next_alarm_caption">NEXT ALARM</string>
+    <string name="next_alarm_none">No alarm scheduled</string>
+    <string name="next_alarm_none_hint">Add one to get started</string>
+    <string name="countdown_now">Ringing now</string>
+    <string name="countdown_days">in %1$dd %2$dh</string>
+    <string name="countdown_hours">in %1$dh %2$dm</string>
+    <string name="countdown_minutes">in %1$d min</string>
+    <string name="today_caption">TODAY</string>
+    <string name="empty_title">No alarms yet</string>
+    <string name="empty_subtitle">Tap the button below to schedule your first fasting alarm.</string>
+    <string name="fab_add_alarm">New Alarm</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="alarm_deleted">Alarm deleted</string>
+    <string name="action_undo">Undo</string>
+    <string name="alarm_turned_off">Alarm turned off</string>
+    <string name="alarm_scheduled_for">Rings %1$s</string>
+    <string name="alarm_expired">Expired — tap to reschedule</string>
+    <string name="cd_toggle_alarm">Turn alarm on or off</string>
+    <string name="cd_app_logo">App logo</string>
+    <string name="chip_reminder">Reminder %1$s before · %2$s</string>
+    <string name="alarm_options_title">Alarm options</string>
+    <string name="action_edit">Edit</string>
+    <string name="duplicate_suffix">%1$s (copy)</string>
+    <string name="swipe_to_delete">Swipe to delete</string>
+
+    <!-- ======================= Editor ======================= -->
+    <string name="title_new_alarm">New Alarm</string>
+    <string name="title_edit_alarm">Edit Alarm</string>
+    <string name="hint_alarm_label">Alarm name</string>
+    <string name="default_alarm_label">Roza Alarm</string>
+    <string name="seed_alarm_label">Ayyam al-Beed Sehri</string>
+    <string name="section_time">Time</string>
+    <string name="section_repeat">Repeat</string>
+    <string name="section_reminder">Advance reminder</string>
+    <string name="section_options">Options</string>
+    <string name="section_presets">Quick presets</string>
+    <string name="tap_to_change_time">Tap to change</string>
+
+    <string name="repeat_once">Once</string>
+    <string name="repeat_daily">Daily</string>
+    <string name="repeat_weekly">Weekly</string>
+    <string name="repeat_monthly">Monthly</string>
+
+    <string name="calendar_system">Calendar</string>
+    <string name="calendar_gregorian">Gregorian</string>
+    <string name="calendar_hijri">Hijri</string>
+    <string name="calendar_hijri_hint">Days are counted in the Islamic month (Umm al-Qura).</string>
+    <string name="calendar_gregorian_hint">Days are counted in the English month.</string>
+
+    <string name="days_of_month">Days of the month</string>
+    <string name="days_of_week">Days of the week</string>
+    <string name="pick_date">Pick a date</string>
+    <string name="clamp_month_end">Shift to the last day in shorter months</string>
+    <string name="selected_days_none">Select at least one day</string>
+
+    <string name="preset_white_days">White Days · 13, 14, 15</string>
+    <string name="preset_mon_thu">Mondays &amp; Thursdays</string>
+    <string name="preset_every_day">Every day</string>
+    <string name="preset_applied">Preset applied</string>
+
+    <string name="reminder_enable">Remind me in advance</string>
+    <string name="reminder_days_before">Days before</string>
+    <string name="reminder_days_value">%1$d day before</string>
+    <string name="reminder_days_value_plural">%1$d days before</string>
+    <string name="reminder_time">Reminder time</string>
+    <string name="reminder_first_day_only">Only before the first day of a run</string>
+    <string name="reminder_first_day_only_hint">For 13–15 you get one reminder on the 12th instead of three.</string>
+    <string name="reminder_next_preview">Reminder: %1$s</string>
+    <string name="reminder_next_none">No reminder scheduled</string>
+
+    <string name="option_vibrate">Vibrate</string>
+    <string name="option_tone">Alarm tone</string>
+    <string name="option_tone_default">Default alarm tone</string>
+    <string name="option_snooze">Snooze length</string>
+    <string name="option_snooze_value">%1$d minutes</string>
+
+    <string name="preview_next_rings">Next: %1$s</string>
+    <string name="preview_upcoming">Upcoming</string>
+    <string name="preview_none">This rule never fires — check the selected days.</string>
+    <string name="action_save">Save alarm</string>
+    <string name="saved_toast">Saved · rings %1$s</string>
+    <string name="error_pick_days">Please select at least one day.</string>
+    <string name="error_pick_future_date">Please pick a date and time in the future.</string>
+
+    <!-- ======================= Ringing ======================= -->
+    <string name="ring_dismiss">Dismiss</string>
+    <string name="ring_snooze">Snooze %1$d min</string>
+    <string name="ring_snoozed">Snoozed until %1$s</string>
+    <string name="ring_default_title">Roza Alarm</string>
+
+    <!-- ======================= Settings ======================= -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_language">Notification language</string>
+    <string name="settings_language_both">English + اردو</string>
+    <string name="settings_language_english">English only</string>
+    <string name="settings_language_urdu">اردو صرف</string>
+    <string name="settings_calendar">Islamic calendar</string>
+    <string name="settings_hijri_offset">Hijri date adjustment</string>
+    <string name="settings_hijri_offset_desc">Shift the Hijri date to match your local moon sighting.</string>
+    <string name="settings_hijri_offset_value">%1$+d day</string>
+    <string name="settings_hijri_today">Today: %1$s</string>
+    <string name="settings_reliability">Reliability</string>
+    <string name="settings_exact_alarms">Exact alarms</string>
+    <string name="settings_exact_alarms_desc">Required so alarms ring at the precise minute.</string>
+    <string name="settings_battery">Ignore battery optimisation</string>
+    <string name="settings_battery_desc">Stops the system from delaying alarms while the phone sleeps.</string>
+    <string name="settings_notification_access">Notification permission</string>
+    <string name="settings_notification_access_desc">Needed to show alarms and reminders.</string>
+    <string name="settings_granted">Granted</string>
+    <string name="settings_not_granted">Tap to allow</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_animations">Rich animations</string>
+    <string name="settings_animations_desc">Turn off for a calmer, faster interface.</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="about_body">Afzal\'s Roza Alarm keeps your voluntary fasts on schedule — the White Days of every month, Mondays and Thursdays, or any date you choose. Reminders arrive the evening before so Suhoor is never a rush.</string>
+
+    <!-- ======================= Permissions ======================= -->
+    <string name="perm_title">One more step</string>
+    <string name="perm_exact_message">Android needs your permission to schedule exact alarms. Without it your fasting alarm may ring late.</string>
+    <string name="perm_battery_message">Allow the app to run without battery restrictions so alarms ring even when the phone is idle.</string>
+    <string name="perm_notification_message">Allow notifications so alarms and advance reminders can reach you.</string>
+    <string name="perm_grant">Allow</string>
+    <string name="perm_later">Not now</string>
+
+    <!-- ======================= Repeat summaries ======================= -->
+    <string name="summary_once">Once on %1$s</string>
+    <string name="summary_daily">Every day</string>
+    <string name="summary_weekly">Every %1$s</string>
+    <string name="summary_monthly_gregorian">Every month on %1$s</string>
+    <string name="summary_monthly_hijri">Every Hijri month on %1$s</string>
+    <string name="summary_ayyam_gregorian">White Days · 13, 14, 15 each month</string>
+    <string name="summary_ayyam_hijri">Ayyam al-Beed · 13, 14, 15 of every Hijri month</string>
+    <string name="summary_day_join">, </string>
+    <string name="summary_with_reminder">%1$s · reminder %2$s before</string>
+
+    <!-- ======================= Notifications (bilingual) ======================= -->
+    <string name="channel_alarm_name">Fasting alarms</string>
+    <string name="channel_alarm_desc">Full screen alarms for Suhoor and fasting days · روزے کے الارم</string>
+    <string name="channel_reminder_name">Advance reminders</string>
+    <string name="channel_reminder_desc">Heads-up the day before a fast · پیشگی یاد دہانی</string>
+
+    <string name="notif_alarm_title_en">Time to wake up</string>
+    <string name="notif_alarm_title_ur">جاگنے کا وقت</string>
+    <string name="notif_alarm_body_en">Suhoor time — your fasting alarm is ringing.</string>
+    <string name="notif_alarm_body_ur">سحری کا وقت ہو گیا ہے — روزے کا الارم بج رہا ہے۔</string>
+
+    <string name="notif_reminder_title_en">Fast tomorrow, In sha Allah</string>
+    <string name="notif_reminder_title_ur">کل روزہ ہے، ان شاء اللہ</string>
+    <string name="notif_reminder_title_days_en">Fast coming up</string>
+    <string name="notif_reminder_title_days_ur">روزہ قریب ہے</string>
+    <string name="notif_reminder_body_en">%1$s rings tomorrow at %2$s. Plan your Suhoor and set your intention tonight.</string>
+    <string name="notif_reminder_body_ur">%1$s کل %2$s بجے بجے گا۔ آج رات سحری کی تیاری اور نیت کر لیجیے۔</string>
+    <string name="notif_reminder_body_days_en">%1$s rings in %2$d days at %3$s.</string>
+    <string name="notif_reminder_body_days_ur">%1$s %2$d دن بعد %3$s بجے بجے گا۔</string>
+    <string name="notif_reminder_hijri_en">Hijri date: %1$s</string>
+    <string name="notif_reminder_hijri_ur">ہجری تاریخ: %1$s</string>
+
+    <string name="notif_snoozed_title_en">Alarm snoozed</string>
+    <string name="notif_snoozed_title_ur">الارم ملتوی</string>
+    <string name="notif_snoozed_body_en">Ringing again at %1$s.</string>
+    <string name="notif_snoozed_body_ur">دوبارہ %1$s بجے بجے گا۔</string>
+
+    <string name="notif_missed_title_en">Missed alarm</string>
+    <string name="notif_missed_title_ur">الارم رہ گیا</string>
+    <string name="notif_missed_body_en">%1$s was not dismissed.</string>
+    <string name="notif_missed_body_ur">%1$s بند نہیں کیا گیا۔</string>
+
+    <string name="notif_action_snooze_en">Snooze</string>
+    <string name="notif_action_snooze_ur">ملتوی</string>
+    <string name="notif_action_dismiss_en">Dismiss</string>
+    <string name="notif_action_dismiss_ur">بند کریں</string>
+    <string name="notif_action_ok_en">Got it</string>
+    <string name="notif_action_ok_ur">ٹھیک ہے</string>
+
+    <string name="bilingual_separator">" • "</string>
+
+    <!-- Day names used inside notification and summary text -->
+    <string name="day_short_sun">Sun</string>
+    <string name="day_short_mon">Mon</string>
+    <string name="day_short_tue">Tue</string>
+    <string name="day_short_wed">Wed</string>
+    <string name="day_short_thu">Thu</string>
+    <string name="day_short_fri">Fri</string>
+    <string name="day_short_sat">Sat</string>
+</resources>

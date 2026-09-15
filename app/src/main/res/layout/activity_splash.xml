@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_night_sky">
+
+    <com.afzal.rozaalarm.ui.view.StarfieldView
+        android:id="@+id/starfield"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp">
+
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp">
+
+            <com.afzal.rozaalarm.ui.view.PulseRingView
+                android:id="@+id/splashPulse"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/splashLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/cd_app_logo"
+                android:src="@drawable/logo_roza" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/splashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/app_name"
+            android:textColor="@color/brand_gold_light"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.02"
+            tools:ignore="UnusedAttribute" />
+
+        <View
+            android:id="@+id/splashRule"
+            android:layout_width="64dp"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="14dp"
+            android:background="@color/brand_gold" />
+
+        <TextView
+            android:id="@+id/splashTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/app_tagline"
+            android:textColor="#B3FFFFFF"
+            android:textSize="14sp"
+            android:letterSpacing="0.16" />
+
+        <TextView
+            android:id="@+id/splashBismillah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:text="@string/bismillah"
+            android:textColor="#8CF6D79B"
+            android:textSize="19sp"
+            android:lineSpacingMultiplier="1.6"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/splashProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="120dp"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="72dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="@color/brand_gold"
+        android:progressBackgroundTint="#33FFFFFF"
+        tools:ignore="UnusedAttribute" />
+</FrameLayout>

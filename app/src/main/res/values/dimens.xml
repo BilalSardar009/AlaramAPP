@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_margin">20dp</dimen>
+    <dimen name="card_gap">12dp</dimen>
+    <dimen name="section_gap">24dp</dimen>
+    <dimen name="hero_height">228dp</dimen>
+    <dimen name="fab_bottom_inset">96dp</dimen>
+    <dimen name="corner_large">22dp</dimen>
+</resources>

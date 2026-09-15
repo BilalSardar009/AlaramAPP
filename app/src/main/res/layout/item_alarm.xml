@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alarmCard"
+    style="@style/Widget.Roza.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/card_gap"
+    android:checkable="false"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="0dp"
+        android:paddingEnd="16dp">
+
+        <!-- Gold spine marking an active alarm -->
+        <View
+            android:id="@+id/activeSpine"
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_gold_gradient"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/alarmTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.Roza.Clock"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintStart_toEndOf="@id/activeSpine"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3:00" />
+
+        <TextView
+            android:id="@+id/alarmMeridiem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="6dp"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBaseline_toBaselineOf="@id/alarmTime"
+            app:layout_constraintStart_toEndOf="@id/alarmTime"
+            tools:text="AM" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarmSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:contentDescription="@string/cd_toggle_alarm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/alarmLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/activeSpine"
+            app:layout_constraintTop_toBottomOf="@id/alarmTime"
+            tools:text="Ayyam al-Beed Sehri" />
+
+        <ImageView
+            android:id="@+id/repeatIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_repeat"
+            app:layout_constraintStart_toEndOf="@id/activeSpine"
+            app:layout_constraintTop_toBottomOf="@id/alarmLabel"
+            app:tint="?attr/colorPrimary" />
+
+        <TextView
+            android:id="@+id/alarmRepeat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBottom_toBottomOf="@id/repeatIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/repeatIcon"
+            app:layout_constraintTop_toTopOf="@id/repeatIcon"
+            tools:text="White Days · 13, 14, 15 each month" />
+
+        <ImageView
+            android:id="@+id/nextIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintStart_toEndOf="@id/activeSpine"
+            app:layout_constraintTop_toBottomOf="@id/repeatIcon"
+            app:tint="?attr/colorSecondary" />
+
+        <TextView
+            android:id="@+id/alarmNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBottom_toBottomOf="@id/nextIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/nextIcon"
+            app:layout_constraintTop_toTopOf="@id/nextIcon"
+            tools:text="Rings Fri, 13 Nov · 3:00 AM" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/reminderChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="14dp"
+            android:clickable="false"
+            android:checkable="false"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            app:chipIcon="@drawable/ic_bell"
+            app:chipIconSize="15dp"
+            app:chipIconTint="?attr/colorSecondary"
+            app:chipMinHeight="28dp"
+            app:chipStrokeWidth="0dp"
+            app:chipBackgroundColor="?attr/colorSecondaryContainer"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:ensureMinTouchTargetSize="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/activeSpine"
+            app:layout_constraintTop_toBottomOf="@id/nextIcon"
+            tools:text="Reminder 1 day before, 8:00 PM" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
