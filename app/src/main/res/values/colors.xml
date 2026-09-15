@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ===== Brand =====
-         One green, one gold. Everything else is paper and ink, so the accents mean something. -->
-    <color name="brand_green">#15654C</color>
-    <color name="brand_green_dark">#0C4736</color>
-    <color name="brand_green_soft">#D7EBE1</color>
-    <color name="brand_green_tint">#EDF6F1</color>
+    <!-- One green, one gold, on warm paper. Deep enough to read at arm's length in sunlight. -->
+    <color name="brand_green">#0E5C43</color>
+    <color name="brand_green_dark">#073C2C</color>
+    <color name="brand_green_soft">#CDE5D9</color>
+    <color name="brand_green_tint">#E9F2ED</color>
 
-    <color name="brand_gold">#9C7218</color>
-    <color name="brand_gold_soft">#F7E8C6</color>
-    <color name="brand_gold_tint">#FCF5E6</color>
+    <color name="brand_gold">#8F6A11</color>
+    <color name="brand_gold_soft">#F2E2BA</color>
+    <color name="brand_gold_tint">#FAF4E7</color>
 
-    <!-- ===== Paper ===== -->
-    <color name="paper">#F7F5EF</color>
+    <color name="paper">#F5F3ED</color>
     <color name="paper_raised">#FFFFFF</color>
-    <color name="paper_sunken">#EFEDE4</color>
+    <color name="paper_sunken">#ECE9E0</color>
 
-    <!-- ===== Ink ===== -->
-    <color name="ink">#1B2320</color>
-    <color name="ink_muted">#5D6763</color>
-    <color name="hairline">#E2DED2</color>
+    <color name="ink">#161C19</color>
+    <color name="ink_muted">#4E5854</color>
+    <color name="hairline">#DCD7CA</color>
 
-    <!-- ===== Fixed ===== -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-    <color name="danger">#B3261E</color>
-    <color name="danger_soft">#FBE3E0</color>
+    <color name="danger">#A3261E</color>
+    <color name="danger_soft">#F8DEDB</color>
 </resources>

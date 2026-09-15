@@ -27,7 +27,7 @@
         <item name="colorError">@color/danger</item>
         <item name="colorErrorContainer">@color/danger_soft</item>
 
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/paper</item>
         <item name="android:navigationBarColor">@color/paper</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
@@ -40,11 +40,13 @@
 
     <style name="Theme.RozaAlarm.Splash" parent="Theme.RozaAlarm">
         <item name="android:windowBackground">@color/paper</item>
+        <item name="android:statusBarColor">@color/paper</item>
     </style>
 
     <!-- The alarm screen at 3am: still light, but warm rather than white. -->
     <style name="Theme.RozaAlarm.Ring" parent="Theme.RozaAlarm">
         <item name="android:windowBackground">@color/brand_gold_tint</item>
+        <item name="android:statusBarColor">@color/brand_gold_tint</item>
         <item name="android:navigationBarColor">@color/brand_gold_tint</item>
     </style>
 

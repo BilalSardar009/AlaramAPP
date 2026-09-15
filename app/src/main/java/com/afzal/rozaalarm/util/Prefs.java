@@ -20,7 +20,6 @@ public final class Prefs {
     private static final String KEY_SEEDED = "seeded_defaults";
     private static final String KEY_BATTERY_PROMPTED = "battery_prompted";
     private static final String KEY_DEFAULT_SNOOZE = "default_snooze";
-    private static final String KEY_ANIMATIONS = "rich_animations";
 
     private Prefs() {
     }
@@ -74,13 +73,7 @@ public final class Prefs {
         prefs(context).edit().putInt(KEY_DEFAULT_SNOOZE, clamp(minutes, 1, 60)).apply();
     }
 
-    public static boolean richAnimations(@NonNull Context context) {
-        return prefs(context).getBoolean(KEY_ANIMATIONS, true);
-    }
 
-    public static void setRichAnimations(@NonNull Context context, boolean enabled) {
-        prefs(context).edit().putBoolean(KEY_ANIMATIONS, enabled).apply();
-    }
 
     private static int clamp(int value, int min, int max) {
         return Math.max(min, Math.min(max, value));

@@ -43,22 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         binding.exactAlarmRow.setOnClickListener(v -> openExactAlarmSettings());
         binding.batteryRow.setOnClickListener(v -> openBatterySettings());
         binding.notificationPermissionRow.setOnClickListener(v -> openAppNotificationSettings());
-
-        binding.hijriOffsetSlider.setValue(HijriDates.clampOffset(Prefs.hijriOffset(this)));
-        binding.hijriOffsetSlider.addOnChangeListener((slider, value, fromUser) -> {
-            if (!fromUser) {
-                return;
-            }
-            // Hijri rules resolve to different dates now, so this also re-registers every alarm.
-            corrections.setGlobalOffset((int) value, this::updateHijriPreview);
-        });
-
         binding.correctTodayRow.setOnClickListener(v -> showCorrectTodayDialog());
-        binding.monthAdjustRow.setOnClickListener(v -> showMonthAdjustmentsDialog());
-
-        binding.animationsSwitch.setChecked(Prefs.richAnimations(this));
-        binding.animationsSwitch.setOnCheckedChangeListener(
-                (button, checked) -> Prefs.setRichAnimations(this, checked));
     }
 
     @Override
@@ -66,7 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         updateLanguageValue();
         updateHijriPreview();
-        updateMonthAdjustmentRow();
         updatePermissionRows();
     }
 
@@ -110,11 +94,9 @@ public class SettingsActivity extends AppCompatActivity {
     // ---- hijri --------------------------------------------------------------------------------
 
     private void updateHijriPreview() {
-        int offset = HijriDates.globalOffset();
         long now = System.currentTimeMillis();
         binding.hijriTodayEnglish.setText(
-                getString(R.string.settings_hijri_today, HijriDates.formatEnglish(now))
-                        + "   " + getString(R.string.settings_hijri_offset_value, offset));
+                getString(R.string.settings_hijri_today, HijriDates.formatEnglish(now)));
         binding.hijriTodayUrdu.setText(HijriDates.formatUrdu(now));
     }
 
@@ -144,7 +126,6 @@ public class SettingsActivity extends AppCompatActivity {
     private void applyTodayCorrection(int actualHijriDay) {
         int applied = corrections.correctToday(actualHijriDay, () -> {
             updateHijriPreview();
-            binding.hijriOffsetSlider.setValue(HijriDates.globalOffset());
             Snackbar.make(binding.settingsRoot,
                     getString(R.string.hijri_correct_applied, HijriDates.globalOffset(),
                             HijriDates.formatEnglish(System.currentTimeMillis())),
@@ -157,35 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void updateMonthAdjustmentRow() {
-        corrections.io().execute(() -> {
-            int count = corrections.monthOffsetCount();
-            runOnUiThread(() -> {
-                if (count == 0) {
-                    binding.monthAdjustValue.setText(R.string.settings_hijri_months_none);
-                } else {
-                    binding.monthAdjustValue.setText(getString(count == 1
-                                    ? R.string.settings_hijri_months_desc
-                                    : R.string.settings_hijri_months_desc_plural, count));
-                }
-            });
-        });
-    }
 
-    /** Individual months are adjusted from the Calendar tab; this only offers a reset. */
-    private void showMonthAdjustmentsDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.settings_hijri_months)
-                .setMessage(R.string.calendar_adjust_month_message)
-                .setPositiveButton(R.string.settings_hijri_months_clear, (d, w) ->
-                        corrections.clearMonthOffsets(() -> {
-                            updateMonthAdjustmentRow();
-                            Snackbar.make(binding.settingsRoot, R.string.cleared,
-                                    Snackbar.LENGTH_SHORT).show();
-                        }))
-                .setNegativeButton(R.string.perm_later, null)
-                .show();
-    }
 
     // ---- permission rows ----------------------------------------------------------------------
 

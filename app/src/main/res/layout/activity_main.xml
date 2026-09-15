@@ -4,6 +4,7 @@
     android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:colorBackground"
     android:orientation="vertical">
 
     <androidx.fragment.app.FragmentContainerView
@@ -12,12 +13,20 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/hairline" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        app:elevation="8dp"
+        android:background="@color/paper_raised"
+        app:elevation="0dp"
+        app:itemActiveIndicatorStyle="@style/Widget.Roza.NavIndicator"
+        app:itemIconTint="@color/bottom_nav_item"
+        app:itemTextColor="@color/bottom_nav_item"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav" />
 </LinearLayout>

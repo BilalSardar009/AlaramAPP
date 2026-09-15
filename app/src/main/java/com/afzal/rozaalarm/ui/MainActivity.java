@@ -16,10 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.afzal.rozaalarm.R;
@@ -49,11 +45,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        applyWindowInsets();
 
         binding.bottomNav.setOnItemSelectedListener(item -> {
             showTab(item.getItemId());
@@ -138,20 +131,6 @@ public class MainActivity extends AppCompatActivity {
         return new AlarmsFragment();
     }
 
-    /**
-     * The tabs draw under the status bar, so the bottom inset is applied to the navigation bar
-     * here and removed before the insets reach them.
-     */
-    private void applyWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (view, insets) -> {
-            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            binding.bottomNav.setPadding(0, 0, 0, bars.bottom);
-            return new WindowInsetsCompat.Builder(insets)
-                    .setInsets(WindowInsetsCompat.Type.systemBars(),
-                            Insets.of(bars.left, bars.top, bars.right, 0))
-                    .build();
-        });
-    }
 
     // ---- permissions --------------------------------------------------------------------------
 

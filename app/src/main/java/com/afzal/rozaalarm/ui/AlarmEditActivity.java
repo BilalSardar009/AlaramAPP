@@ -534,8 +534,8 @@ public class AlarmEditActivity extends AppCompatActivity {
         CalendarConstraints constraints = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointForward.now())
                 .build();
-        long selection = alarm.onceDateMillis > 0
-                ? alarm.onceDateMillis : MaterialDatePicker.todayInUtcMilliseconds();
+        long selection = toUtcMidnight(alarm.onceDateMillis > 0
+                ? alarm.onceDateMillis : System.currentTimeMillis());
         MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText(R.string.pick_date)
                 .setCalendarConstraints(constraints)
@@ -547,6 +547,17 @@ public class AlarmEditActivity extends AppCompatActivity {
             refreshPreview();
         });
         picker.show(getSupportFragmentManager(), "once_date");
+    }
+
+    /** The local calendar day of an instant, expressed as the UTC midnight the picker expects. */
+    private long toUtcMidnight(long localMillis) {
+        Calendar local = Calendar.getInstance();
+        local.setTimeInMillis(localMillis);
+        Calendar utc = Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"));
+        utc.clear();
+        utc.set(local.get(Calendar.YEAR), local.get(Calendar.MONTH),
+                local.get(Calendar.DAY_OF_MONTH));
+        return utc.getTimeInMillis();
     }
 
     /**

@@ -140,6 +140,39 @@ public class OccurrencesTest {
                 Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 4, 0)));
     }
 
+    /** Picking today and a time still to come rings today. */
+    @Test
+    public void aOneOffLaterTodayRingsToday() {
+        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
+        alarm.onceDateMillis = at(2027, Calendar.MARCH, 10, 0, 0);
+
+        assertEquals(at(2027, Calendar.MARCH, 10, 9, 0),
+                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 7, 0)));
+    }
+
+    /**
+     * Picking today and a time that has already gone by is not an error: as on any alarm clock,
+     * it rings at that time tomorrow.
+     */
+    @Test
+    public void aOneOffEarlierTodayRollsToTomorrow() {
+        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
+        alarm.onceDateMillis = at(2027, Calendar.MARCH, 10, 0, 0);
+
+        assertEquals(at(2027, Calendar.MARCH, 11, 9, 0),
+                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 11, 0)));
+    }
+
+    /** A date that is genuinely past has no firing, and does not quietly roll forward. */
+    @Test
+    public void aOneOffOnAnEarlierDateDoesNotRoll() {
+        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
+        alarm.onceDateMillis = at(2027, Calendar.MARCH, 9, 0, 0);
+
+        assertEquals(Occurrences.NONE,
+                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 11, 0)));
+    }
+
     @Test
     public void aOneOffInThePastNeverFires() {
         Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 7, 0);

@@ -17,7 +17,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
 
 import com.afzal.rozaalarm.R;
 import com.afzal.rozaalarm.alarm.AlarmActionReceiver;
@@ -67,7 +66,6 @@ public class AlarmRingActivity extends AppCompatActivity {
 
         binding = ActivityAlarmRingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         alarmId = getIntent().getLongExtra(AlarmIntents.EXTRA_ALARM_ID, AlarmService.ringingAlarmId());
 
@@ -195,9 +193,6 @@ public class AlarmRingActivity extends AppCompatActivity {
     }
 
     private void runEntranceAnimation() {
-        if (!Prefs.richAnimations(this)) {
-            return;
-        }
         binding.ringLogo.setScaleX(0.7f);
         binding.ringLogo.setScaleY(0.7f);
         binding.ringLogo.setAlpha(0f);

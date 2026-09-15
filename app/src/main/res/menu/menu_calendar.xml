@@ -5,10 +5,12 @@
         android:id="@+id/action_today"
         android:icon="@drawable/ic_crescent"
         android:title="@string/calendar_today"
+        app:iconTint="@color/ink"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_adjust_month"
         android:icon="@drawable/ic_edit_calendar"
         android:title="@string/calendar_adjust_month"
+        app:iconTint="@color/ink"
         app:showAsAction="ifRoom" />
 </menu>

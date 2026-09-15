@@ -12,17 +12,14 @@ import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
 
 import com.afzal.rozaalarm.R;
 import com.afzal.rozaalarm.databinding.ActivitySplashBinding;
-import com.afzal.rozaalarm.util.Prefs;
 
 /** Animated entry screen: the crescent settles in, the wordmark fades up, then home opens. */
 public class SplashActivity extends AppCompatActivity {
 
     private static final long HOLD_MILLIS = 2_300L;
-    private static final long REDUCED_HOLD_MILLIS = 700L;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -32,22 +29,16 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        boolean animate = Prefs.richAnimations(this);
-        if (animate) {
-            runIntro();
-        } else {
-            showStatic();
-        }
+        runIntro();
 
         // Tapping anywhere skips straight through.
         binding.splashRoot.setOnClickListener(v -> openHome());
 
-        handler.postDelayed(this::openHome, animate ? HOLD_MILLIS : REDUCED_HOLD_MILLIS);
+        handler.postDelayed(this::openHome, HOLD_MILLIS);
     }
 
     private void runIntro() {
@@ -92,10 +83,6 @@ public class SplashActivity extends AppCompatActivity {
         progress.start();
     }
 
-    private void showStatic() {
-        binding.splashProgress.setVisibility(View.GONE);
-        binding.splashPulse.setVisibility(View.GONE);
-    }
 
     private void openHome() {
         if (handedOver || isFinishing()) {

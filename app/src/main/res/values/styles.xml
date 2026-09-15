@@ -8,23 +8,27 @@
 
     <!-- ===== Text ===== -->
     <style name="TextAppearance.Roza.Display" parent="TextAppearance.Material3.DisplayMedium">
-        <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
-    <style name="TextAppearance.Roza.Clock" parent="TextAppearance.Material3.DisplaySmall">
+    <style name="TextAppearance.Roza.Clock" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="TextAppearance.Roza.Caption" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:letterSpacing">0.14</item>
+        <item name="android:letterSpacing">0.12</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Roza.Section" parent="TextAppearance.Material3.TitleSmall">
-        <item name="android:letterSpacing">0.08</item>
+    <!-- Section headings: small, gold, widely tracked. They separate without shouting. -->
+    <style name="TextAppearance.Roza.Section" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.1</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Roza.Urdu" parent="TextAppearance.Material3.BodyMedium">
@@ -33,29 +37,39 @@
     </style>
 
     <!-- ===== Widgets ===== -->
+    <!-- One card treatment everywhere: white, softly raised, generously rounded. -->
     <style name="Widget.Roza.Card" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardCornerRadius">22dp</item>
-        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
         <item name="cardUseCompatPadding">false</item>
         <item name="rippleColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.Roza.Chip.Choice" parent="Widget.Material3.Chip.Filter">
-        <item name="chipMinHeight">44dp</item>
+        <item name="chipMinHeight">40dp</item>
         <item name="checkedIconVisible">true</item>
     </style>
 
     <style name="Widget.Roza.SectionLabel" parent="">
         <item name="android:textAppearance">@style/TextAppearance.Roza.Section</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:layout_marginTop">24dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textColor">@color/brand_gold</item>
+        <item name="android:layout_marginTop">@dimen/section_gap</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="Widget.Roza.NavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/brand_green_soft</item>
+        <item name="android:width">64dp</item>
+        <item name="android:height">32dp</item>
     </style>
 
     <style name="Widget.Roza.Row" parent="">
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">64dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>

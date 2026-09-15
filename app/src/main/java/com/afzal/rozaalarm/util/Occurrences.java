@@ -50,8 +50,8 @@ public final class Occurrences {
         }
 
         if (alarm.repeatMode == Alarm.REPEAT_ONCE) {
-            long once = onceInstant(alarm);
-            if (once > fromMillis && !isSkipped(alarm, once)) {
+            long once = onceInstantAfter(alarm, fromMillis);
+            if (once != NONE && !isSkipped(alarm, once)) {
                 result.add(once);
             }
             return result;
@@ -188,7 +188,7 @@ public final class Occurrences {
         }
     }
 
-    /** The single instant a {@link Alarm#REPEAT_ONCE} alarm fires. */
+    /** The instant a {@link Alarm#REPEAT_ONCE} alarm names: its chosen date, at its time. */
     public static long onceInstant(@NonNull Alarm alarm) {
         Calendar cal = Calendar.getInstance();
         if (alarm.onceDateMillis > 0L) {
@@ -196,6 +196,37 @@ public final class Occurrences {
         }
         applyTime(cal, alarm.hour, alarm.minute);
         return cal.getTimeInMillis();
+    }
+
+    /**
+     * When a one-off alarm actually rings, or {@link #NONE} if it cannot.
+     *
+     * <p>Picking today and a time that has already gone by is not an error: as on any alarm clock,
+     * the alarm rings at that time tomorrow. Only a date that is genuinely past has no firing.</p>
+     */
+    public static long onceInstantAfter(@NonNull Alarm alarm, long fromMillis) {
+        long instant = onceInstant(alarm);
+        if (instant > fromMillis) {
+            return instant;
+        }
+        long chosenDate = alarm.onceDateMillis > 0L ? alarm.onceDateMillis : fromMillis;
+        if (!isSameLocalDay(chosenDate, fromMillis)) {
+            return NONE;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(instant);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTimeInMillis();
+    }
+
+    /** True when two instants fall on the same local calendar day. */
+    public static boolean isSameLocalDay(long first, long second) {
+        Calendar a = Calendar.getInstance();
+        a.setTimeInMillis(first);
+        Calendar b = Calendar.getInstance();
+        b.setTimeInMillis(second);
+        return a.get(Calendar.YEAR) == b.get(Calendar.YEAR)
+                && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR);
     }
 
     public static void applyTime(@NonNull Calendar cal, int hour, int minute) {
