@@ -203,7 +203,7 @@
     <string name="occ_ashura_note_en">10 Muharram</string>
     <string name="occ_ashura_note_ur">۱۰ محرم</string>
 
-    <string name="occ_tasua_en">Tasu'a</string>
+    <string name="occ_tasua_en">Tasu\'a</string>
     <string name="occ_tasua_ur">تاسوعا</string>
     <string name="occ_tasua_note_en">9 Muharram, fasted with Ashura</string>
     <string name="occ_tasua_note_ur">۹ محرم، عاشورا کے ساتھ</string>
@@ -218,9 +218,9 @@
     <string name="occ_muharram_note_en">Voluntary fasting through the month</string>
     <string name="occ_muharram_note_ur">پورے مہینے نفلی روزے</string>
 
-    <string name="occ_shaban_mid_en">15 Sha'ban</string>
+    <string name="occ_shaban_mid_en">15 Sha\'ban</string>
     <string name="occ_shaban_mid_ur">پندرہ شعبان</string>
-    <string name="occ_shaban_mid_note_en">Mid Sha'ban</string>
+    <string name="occ_shaban_mid_note_en">Mid Sha\'ban</string>
     <string name="occ_shaban_mid_note_ur">نصف شعبان</string>
 
     <string name="occ_shawwal_six_en">Six of Shawwal</string>
@@ -313,9 +313,9 @@
     <string name="skip_forbidden_days_hint">Fasting is not permitted on Eid al-Fitr, Eid al-Adha or 11–13 Dhu al-Hijjah, so those days are never scheduled.</string>
 
     <!-- ======================= Hijri correction ======================= -->
-    <string name="settings_hijri_correct">Correct today's Hijri date</string>
-    <string name="settings_hijri_correct_desc">Tell the app what today's date really is and it works out the adjustment for you.</string>
-    <string name="hijri_correct_title">What is today's Hijri date?</string>
+    <string name="settings_hijri_correct">Correct today\'s Hijri date</string>
+    <string name="settings_hijri_correct_desc">Tell the app what today\'s date really is and it works out the adjustment for you.</string>
+    <string name="hijri_correct_title">What is today\'s Hijri date?</string>
     <string name="hijri_correct_message">Calculated as %1$s. Pick the day shown on your local calendar.</string>
     <string name="hijri_correct_applied">Adjusted by %1$+d day — today is now %2$s</string>
     <string name="hijri_correct_impossible">That date is more than %1$d days away from the calculated one.</string>
