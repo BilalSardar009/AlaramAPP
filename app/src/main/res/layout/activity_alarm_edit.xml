@@ -112,43 +112,6 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ===================== Presets ===================== -->
-            <TextView
-                style="@style/Widget.Roza.SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/section_presets" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/presetChips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:singleLine="false">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/presetWhiteDays"
-                    style="@style/Widget.Material3.Chip.Assist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_white_days"
-                    app:chipIcon="@drawable/ic_moon_stars" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/presetMonThu"
-                    style="@style/Widget.Material3.Chip.Assist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_mon_thu"
-                    app:chipIcon="@drawable/ic_calendar" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/presetEveryDay"
-                    style="@style/Widget.Material3.Chip.Assist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_every_day"
-                    app:chipIcon="@drawable/ic_repeat" />
-            </com.google.android.material.chip.ChipGroup>
 
             <!-- ===================== Repeat mode ===================== -->
             <TextView
@@ -293,14 +256,6 @@
                     app:chipSpacingVertical="2dp"
                     app:singleLine="false" />
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/clampSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:minHeight="48dp"
-                    android:text="@string/clamp_month_end"
-                    android:textAppearance="?attr/textAppearanceBodyMedium" />
             </LinearLayout>
 
             <!-- ===================== Weekly options ===================== -->
@@ -403,24 +358,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/reminderDaysLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    tools:text="Days before: 1 day" />
-
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/reminderDaysSlider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:stepSize="1"
-                    android:value="1"
-                    android:valueFrom="1"
-                    android:valueTo="7" />
-
                 <LinearLayout
                     android:id="@+id/reminderTimeRow"
                     android:layout_width="match_parent"
@@ -456,6 +393,27 @@
                         tools:text="8:00 PM" />
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <!-- ===================== More options ===================== -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/advancedToggle"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="18dp"
+                android:text="@string/more_options"
+                app:icon="@drawable/ic_expand_more"
+                app:iconGravity="textEnd" />
+
+            <LinearLayout
+                android:id="@+id/advancedSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/reminderFirstDaySwitch"
                     android:layout_width="match_parent"
@@ -467,18 +425,41 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:text="@string/reminder_first_day_only_hint"
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:textColor="?attr/colorOnSurfaceVariant" />
-            </LinearLayout>
 
-            <!-- ===================== Options ===================== -->
-            <TextView
-                style="@style/Widget.Roza.SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/section_options" />
+                <TextView
+                    android:id="@+id/reminderDaysLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    tools:text="Days before: 1 day" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/reminderDaysSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:value="1"
+                    android:valueFrom="1"
+                    android:valueTo="7" />
+
+                <TextView
+                    style="@style/Widget.Roza.SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_options" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/clampSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:text="@string/clamp_month_end"
+                    android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/skipForbiddenSwitch"
@@ -571,6 +552,8 @@
                 android:value="5"
                 android:valueFrom="1"
                 android:valueTo="30" />
+
+            </LinearLayout>
 
             <!-- ===================== Preview ===================== -->
             <com.google.android.material.card.MaterialCardView

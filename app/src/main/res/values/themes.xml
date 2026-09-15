@@ -1,65 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.RozaAlarm" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- A single light theme. Calm paper background, one green, one gold. -->
+    <style name="Theme.RozaAlarm" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/brand_green</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">#C7EEE0</item>
-        <item name="colorOnPrimaryContainer">#00201A</item>
+        <item name="colorPrimaryContainer">@color/brand_green_soft</item>
+        <item name="colorOnPrimaryContainer">@color/brand_green_dark</item>
 
-        <item name="colorSecondary">@color/brand_gold_deep</item>
+        <item name="colorSecondary">@color/brand_gold</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">#FBE7C2</item>
-        <item name="colorOnSecondaryContainer">#2A1C00</item>
+        <item name="colorSecondaryContainer">@color/brand_gold_soft</item>
+        <item name="colorOnSecondaryContainer">#4A3400</item>
 
-        <item name="colorTertiary">@color/brand_teal</item>
+        <item name="colorTertiary">@color/brand_green</item>
         <item name="colorOnTertiary">@color/white</item>
 
-        <item name="android:colorBackground">@color/light_background</item>
-        <item name="colorOnBackground">@color/light_on_background</item>
-        <item name="colorSurface">@color/light_surface</item>
-        <item name="colorOnSurface">@color/light_on_background</item>
-        <item name="colorSurfaceVariant">@color/light_surface_variant</item>
-        <item name="colorOnSurfaceVariant">@color/light_on_surface_variant</item>
-        <item name="colorOutline">@color/light_outline</item>
+        <item name="android:colorBackground">@color/paper</item>
+        <item name="colorOnBackground">@color/ink</item>
+        <item name="colorSurface">@color/paper_raised</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorSurfaceVariant">@color/paper_sunken</item>
+        <item name="colorOnSurfaceVariant">@color/ink_muted</item>
+        <item name="colorOutline">@color/hairline</item>
+        <item name="colorOutlineVariant">@color/hairline</item>
         <item name="colorError">@color/danger</item>
+        <item name="colorErrorContainer">@color/danger_soft</item>
 
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">?android:colorBackground</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/paper</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowBackground">@color/paper</item>
 
         <item name="android:windowActivityTransitions">true</item>
         <item name="materialAlertDialogTheme">@style/Theme.RozaAlarm.Dialog</item>
-        <item name="materialTimePickerTheme">@style/Theme.RozaAlarm.TimePicker</item>
         <item name="bottomSheetDialogTheme">@style/Theme.RozaAlarm.BottomSheet</item>
     </style>
 
-    <!-- Splash keeps the night sky behind it so there is no white flash before the animation. -->
     <style name="Theme.RozaAlarm.Splash" parent="Theme.RozaAlarm">
-        <item name="android:windowBackground">@drawable/bg_night_sky</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/sky_bottom</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">@color/paper</item>
     </style>
 
+    <!-- The alarm screen at 3am: still light, but warm rather than white. -->
     <style name="Theme.RozaAlarm.Ring" parent="Theme.RozaAlarm">
-        <item name="android:windowBackground">@drawable/bg_night_sky</item>
-        <item name="android:windowShowWallpaper">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">@color/brand_gold_tint</item>
+        <item name="android:navigationBarColor">@color/brand_gold_tint</item>
     </style>
 
     <style name="Theme.RozaAlarm.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Roza.Dialog</item>
-    </style>
-
-    <style name="Theme.RozaAlarm.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
-        <item name="colorPrimary">@color/brand_green</item>
     </style>
 
     <style name="Theme.RozaAlarm.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog" />

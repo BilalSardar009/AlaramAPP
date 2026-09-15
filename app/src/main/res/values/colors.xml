@@ -1,42 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ===== Brand ===== -->
-    <color name="brand_green">#0F6B54</color>
-    <color name="brand_green_deep">#08382C</color>
-    <color name="brand_green_night">#061613</color>
-    <color name="brand_green_light">#3FC79E</color>
-    <color name="brand_gold">#E3B662</color>
-    <color name="brand_gold_deep">#B98A31</color>
-    <color name="brand_gold_light">#F6D79B</color>
-    <color name="brand_teal">#12806A</color>
+    <!-- ===== Brand =====
+         One green, one gold. Everything else is paper and ink, so the accents mean something. -->
+    <color name="brand_green">#15654C</color>
+    <color name="brand_green_dark">#0C4736</color>
+    <color name="brand_green_soft">#D7EBE1</color>
+    <color name="brand_green_tint">#EDF6F1</color>
 
-    <!-- ===== Night sky gradient used by the splash, header and ring screens ===== -->
-    <color name="sky_top">#04120F</color>
-    <color name="sky_mid">#0A2C24</color>
-    <color name="sky_bottom">#124C3E</color>
-    <color name="sky_glow">#2A9C7C</color>
+    <color name="brand_gold">#9C7218</color>
+    <color name="brand_gold_soft">#F7E8C6</color>
+    <color name="brand_gold_tint">#FCF5E6</color>
 
-    <!-- ===== Light scheme ===== -->
-    <color name="light_background">#F4F7F4</color>
-    <color name="light_surface">#FFFFFF</color>
-    <color name="light_surface_variant">#E4EDE8</color>
-    <color name="light_on_background">#101C18</color>
-    <color name="light_on_surface_variant">#4A5B54</color>
-    <color name="light_outline">#C9D8D1</color>
+    <!-- ===== Paper ===== -->
+    <color name="paper">#F7F5EF</color>
+    <color name="paper_raised">#FFFFFF</color>
+    <color name="paper_sunken">#EFEDE4</color>
 
-    <!-- ===== Dark scheme ===== -->
-    <color name="dark_background">#071411</color>
-    <color name="dark_surface">#0E201B</color>
-    <color name="dark_surface_variant">#17302A</color>
-    <color name="dark_on_background">#E7F2EE</color>
-    <color name="dark_on_surface_variant">#A9C0B8</color>
-    <color name="dark_outline">#28423B</color>
+    <!-- ===== Ink ===== -->
+    <color name="ink">#1B2320</color>
+    <color name="ink_muted">#5D6763</color>
+    <color name="hairline">#E2DED2</color>
 
     <!-- ===== Fixed ===== -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-    <color name="scrim_60">#99000000</color>
-    <color name="danger">#D3452F</color>
-    <color name="on_brand">#FFFFFF</color>
+    <color name="danger">#B3261E</color>
+    <color name="danger_soft">#FBE3E0</color>
 </resources>

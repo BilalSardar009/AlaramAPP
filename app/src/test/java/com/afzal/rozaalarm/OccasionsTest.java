@@ -9,7 +9,6 @@ import com.afzal.rozaalarm.util.Occasions;
 
 import org.junit.Test;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -18,11 +17,8 @@ import java.util.List;
  */
 public class OccasionsTest {
 
-    /** A weekday that is neither Monday nor Thursday, so it never adds an occasion of its own. */
-    private static final int PLAIN_DAY = Calendar.WEDNESDAY;
-
     private static List<Occasion> on(int month, int day) {
-        return Occasions.forHijriDay(month, day, PLAIN_DAY);
+        return Occasions.forHijriDay(month, day);
     }
 
     // ---- the named days -----------------------------------------------------------------------
@@ -52,8 +48,8 @@ public class OccasionsTest {
     }
 
     @Test
-    public void ramadanSupersedesTheWhiteDaysAndWeekdays() {
-        List<Occasion> occasions = Occasions.forHijriDay(Occasions.RAMADAN, 14, Calendar.MONDAY);
+    public void ramadanSupersedesTheWhiteDays() {
+        List<Occasion> occasions = on(Occasions.RAMADAN, 14);
         assertEquals(1, occasions.size());
         assertEquals(Occasion.RAMADAN, occasions.get(0));
     }
@@ -70,16 +66,6 @@ public class OccasionsTest {
             assertFalse("month " + month, on(month, 12).contains(Occasion.WHITE_DAYS));
             assertFalse("month " + month, on(month, 16).contains(Occasion.WHITE_DAYS));
         }
-    }
-
-    @Test
-    public void mondaysAndThursdaysAreMarked() {
-        assertTrue(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.MONDAY)
-                .contains(Occasion.MONDAY_THURSDAY));
-        assertTrue(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.THURSDAY)
-                .contains(Occasion.MONDAY_THURSDAY));
-        assertFalse(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.FRIDAY)
-                .contains(Occasion.MONDAY_THURSDAY));
     }
 
     @Test
@@ -150,9 +136,8 @@ public class OccasionsTest {
 
     @Test
     public void nothingVoluntaryIsListedAlongsideAForbiddenDay() {
-        // 1 Shawwal on a Monday is Eid, and only Eid.
-        List<Occasion> occasions =
-                Occasions.forHijriDay(Occasions.SHAWWAL, 1, Calendar.MONDAY);
+        // 1 Shawwal is Eid, and only Eid.
+        List<Occasion> occasions = on(Occasions.SHAWWAL, 1);
         assertEquals(1, occasions.size());
         assertEquals(Occasion.EID_AL_FITR, occasions.get(0));
     }
@@ -161,12 +146,21 @@ public class OccasionsTest {
 
     @Test
     public void theMostSignificantOccasionComesFirst() {
-        // 9 Dhul-Hijjah on a Monday: Arafah leads, ahead of the ten days and the weekday.
-        List<Occasion> occasions =
-                Occasions.forHijriDay(Occasions.DHUL_HIJJAH, 9, Calendar.MONDAY);
+        // 9 Dhul-Hijjah: Arafah leads, ahead of the first ten days of the month.
+        List<Occasion> occasions = on(Occasions.DHUL_HIJJAH, 9);
         assertEquals(Occasion.ARAFAH, occasions.get(0));
         assertTrue(occasions.contains(Occasion.DHUL_HIJJAH_FIRST_NINE));
-        assertTrue(occasions.contains(Occasion.MONDAY_THURSDAY));
+    }
+
+    /** Retired: it marked about a third of the calendar and buried the days that matter. */
+    @Test
+    public void mondaysAndThursdaysAreNeverReported() {
+        for (int month = 0; month <= 11; month++) {
+            for (int day = 1; day <= 30; day++) {
+                assertFalse("month " + month + " day " + day,
+                        on(month, day).contains(Occasion.MONDAY_THURSDAY));
+            }
+        }
     }
 
     /** Muharram is the least specific label, so it never hides a named day. */
@@ -197,9 +191,10 @@ public class OccasionsTest {
     }
 
     @Test
-    public void forbiddenOccasionsAreNotSchedulable() {
+    public void forbiddenAndRetiredOccasionsAreNotSchedulable() {
         for (Occasion occasion : Occasion.values()) {
-            assertEquals(occasion.name(), !occasion.isForbidden(), occasion.isSchedulable());
+            boolean expected = !occasion.isForbidden() && occasion != Occasion.MONDAY_THURSDAY;
+            assertEquals(occasion.name(), expected, occasion.isSchedulable());
         }
     }
 }

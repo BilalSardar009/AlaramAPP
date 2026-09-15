@@ -195,8 +195,7 @@ public class CalendarFragment extends Fragment implements CalendarDayAdapter.Lis
 
             // The occasions come from the grid's own Hijri coordinates rather than from a second
             // conversion, so the labels can never disagree with the cell they sit in.
-            List<Occasion> occasions = Occasions.forHijriDay(
-                    shownMonth, day, dayCal.get(Calendar.DAY_OF_WEEK));
+            List<Occasion> occasions = Occasions.forHijriDay(shownMonth, day);
 
             CalendarDay cell = new CalendarDay(day, dayCal.get(Calendar.DAY_OF_MONTH), millis,
                     dateKey == todayKey, occasions);
@@ -419,6 +418,8 @@ public class CalendarFragment extends Fragment implements CalendarDayAdapter.Lis
         TextView label = new TextView(requireContext());
         label.setText(labelRes);
         label.setTextSize(10f);
+        label.setMaxLines(1);
+        label.setEllipsize(android.text.TextUtils.TruncateAt.END);
         label.setTextColor(MaterialColors.getColor(binding.getRoot(),
                 com.google.android.material.R.attr.colorOnSurfaceVariant));
 

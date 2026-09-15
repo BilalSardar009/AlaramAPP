@@ -23,7 +23,7 @@ public class PulseRingView extends View {
     @Nullable
     private ValueAnimator animator;
     private float phase;
-    private int ringColor = Color.rgb(227, 182, 98);
+    private int ringColor = Color.rgb(21, 101, 76);
 
     public PulseRingView(Context context) {
         this(context, null);
@@ -78,7 +78,7 @@ public class PulseRingView extends View {
             float progress = (phase + i / (float) RING_COUNT) % 1f;
             float radius = minRadius + (maxRadius - minRadius) * progress;
             // Fade out as the ring travels, so the edge never looks cut off.
-            int alpha = (int) (170 * (1f - progress) * (1f - progress));
+            int alpha = (int) (110 * (1f - progress) * (1f - progress));
             ringPaint.setColor(Color.argb(alpha, Color.red(ringColor), Color.green(ringColor),
                     Color.blue(ringColor)));
             ringPaint.setStrokeWidth(2.5f + 2.5f * (1f - progress));

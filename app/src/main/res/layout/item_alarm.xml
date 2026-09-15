@@ -52,6 +52,8 @@
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintBaseline_toBaselineOf="@id/alarmTime"
+            app:layout_constraintEnd_toStartOf="@id/alarmSwitch"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/alarmTime"
             tools:text="AM" />
 
@@ -59,6 +61,7 @@
             android:id="@+id/alarmSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="14dp"
             android:contentDescription="@string/cd_toggle_alarm"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/activeSpine"
             app:layout_constraintTop_toBottomOf="@id/alarmTime"
+            app:layout_constraintWidth_default="spread"
             tools:text="Ayyam al-Beed Sehri" />
 
         <ImageView

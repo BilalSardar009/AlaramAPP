@@ -56,7 +56,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/calendar_prev_month"
                     android:src="@drawable/ic_chevron_left"
-                    app:tint="@color/brand_gold_light" />
+                    app:tint="@color/brand_green" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:textColor="@color/white"
+                        android:textColor="@color/ink"
                         android:textSize="21sp"
                         tools:text="Ramadan 1448 AH" />
 
@@ -78,7 +78,7 @@
                         android:id="@+id/monthTitleUrdu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#CCF6D79B"
+                        android:textColor="@color/brand_green"
                         android:textSize="15sp"
                         tools:text="رمضان ۱۴۴۸ھ" />
 
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:textColor="#99FFFFFF"
+                        android:textColor="@color/ink_muted"
                         android:textSize="12sp"
                         tools:text="12 Mar – 10 Apr 2027" />
 
@@ -96,12 +96,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:background="@drawable/bg_glass_pill"
+                        android:background="@drawable/bg_soft_pill"
                         android:paddingStart="10dp"
                         android:paddingTop="3dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="3dp"
-                        android:textColor="@color/brand_gold_light"
+                        android:textColor="@color/brand_green_dark"
                         android:textSize="11sp"
                         android:visibility="gone"
                         tools:text="Adjusted by +1 day"
@@ -115,7 +115,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/calendar_next_month"
                     android:src="@drawable/ic_chevron_right"
-                    app:tint="@color/brand_gold_light" />
+                    app:tint="@color/brand_green" />
             </LinearLayout>
 
             <!-- ============ Weekday header ============ -->
@@ -206,41 +206,45 @@
                         app:drawableTint="?attr/colorError"
                         tools:visibility="visible" />
 
-                    <LinearLayout
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/recordButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
+                        android:minHeight="52dp"
+                        android:text="@string/day_sheet_record"
+                        app:cornerRadius="26dp"
+                        app:icon="@drawable/ic_check"
+                        app:iconGravity="textStart" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/recordButton"
+                            android:id="@+id/missedButton"
+                            style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
                             android:layout_weight="1"
-                            android:text="@string/day_sheet_record"
-                            app:cornerRadius="24dp"
-                            app:icon="@drawable/ic_check" />
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/day_sheet_missed" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/alarmButton"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="wrap_content"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:contentDescription="@string/day_sheet_add_alarm"
-                            app:cornerRadius="24dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/day_sheet_add_alarm"
                             app:icon="@drawable/ic_alarm"
-                            app:iconPadding="0dp" />
+                            app:iconGravity="textStart" />
                     </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/missedButton"
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="@string/day_sheet_missed" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

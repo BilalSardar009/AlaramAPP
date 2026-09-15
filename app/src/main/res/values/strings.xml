@@ -44,7 +44,8 @@
     <string name="section_repeat">Repeat</string>
     <string name="section_reminder">Advance reminder</string>
     <string name="section_options">Options</string>
-    <string name="section_presets">Quick presets</string>
+    <string name="more_options">More options</string>
+    <string name="fewer_options">Fewer options</string>
     <string name="tap_to_change_time">Tap to change</string>
 
     <string name="repeat_once">Once</string>
@@ -64,10 +65,6 @@
     <string name="clamp_month_end">Shift to the last day in shorter months</string>
     <string name="selected_days_none">Select at least one day</string>
 
-    <string name="preset_white_days">White Days · 13, 14, 15</string>
-    <string name="preset_mon_thu">Mondays &amp; Thursdays</string>
-    <string name="preset_every_day">Every day</string>
-    <string name="preset_applied">Preset applied</string>
 
     <string name="reminder_enable">Remind me in advance</string>
     <string name="reminder_days_before">Days before</string>
@@ -305,9 +302,9 @@
     <string name="history_expand">Show the dates</string>
 
     <!-- ======================= Occasion alarms ======================= -->
-    <string name="repeat_occasion">Occasion</string>
-    <string name="section_occasion">Islamic occasion</string>
-    <string name="occasion_pick">Choose an occasion</string>
+    <string name="repeat_occasion">Fasting day</string>
+    <string name="section_occasion">Which fast</string>
+    <string name="occasion_pick">Choose which fast</string>
     <string name="summary_occasion">Every %1$s</string>
     <string name="skip_forbidden_days">Skip Eid and Tashreeq days</string>
     <string name="skip_forbidden_days_hint">Fasting is not permitted on Eid al-Fitr, Eid al-Adha or 11–13 Dhu al-Hijjah, so those days are never scheduled.</string>

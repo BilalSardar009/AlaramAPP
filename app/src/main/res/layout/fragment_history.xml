@@ -41,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_month_header"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingTop="18dp"
                 android:paddingBottom="18dp">
@@ -57,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:textColor="@color/white"
+                        android:textColor="@color/ink"
                         android:textSize="28sp"
                         tools:text="128" />
 
@@ -66,14 +67,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/history_total"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
-                        android:textColor="#99FFFFFF"
+                        android:textColor="@color/ink_muted"
                         android:textSize="10sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#33FFFFFF" />
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/hairline" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -87,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:textColor="@color/brand_gold_light"
+                        android:textColor="@color/brand_gold"
                         android:textSize="28sp"
                         tools:text="31" />
 
@@ -96,14 +98,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/history_this_year"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
-                        android:textColor="#99FFFFFF"
+                        android:textColor="@color/ink_muted"
                         android:textSize="10sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#33FFFFFF" />
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/hairline" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -117,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:textColor="@color/white"
+                        android:textColor="@color/ink"
                         android:textSize="28sp"
                         tools:text="3" />
 
@@ -126,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/history_streak"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
-                        android:textColor="#99FFFFFF"
+                        android:textColor="@color/ink_muted"
                         android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>

@@ -37,7 +37,6 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -238,6 +237,7 @@ public class AlarmEditActivity extends AppCompatActivity {
         binding.onceDateCard.setOnClickListener(v -> pickOnceDate());
         binding.toneRow.setOnClickListener(v -> pickTone());
         binding.saveButton.setOnClickListener(v -> save());
+        binding.advancedToggle.setOnClickListener(v -> toggleAdvanced());
 
         binding.repeatChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (bindingValues || checkedIds.isEmpty()) {
@@ -275,12 +275,6 @@ public class AlarmEditActivity extends AppCompatActivity {
             updateCalendarHint();
             refreshPreview();
         });
-
-        binding.presetWhiteDays.setOnClickListener(v -> applyPreset(Alarm.REPEAT_MONTHLY,
-                Arrays.asList(13, 14, 15), null));
-        binding.presetMonThu.setOnClickListener(v -> applyPreset(Alarm.REPEAT_WEEKLY, null,
-                Arrays.asList(Calendar.MONDAY, Calendar.THURSDAY)));
-        binding.presetEveryDay.setOnClickListener(v -> applyPreset(Alarm.REPEAT_DAILY, null, null));
 
         CompoundButton.OnCheckedChangeListener simpleToggle = (button, checked) -> {
             if (bindingValues) {
@@ -321,22 +315,17 @@ public class AlarmEditActivity extends AppCompatActivity {
         });
     }
 
-    private void applyPreset(int repeatMode, @Nullable List<Integer> monthDays,
-                             @Nullable List<Integer> weekDays) {
-        alarm.repeatMode = repeatMode;
-        if (monthDays != null) {
-            alarm.setMonthDayList(monthDays);
-        }
-        if (weekDays != null) {
-            alarm.setWeekDayList(weekDays);
-        }
-        bindAlarmToUi();
-        Snackbar.make(binding.editRoot, R.string.preset_applied, Snackbar.LENGTH_SHORT)
-                .setAnchorView(binding.saveButton)
-                .show();
-    }
 
     // ---- binding ------------------------------------------------------------------------------
+
+    /** Shows or hides the settings most people never need to touch. */
+    private void toggleAdvanced() {
+        boolean showing = binding.advancedSection.getVisibility() == View.VISIBLE;
+        binding.advancedSection.setVisibility(showing ? View.GONE : View.VISIBLE);
+        binding.advancedToggle.setText(showing ? R.string.more_options : R.string.fewer_options);
+        binding.advancedToggle.setIconResource(
+                showing ? R.drawable.ic_expand_more : R.drawable.ic_expand_less);
+    }
 
     private void bindAlarmToUi() {
         bindingValues = true;

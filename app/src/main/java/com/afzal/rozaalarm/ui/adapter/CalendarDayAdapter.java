@@ -143,7 +143,7 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
                 binding.dayLogged.setImageResource(day.missed
                         ? R.drawable.ic_block : R.drawable.ic_check_circle);
                 binding.dayLogged.setImageTintList(ContextCompat.getColorStateList(context,
-                        day.missed ? R.color.danger : R.color.brand_green_light));
+                        day.missed ? R.color.danger : R.color.brand_green));
             } else {
                 binding.dayLogged.setVisibility(View.GONE);
             }

@@ -18,8 +18,8 @@ public class RozaApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // The palette is designed for both schemes; follow whatever the phone is set to.
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        // One calm light theme, regardless of the system setting.
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         Notifications.createChannels(this);
 

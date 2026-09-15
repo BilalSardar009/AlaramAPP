@@ -141,7 +141,15 @@ public final class Occurrences {
 
             case Alarm.REPEAT_OCCASION: {
                 Occasion occasion = Occasion.fromId(alarm.occasionId);
-                return occasion != null && Occasions.matches(occasion, day.getTimeInMillis());
+                if (occasion == null) {
+                    return false;
+                }
+                if (occasion == Occasion.MONDAY_THURSDAY) {
+                    // Retired from the occasion list, but alarms saved against it still ring.
+                    int weekday = day.get(Calendar.DAY_OF_WEEK);
+                    return weekday == Calendar.MONDAY || weekday == Calendar.THURSDAY;
+                }
+                return Occasions.matches(occasion, day.getTimeInMillis());
             }
 
             case Alarm.REPEAT_MONTHLY: {

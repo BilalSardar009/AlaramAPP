@@ -16,9 +16,10 @@ voluntary fasts needs. This app is built around that rule, and around the calend
 
 * **Monthly day rules** — pick any days of the month and the alarm fires on each of them, every
   month, forever. Counted in the **Hijri** month (Umm al-Qura) or the English one.
-* **Occasion rules** — set an alarm for *Ramadan*, the *Day of Arafah*, *Ashura*, *Tasu'a*, the
-  *first nine of Dhu al-Hijjah*, the *six of Shawwal*, *15 Sha'ban*, *Muharram*, the *White Days*
-  or *Mondays & Thursdays*. The app works out the dates every year, forever.
+* **Fasting-day rules** — set an alarm for *Ramadan*, the *Day of Arafah*, *Ashura*, *Tasu'a*, the
+  *first nine of Dhu al-Hijjah*, the *six of Shawwal*, *15 Sha'ban*, *Muharram* or the *White
+  Days*. The app works out the dates every year, forever. For Mondays and Thursdays use the plain
+  Weekly repeat — it says the same thing without marking a third of the calendar.
 * **Days fasting is not permitted are never scheduled** — Eid al-Fitr, Eid al-Adha and the days of
   Tashreeq. This is why a White Days rule rings on the 14th and 15th of Dhu al-Hijjah but not the
   13th, which is a day of Tashreeq.
@@ -85,13 +86,20 @@ a calendar in the way:
 | 15 Sha'ban | 15 Sha'ban | voluntary |
 | Six of Shawwal | any six days after Eid; 2–7 shown | voluntary |
 | White Days | 13th, 14th, 15th of every month | voluntary |
-| Mondays & Thursdays | weekly | voluntary |
 | Eid al-Fitr | 1 Shawwal | **not permitted** |
 | Eid al-Adha | 10 Dhu al-Hijjah | **not permitted** |
 | Days of Tashreeq | 11–13 Dhu al-Hijjah | **not permitted** |
 
 Ramadan supersedes every voluntary fast, and nothing voluntary is ever listed next to a day
 fasting is not permitted on.
+
+## Look and feel
+
+One light theme — paper, one green, one gold — so the marked days carry the screen instead of the
+background. The alarm editor shows only time, name, repeat and reminder by default; the settings
+most people never touch sit behind **More options**. Animations are kept to the ones that help:
+the splash crescent settling in, alarm cards easing up as the list loads, the extended button
+collapsing as you scroll, and a slow pulse behind a ringing alarm.
 
 ## Hijri dates
 
@@ -142,6 +150,7 @@ cd AlaramAPP
 | | |
 | --- | --- |
 | Language | Java |
+| Theme | Light only, Material 3 |
 | Min / target SDK | 24 / 34 |
 | UI | Material 3, view binding, `RecyclerView`, custom canvas views |
 | Storage | Room (schemas exported to `app/schemas`) |

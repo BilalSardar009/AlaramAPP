@@ -84,9 +84,15 @@ public enum Occasion {
         return category == Category.FORBIDDEN;
     }
 
-    /** True when this occasion can be used as the repeat rule of an alarm. */
+    /**
+     * True when this occasion is offered as an alarm rule and drawn on the calendar.
+     *
+     * <p>{@link #MONDAY_THURSDAY} is kept so alarms saved before it was retired still resolve, but
+     * it is no longer offered: a weekly alarm on Monday and Thursday says the same thing without
+     * marking a third of the calendar.</p>
+     */
     public boolean isSchedulable() {
-        return !isForbidden();
+        return !isForbidden() && this != MONDAY_THURSDAY;
     }
 
     @Nullable

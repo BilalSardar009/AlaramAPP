@@ -3,7 +3,6 @@ package com.afzal.rozaalarm.util;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,12 +34,15 @@ public final class Occasions {
     /**
      * Every occasion falling on one day, most significant first.
      *
-     * @param hijriMonth       zero based Hijri month, {@link #MUHARRAM} … {@link #DHUL_HIJJAH}
-     * @param hijriDay         Hijri day of month, 1-30
-     * @param gregorianWeekday {@link Calendar#DAY_OF_WEEK} of the same day
+     * <p>Mondays and Thursdays are deliberately not reported. They would mark roughly nine days a
+     * month, which drowns out the days that actually are special; a weekly alarm says the same
+     * thing more plainly.</p>
+     *
+     * @param hijriMonth zero based Hijri month, {@link #MUHARRAM} … {@link #DHUL_HIJJAH}
+     * @param hijriDay   Hijri day of month, 1-30
      */
     @NonNull
-    public static List<Occasion> forHijriDay(int hijriMonth, int hijriDay, int gregorianWeekday) {
+    public static List<Occasion> forHijriDay(int hijriMonth, int hijriDay) {
         List<Occasion> found = new ArrayList<>(3);
 
         // ---- days on which fasting is not permitted -------------------------------------------
@@ -95,9 +97,6 @@ public final class Occasions {
         if (hijriMonth == MUHARRAM) {
             found.add(Occasion.MUHARRAM);
         }
-        if (gregorianWeekday == Calendar.MONDAY || gregorianWeekday == Calendar.THURSDAY) {
-            found.add(Occasion.MONDAY_THURSDAY);
-        }
 
         return Collections.unmodifiableList(found);
     }
@@ -105,10 +104,8 @@ public final class Occasions {
     /** Convenience wrapper that converts the instant first. */
     @NonNull
     public static List<Occasion> forInstant(long millis) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(millis);
         HijriDates.Snapshot hijri = HijriDates.snapshot(millis);
-        return forHijriDay(hijri.month, hijri.day, cal.get(Calendar.DAY_OF_WEEK));
+        return forHijriDay(hijri.month, hijri.day);
     }
 
     /** The occasion a day should be labelled with, or {@code null} for an ordinary day. */
