@@ -148,14 +148,20 @@ public final class Notifications {
             bodyUr = context.getString(R.string.notif_reminder_body_days_ur, label, daysAway, timeText);
         }
 
-        int offset = Prefs.hijriOffset(context);
         String hijriEn = context.getString(R.string.notif_reminder_hijri_en,
-                HijriDates.formatEnglish(occurrenceMillis, offset));
+                HijriDates.formatEnglish(occurrenceMillis));
         String hijriUr = context.getString(R.string.notif_reminder_hijri_ur,
-                HijriDates.formatUrdu(occurrenceMillis, offset));
+                HijriDates.formatUrdu(occurrenceMillis));
 
-        String body = Bilingual.stacked(context, bodyEn, bodyUr)
-                + "\n" + Bilingual.stacked(context, hijriEn, hijriUr);
+        StringBuilder bodyBuilder = new StringBuilder(Bilingual.stacked(context, bodyEn, bodyUr));
+
+        Occasion occasion = Occasions.primaryForInstant(occurrenceMillis);
+        if (occasion != null) {
+            bodyBuilder.append('\n').append(OccasionText.bilingualName(context, occasion));
+        }
+        bodyBuilder.append('\n').append(Bilingual.stacked(context, hijriEn, hijriUr));
+
+        String body = bodyBuilder.toString();
 
         PendingIntent content = PendingIntent.getActivity(
                 context,

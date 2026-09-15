@@ -192,7 +192,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/repeat_monthly" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/repeatOccasion"
+                    style="@style/Widget.Roza.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repeat_occasion" />
             </com.google.android.material.chip.ChipGroup>
+
+            <!-- ===================== Islamic occasion ===================== -->
+            <LinearLayout
+                android:id="@+id/occasionSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Widget.Roza.SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_occasion" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/occasionChips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:selectionRequired="true"
+                    app:singleLine="false"
+                    app:singleSelection="true" />
+
+                <TextView
+                    android:id="@+id/occasionNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    tools:text="9 Dhu al-Hijjah" />
+            </LinearLayout>
 
             <!-- ===================== Monthly options ===================== -->
             <LinearLayout
@@ -440,6 +479,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/section_options" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/skipForbiddenSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/skip_forbidden_days"
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="@string/skip_forbidden_days_hint"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/vibrateSwitch"

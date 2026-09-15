@@ -4,15 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,46 +16,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
 import com.afzal.rozaalarm.R;
 import com.afzal.rozaalarm.alarm.AlarmScheduler;
-import com.afzal.rozaalarm.data.Alarm;
-import com.afzal.rozaalarm.data.AlarmRepository;
 import com.afzal.rozaalarm.databinding.ActivityMainBinding;
-import com.afzal.rozaalarm.ui.adapter.AlarmAdapter;
-import com.afzal.rozaalarm.util.HijriDates;
-import com.afzal.rozaalarm.util.Occurrences;
-import com.afzal.rozaalarm.util.Prefs;
-import com.afzal.rozaalarm.util.TimeText;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * Hosts the three tabs — Alarms, Calendar and History — and owns the permission prompts, which
+ * belong to the app as a whole rather than to any one tab.
+ */
+public class MainActivity extends AppCompatActivity {
 
-/** Home screen: the hero header with today's dates plus the list of alarms. */
-public class MainActivity extends AppCompatActivity implements AlarmAdapter.Listener {
+    /** Ask the Calendar tab to open on a particular Hijri month. */
+    public static final String EXTRA_SHOW_HIJRI_YEAR = "com.afzal.rozaalarm.extra.HIJRI_YEAR";
+    public static final String EXTRA_SHOW_HIJRI_MONTH = "com.afzal.rozaalarm.extra.HIJRI_MONTH";
 
-    private static final long TICK_INTERVAL_MS = 30_000L;
+    private static final String STATE_TAB = "selected_tab";
 
     private ActivityMainBinding binding;
-    private AlarmAdapter adapter;
-    private AlarmRepository repository;
-
-    private final Handler ticker = new Handler(Looper.getMainLooper());
-    private final List<Alarm> currentAlarms = new ArrayList<>();
-    private boolean firstListLoad = true;
-
-    private final Runnable tick = new Runnable() {
-        @Override
-        public void run() {
-            updateHero();
-            ticker.postDelayed(this, TICK_INTERVAL_MS);
-        }
-    };
+    private int selectedTabId = R.id.tab_alarms;
 
     private final ActivityResultLauncher<String> notificationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -68,229 +49,107 @@ public class MainActivity extends AppCompatActivity implements AlarmAdapter.List
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        applyWindowInsets();
 
-        repository = AlarmRepository.get(this);
-
-        binding.toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_settings) {
-                startActivity(new Intent(this, SettingsActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                return true;
-            }
-            return false;
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            showTab(item.getItemId());
+            return true;
+        });
+        binding.bottomNav.setOnItemReselectedListener(item -> {
+            // Reselecting a tab should not rebuild it.
         });
 
-        adapter = new AlarmAdapter(this);
-        binding.alarmList.setLayoutManager(new LinearLayoutManager(this));
-        binding.alarmList.setAdapter(adapter);
-        binding.alarmList.setHasFixedSize(false);
-        attachSwipeToDelete();
-        keepFabOutOfTheWay();
+        if (savedInstanceState != null) {
+            selectedTabId = savedInstanceState.getInt(STATE_TAB, R.id.tab_alarms);
+        }
+        if (getIntent().hasExtra(EXTRA_SHOW_HIJRI_MONTH)) {
+            selectedTabId = R.id.tab_calendar;
+        }
 
-        binding.addAlarmFab.setOnClickListener(v -> openEditor(0L));
-        binding.nextAlarmCard.setOnClickListener(v -> scrollToNextAlarm());
+        binding.bottomNav.setSelectedItemId(selectedTabId);
+        showTab(selectedTabId);
+    }
 
-        repository.observeAll().observe(this, alarms -> {
-            currentAlarms.clear();
-            currentAlarms.addAll(alarms);
-            adapter.submitList(new ArrayList<>(alarms));
-            binding.emptyState.setVisibility(alarms.isEmpty() ? View.VISIBLE : View.GONE);
-            binding.alarmList.setVisibility(alarms.isEmpty() ? View.GONE : View.VISIBLE);
-            if (firstListLoad && !alarms.isEmpty()) {
-                firstListLoad = false;
-                binding.alarmList.scheduleLayoutAnimation();
-            }
-            updateHero();
-        });
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent.hasExtra(EXTRA_SHOW_HIJRI_MONTH)) {
+            binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
+            showTab(R.id.tab_calendar);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_TAB, selectedTabId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateHero();
-        ticker.removeCallbacks(tick);
-        ticker.postDelayed(tick, TICK_INTERVAL_MS);
         requestPermissionsIfNeeded();
     }
 
-    @Override
-    protected void onPause() {
-        ticker.removeCallbacks(tick);
-        super.onPause();
+    /** Jump to the Calendar tab focused on one Hijri month. Used by the History tab. */
+    public void showCalendarMonth(int hijriYear, int hijriMonth) {
+        getIntent().putExtra(EXTRA_SHOW_HIJRI_YEAR, hijriYear);
+        getIntent().putExtra(EXTRA_SHOW_HIJRI_MONTH, hijriMonth);
+        binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
+        showTab(R.id.tab_calendar);
     }
 
-    // ---- hero ---------------------------------------------------------------------------------
+    // ---- tabs ---------------------------------------------------------------------------------
 
-    private void updateHero() {
-        long now = System.currentTimeMillis();
-        int hijriOffset = Prefs.hijriOffset(this);
+    private void showTab(int itemId) {
+        selectedTabId = itemId;
+        String tag = "tab:" + itemId;
 
-        binding.todayDate.setText(TimeText.fullDate(this, now));
-        binding.todayHijri.setText(HijriDates.formatEnglish(now, hijriOffset)
-                + "   ·   " + HijriDates.formatUrdu(now, hijriOffset));
-
-        Alarm soonest = null;
-        long soonestTime = Long.MAX_VALUE;
-        for (Alarm alarm : currentAlarms) {
-            if (!alarm.enabled) {
-                continue;
-            }
-            long next = Occurrences.next(alarm, now, hijriOffset);
-            if (next != Occurrences.NONE && next < soonestTime) {
-                soonestTime = next;
-                soonest = alarm;
-            }
+        Fragment existing = getSupportFragmentManager().findFragmentByTag(tag);
+        if (existing != null && existing.isVisible()) {
+            return;
         }
 
-        if (soonest == null) {
-            binding.nextAlarmLabel.setText(R.string.next_alarm_none);
-            binding.nextAlarmCountdown.setText(R.string.next_alarm_none_hint);
-        } else {
-            String label = soonest.label.trim().isEmpty()
-                    ? getString(R.string.default_alarm_label)
-                    : soonest.label;
-            binding.nextAlarmLabel.setText(label + " · " + TimeText.dateTime(this, soonestTime));
-            binding.nextAlarmCountdown.setText(TimeText.countdown(this, soonestTime, now));
+        Fragment fragment = existing != null ? existing : createFragment(itemId);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .replace(R.id.tabContainer, fragment, tag)
+                .commit();
+    }
+
+    @NonNull
+    private Fragment createFragment(int itemId) {
+        if (itemId == R.id.tab_calendar) {
+            int year = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_YEAR, -1);
+            int month = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_MONTH, -1);
+            // Consume the request so rotating the device does not jump back to that month.
+            getIntent().removeExtra(EXTRA_SHOW_HIJRI_YEAR);
+            getIntent().removeExtra(EXTRA_SHOW_HIJRI_MONTH);
+            return CalendarFragment.newInstance(year, month);
         }
-    }
-
-    private void scrollToNextAlarm() {
-        long now = System.currentTimeMillis();
-        int hijriOffset = Prefs.hijriOffset(this);
-        int bestIndex = -1;
-        long bestTime = Long.MAX_VALUE;
-        for (int i = 0; i < currentAlarms.size(); i++) {
-            Alarm alarm = currentAlarms.get(i);
-            if (!alarm.enabled) {
-                continue;
-            }
-            long next = Occurrences.next(alarm, now, hijriOffset);
-            if (next != Occurrences.NONE && next < bestTime) {
-                bestTime = next;
-                bestIndex = i;
-            }
+        if (itemId == R.id.tab_history) {
+            return new HistoryFragment();
         }
-        if (bestIndex >= 0) {
-            binding.appBar.setExpanded(false, true);
-            binding.alarmList.smoothScrollToPosition(bestIndex);
-        }
+        return new AlarmsFragment();
     }
 
-    // ---- list interaction ---------------------------------------------------------------------
-
-    @Override
-    public void onAlarmClicked(@NonNull Alarm alarm) {
-        openEditor(alarm.id);
-    }
-
-    @Override
-    public void onAlarmToggled(@NonNull Alarm alarm, boolean enabled) {
-        repository.setEnabled(alarm.id, enabled, id -> runOnUiThread(this::updateHero));
-    }
-
-    @Override
-    public void onAlarmLongClicked(@NonNull Alarm alarm) {
-        String[] options = {
-                getString(R.string.action_edit),
-                getString(R.string.action_duplicate),
-                getString(R.string.action_delete)
-        };
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.alarm_options_title)
-                .setItems(options, (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            openEditor(alarm.id);
-                            break;
-                        case 1:
-                            duplicate(alarm);
-                            break;
-                        case 2:
-                            deleteWithUndo(alarm);
-                            break;
-                        default:
-                            break;
-                    }
-                })
-                .show();
-    }
-
-    private void duplicate(@NonNull Alarm alarm) {
-        Alarm copy = Alarm.copyOf(alarm);
-        copy.label = getString(R.string.duplicate_suffix, alarm.label.trim().isEmpty()
-                ? getString(R.string.default_alarm_label) : alarm.label);
-        repository.save(copy, null);
-    }
-
-    private void deleteWithUndo(@NonNull Alarm alarm) {
-        repository.delete(alarm, null);
-        Snackbar.make(binding.mainRoot, R.string.alarm_deleted, Snackbar.LENGTH_LONG)
-                .setAnchorView(binding.addAlarmFab)
-                .setAction(R.string.action_undo, v -> repository.save(Alarm.copyOf(alarm), null))
-                .show();
-    }
-
-    private void openEditor(long alarmId) {
-        startActivity(new Intent(this, AlarmEditActivity.class)
-                .putExtra(AlarmEditActivity.EXTRA_ALARM_ID, alarmId));
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
-    private void attachSwipeToDelete() {
-        ItemTouchHelper helper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
-                                         int direction) {
-                        int position = viewHolder.getBindingAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            deleteWithUndo(adapter.alarmAt(position));
-                        }
-                    }
-
-                    @Override
-                    public void onChildDraw(@NonNull Canvas canvas,
-                                            @NonNull RecyclerView recyclerView,
-                                            @NonNull RecyclerView.ViewHolder viewHolder,
-                                            float dX, float dY, int actionState,
-                                            boolean isCurrentlyActive) {
-                        // Fade the card out as it slides away instead of leaving a hard edge.
-                        float width = Math.max(1f, viewHolder.itemView.getWidth());
-                        viewHolder.itemView.setAlpha(1f - Math.min(1f, Math.abs(dX) / width));
-                        super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState,
-                                isCurrentlyActive);
-                    }
-
-                    @Override
-                    public void clearView(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder) {
-                        viewHolder.itemView.setAlpha(1f);
-                        super.clearView(recyclerView, viewHolder);
-                    }
-                });
-        helper.attachToRecyclerView(binding.alarmList);
-    }
-
-    /** Collapses the extended FAB to a plain icon while the list is scrolling down. */
-    private void keepFabOutOfTheWay() {
-        binding.alarmList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 8 && binding.addAlarmFab.isExtended()) {
-                    binding.addAlarmFab.shrink();
-                } else if (dy < -8 && !binding.addAlarmFab.isExtended()) {
-                    binding.addAlarmFab.extend();
-                }
-            }
+    /**
+     * The tabs draw under the status bar, so the bottom inset is applied to the navigation bar
+     * here and removed before the insets reach them.
+     */
+    private void applyWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (view, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            binding.bottomNav.setPadding(0, 0, 0, bars.bottom);
+            return new WindowInsetsCompat.Builder(insets)
+                    .setInsets(WindowInsetsCompat.Type.systemBars(),
+                            Insets.of(bars.left, bars.top, bars.right, 0))
+                    .build();
         });
     }
 
@@ -333,10 +192,11 @@ public class MainActivity extends AppCompatActivity implements AlarmAdapter.List
     }
 
     private void maybePromptForBattery() {
-        if (Prefs.wasBatteryPromptShown(this) || isIgnoringBatteryOptimizations(this)) {
+        if (com.afzal.rozaalarm.util.Prefs.wasBatteryPromptShown(this)
+                || isIgnoringBatteryOptimizations(this)) {
             return;
         }
-        Prefs.setBatteryPromptShown(this);
+        com.afzal.rozaalarm.util.Prefs.setBatteryPromptShown(this);
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.perm_title)
                 .setMessage(R.string.perm_battery_message)

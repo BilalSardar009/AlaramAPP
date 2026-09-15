@@ -23,6 +23,8 @@ import com.afzal.rozaalarm.data.Alarm;
 import com.afzal.rozaalarm.data.AlarmRepository;
 import com.afzal.rozaalarm.databinding.ActivityAlarmEditBinding;
 import com.afzal.rozaalarm.util.HijriDates;
+import com.afzal.rozaalarm.util.Occasion;
+import com.afzal.rozaalarm.util.OccasionText;
 import com.afzal.rozaalarm.util.Occurrences;
 import com.afzal.rozaalarm.util.Prefs;
 import com.afzal.rozaalarm.util.TimeText;
@@ -43,6 +45,9 @@ import java.util.List;
 public class AlarmEditActivity extends AppCompatActivity {
 
     public static final String EXTRA_ALARM_ID = "com.afzal.rozaalarm.extra.EDIT_ALARM_ID";
+
+    /** Opens a new alarm pre-set to a particular date, used by the calendar's "set an alarm". */
+    public static final String EXTRA_PRESET_DATE = "com.afzal.rozaalarm.extra.PRESET_DATE";
 
     private static final int PREVIEW_COUNT = 4;
 
@@ -75,6 +80,7 @@ public class AlarmEditActivity extends AppCompatActivity {
 
         buildMonthDayChips();
         buildWeekDayChips();
+        buildOccasionChips();
         wireListeners();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -98,7 +104,13 @@ public class AlarmEditActivity extends AppCompatActivity {
         alarm = new Alarm();
         alarm.label = getString(R.string.default_alarm_label);
         alarm.snoozeMinutes = Prefs.defaultSnooze(this);
-        alarm.onceDateMillis = System.currentTimeMillis();
+        long presetDate = getIntent().getLongExtra(EXTRA_PRESET_DATE, 0L);
+        if (presetDate > 0L) {
+            alarm.repeatMode = Alarm.REPEAT_ONCE;
+            alarm.onceDateMillis = presetDate;
+        } else {
+            alarm.onceDateMillis = System.currentTimeMillis();
+        }
         binding.toolbar.setTitle(R.string.title_new_alarm);
         bindAlarmToUi();
     }
@@ -164,6 +176,39 @@ public class AlarmEditActivity extends AppCompatActivity {
         }
     }
 
+    private void buildOccasionChips() {
+        ViewGroup group = binding.occasionChips;
+        group.removeAllViews();
+        for (Occasion occasion : OccasionText.schedulable()) {
+            Chip chip = new Chip(this, null, com.google.android.material.R.attr.chipStyle);
+            chip.setId(View.generateViewId());
+            chip.setTag(occasion.id());
+            chip.setText(OccasionText.name(this, occasion));
+            chip.setChipIconResource(OccasionText.icon(occasion));
+            chip.setCheckable(true);
+            chip.setCheckedIconVisible(false);
+            chip.setOnCheckedChangeListener((button, checked) -> {
+                if (bindingValues || !checked) {
+                    return;
+                }
+                alarm.occasionId = (String) button.getTag();
+                updateOccasionNote();
+                refreshPreview();
+            });
+            group.addView(chip);
+        }
+    }
+
+    private void updateOccasionNote() {
+        Occasion occasion = Occasion.fromId(alarm.occasionId);
+        if (occasion == null) {
+            binding.occasionNote.setText(R.string.occasion_pick);
+            return;
+        }
+        binding.occasionNote.setText(getString(OccasionText.noteEn(occasion))
+                + "  ·  " + getString(OccasionText.noteUr(occasion)));
+    }
+
     @NonNull
     private List<Integer> readCheckedTags(@NonNull ViewGroup group) {
         List<Integer> values = new ArrayList<>();
@@ -205,6 +250,14 @@ public class AlarmEditActivity extends AppCompatActivity {
                 alarm.repeatMode = Alarm.REPEAT_DAILY;
             } else if (id == R.id.repeatWeekly) {
                 alarm.repeatMode = Alarm.REPEAT_WEEKLY;
+            } else if (id == R.id.repeatOccasion) {
+                alarm.repeatMode = Alarm.REPEAT_OCCASION;
+                if (Occasion.fromId(alarm.occasionId) == null) {
+                    // Default to the fast this app is named for.
+                    alarm.occasionId = Occasion.WHITE_DAYS.id();
+                    applyCheckedOccasion();
+                }
+                updateOccasionNote();
             } else {
                 alarm.repeatMode = Alarm.REPEAT_MONTHLY;
             }
@@ -243,6 +296,8 @@ public class AlarmEditActivity extends AppCompatActivity {
                 alarm.preReminderFirstDayOnly = checked;
             } else if (id == R.id.vibrateSwitch) {
                 alarm.vibrate = checked;
+            } else if (id == R.id.skipForbiddenSwitch) {
+                alarm.skipForbiddenDays = checked;
             }
             refreshPreview();
         };
@@ -250,6 +305,7 @@ public class AlarmEditActivity extends AppCompatActivity {
         binding.reminderSwitch.setOnCheckedChangeListener(simpleToggle);
         binding.reminderFirstDaySwitch.setOnCheckedChangeListener(simpleToggle);
         binding.vibrateSwitch.setOnCheckedChangeListener(simpleToggle);
+        binding.skipForbiddenSwitch.setOnCheckedChangeListener(simpleToggle);
 
         binding.reminderDaysSlider.addOnChangeListener((slider, value, fromUser) -> {
             alarm.preReminderDaysBefore = (int) value;
@@ -293,6 +349,7 @@ public class AlarmEditActivity extends AppCompatActivity {
             case Alarm.REPEAT_ONCE: repeatChipId = R.id.repeatOnce; break;
             case Alarm.REPEAT_DAILY: repeatChipId = R.id.repeatDaily; break;
             case Alarm.REPEAT_WEEKLY: repeatChipId = R.id.repeatWeekly; break;
+            case Alarm.REPEAT_OCCASION: repeatChipId = R.id.repeatOccasion; break;
             default: repeatChipId = R.id.repeatMonthly; break;
         }
         binding.repeatChips.check(repeatChipId);
@@ -302,8 +359,11 @@ public class AlarmEditActivity extends AppCompatActivity {
         applyCheckedTags(binding.monthDayChips, alarm.monthDayList());
         applyCheckedTags(binding.weekDayChips, alarm.weekDayList());
 
+        applyCheckedOccasion();
+
         binding.clampSwitch.setChecked(alarm.clampToMonthEnd);
         binding.vibrateSwitch.setChecked(alarm.vibrate);
+        binding.skipForbiddenSwitch.setChecked(alarm.skipForbiddenDays);
 
         binding.reminderSwitch.setChecked(alarm.preReminderEnabled);
         binding.reminderOptions.setVisibility(alarm.preReminderEnabled ? View.VISIBLE : View.GONE);
@@ -317,10 +377,21 @@ public class AlarmEditActivity extends AppCompatActivity {
         updateOnceDateText();
         updateToneRow();
         updateCalendarHint();
+        updateOccasionNote();
         applyModeVisibility();
 
         bindingValues = false;
         refreshPreview();
+    }
+
+    private void applyCheckedOccasion() {
+        ViewGroup group = binding.occasionChips;
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View child = group.getChildAt(i);
+            if (child instanceof Chip) {
+                ((Chip) child).setChecked(child.getTag().equals(alarm.occasionId));
+            }
+        }
     }
 
     private void applyModeVisibility() {
@@ -330,6 +401,8 @@ public class AlarmEditActivity extends AppCompatActivity {
                 alarm.repeatMode == Alarm.REPEAT_WEEKLY ? View.VISIBLE : View.GONE);
         binding.onceSection.setVisibility(
                 alarm.repeatMode == Alarm.REPEAT_ONCE ? View.VISIBLE : View.GONE);
+        binding.occasionSection.setVisibility(
+                alarm.repeatMode == Alarm.REPEAT_OCCASION ? View.VISIBLE : View.GONE);
     }
 
     private void updateTimeDisplay() {
@@ -390,10 +463,9 @@ public class AlarmEditActivity extends AppCompatActivity {
     /** Recomputes the "this will ring on…" card from the current form state. */
     private void refreshPreview() {
         readLabelFromInput();
-        int hijriOffset = Prefs.hijriOffset(this);
         long now = System.currentTimeMillis();
 
-        List<Long> upcoming = Occurrences.nextMany(alarm, now, PREVIEW_COUNT, hijriOffset);
+        List<Long> upcoming = Occurrences.nextMany(alarm, now, PREVIEW_COUNT);
         if (upcoming.isEmpty()) {
             binding.previewList.setText(R.string.preview_none);
             binding.previewReminder.setVisibility(View.GONE);
@@ -407,15 +479,16 @@ public class AlarmEditActivity extends AppCompatActivity {
             }
             long occurrence = upcoming.get(i);
             sb.append(TimeText.dateTime(this, occurrence));
-            if (alarm.repeatMode == Alarm.REPEAT_MONTHLY
-                    && alarm.calendarType == Alarm.CALENDAR_HIJRI) {
-                sb.append("   (").append(HijriDates.formatEnglish(occurrence, hijriOffset))
-                        .append(')');
+            boolean showHijri = alarm.repeatMode == Alarm.REPEAT_OCCASION
+                    || (alarm.repeatMode == Alarm.REPEAT_MONTHLY
+                    && alarm.calendarType == Alarm.CALENDAR_HIJRI);
+            if (showHijri) {
+                sb.append("   (").append(HijriDates.formatEnglish(occurrence)).append(')');
             }
         }
         binding.previewList.setText(sb.toString());
 
-        long reminder = Occurrences.nextReminder(alarm, now, hijriOffset);
+        long reminder = Occurrences.nextReminder(alarm, now);
         if (reminder == Occurrences.NONE) {
             binding.previewReminder.setVisibility(alarm.preReminderEnabled
                     ? View.VISIBLE : View.GONE);
@@ -535,8 +608,13 @@ public class AlarmEditActivity extends AppCompatActivity {
             showError(R.string.error_pick_days);
             return;
         }
+        if (alarm.repeatMode == Alarm.REPEAT_OCCASION
+                && Occasion.fromId(alarm.occasionId) == null) {
+            showError(R.string.occasion_pick);
+            return;
+        }
 
-        long next = Occurrences.next(alarm, System.currentTimeMillis(), Prefs.hijriOffset(this));
+        long next = Occurrences.next(alarm, System.currentTimeMillis());
         if (next == Occurrences.NONE) {
             showError(alarm.repeatMode == Alarm.REPEAT_ONCE
                     ? R.string.error_pick_future_date : R.string.preview_none);

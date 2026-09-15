@@ -187,6 +187,145 @@
 
     <string name="bilingual_separator">" • "</string>
 
+    <!-- ======================= Occasions ======================= -->
+    <string name="occ_ramadan_en">Ramadan</string>
+    <string name="occ_ramadan_ur">رمضان</string>
+    <string name="occ_ramadan_note_en">Fasting is obligatory</string>
+    <string name="occ_ramadan_note_ur">روزہ فرض ہے</string>
+
+    <string name="occ_arafah_en">Day of Arafah</string>
+    <string name="occ_arafah_ur">یومِ عرفہ</string>
+    <string name="occ_arafah_note_en">9 Dhu al-Hijjah</string>
+    <string name="occ_arafah_note_ur">۹ ذوالحجہ</string>
+
+    <string name="occ_ashura_en">Ashura</string>
+    <string name="occ_ashura_ur">عاشورا</string>
+    <string name="occ_ashura_note_en">10 Muharram</string>
+    <string name="occ_ashura_note_ur">۱۰ محرم</string>
+
+    <string name="occ_tasua_en">Tasu'a</string>
+    <string name="occ_tasua_ur">تاسوعا</string>
+    <string name="occ_tasua_note_en">9 Muharram, fasted with Ashura</string>
+    <string name="occ_tasua_note_ur">۹ محرم، عاشورا کے ساتھ</string>
+
+    <string name="occ_dhul_hijjah_nine_en">First nine of Dhu al-Hijjah</string>
+    <string name="occ_dhul_hijjah_nine_ur">ذوالحجہ کے پہلے نو دن</string>
+    <string name="occ_dhul_hijjah_nine_note_en">1–9 Dhu al-Hijjah</string>
+    <string name="occ_dhul_hijjah_nine_note_ur">۱ تا ۹ ذوالحجہ</string>
+
+    <string name="occ_muharram_en">Muharram</string>
+    <string name="occ_muharram_ur">محرم</string>
+    <string name="occ_muharram_note_en">Voluntary fasting through the month</string>
+    <string name="occ_muharram_note_ur">پورے مہینے نفلی روزے</string>
+
+    <string name="occ_shaban_mid_en">15 Sha'ban</string>
+    <string name="occ_shaban_mid_ur">پندرہ شعبان</string>
+    <string name="occ_shaban_mid_note_en">Mid Sha'ban</string>
+    <string name="occ_shaban_mid_note_ur">نصف شعبان</string>
+
+    <string name="occ_shawwal_six_en">Six of Shawwal</string>
+    <string name="occ_shawwal_six_ur">شوال کے چھ روزے</string>
+    <string name="occ_shawwal_six_note_en">Any six days of Shawwal after Eid; 2–7 shown here</string>
+    <string name="occ_shawwal_six_note_ur">عید کے بعد شوال کے کوئی چھ دن؛ یہاں ۲ تا ۷</string>
+
+    <string name="occ_white_days_en">White Days</string>
+    <string name="occ_white_days_ur">ایامِ بیض</string>
+    <string name="occ_white_days_note_en">13th, 14th and 15th of every Islamic month</string>
+    <string name="occ_white_days_note_ur">ہر اسلامی مہینے کی ۱۳، ۱۴ اور ۱۵ تاریخ</string>
+
+    <string name="occ_mon_thu_en">Monday &amp; Thursday</string>
+    <string name="occ_mon_thu_ur">پیر و جمعرات</string>
+    <string name="occ_mon_thu_note_en">Weekly voluntary fast</string>
+    <string name="occ_mon_thu_note_ur">ہفتہ وار نفلی روزہ</string>
+
+    <string name="occ_eid_fitr_en">Eid al-Fitr</string>
+    <string name="occ_eid_fitr_ur">عید الفطر</string>
+    <string name="occ_eid_adha_en">Eid al-Adha</string>
+    <string name="occ_eid_adha_ur">عید الاضحیٰ</string>
+    <string name="occ_tashreeq_en">Days of Tashreeq</string>
+    <string name="occ_tashreeq_ur">ایامِ تشریق</string>
+    <string name="occ_forbidden_note_en">Fasting is not permitted</string>
+    <string name="occ_forbidden_note_ur">روزہ رکھنا منع ہے</string>
+
+    <string name="occ_category_obligatory">Obligatory</string>
+    <string name="occ_category_emphasised">Highly recommended</string>
+    <string name="occ_category_recommended">Voluntary</string>
+    <string name="occ_category_forbidden">Not permitted</string>
+
+    <!-- ======================= Tabs ======================= -->
+    <string name="tab_alarms">Alarms</string>
+    <string name="tab_calendar">Calendar</string>
+    <string name="tab_history">History</string>
+
+    <!-- ======================= Calendar tab ======================= -->
+    <string name="calendar_title">Islamic Calendar</string>
+    <string name="calendar_prev_month">Previous month</string>
+    <string name="calendar_next_month">Next month</string>
+    <string name="calendar_today">Today</string>
+    <string name="calendar_legend">Legend</string>
+    <string name="calendar_legend_fasted">Fast recorded</string>
+    <string name="calendar_legend_recommended">Fasting day</string>
+    <string name="calendar_legend_obligatory">Ramadan</string>
+    <string name="calendar_legend_forbidden">Not permitted</string>
+    <string name="calendar_gregorian_span">%1$s – %2$s</string>
+    <string name="calendar_month_corrected">Adjusted by %1$+d day</string>
+    <string name="calendar_adjust_month">Adjust this month</string>
+    <string name="calendar_adjust_month_title">Adjust %1$s</string>
+    <string name="calendar_adjust_month_message">If this month was announced earlier or later than calculated, shift it here. This affects alarms that use the Islamic calendar.</string>
+    <string name="calendar_adjust_none">No adjustment</string>
+    <string name="calendar_no_occasion">No special fast on this day</string>
+    <string name="calendar_tap_hint">Tap any day to record a fast or read about it.</string>
+
+    <!-- ======================= Day sheet ======================= -->
+    <string name="day_sheet_record">Record a fast</string>
+    <string name="day_sheet_recorded">Fast recorded</string>
+    <string name="day_sheet_remove">Remove record</string>
+    <string name="day_sheet_missed">Mark as missed</string>
+    <string name="day_sheet_missed_recorded">Marked as missed</string>
+    <string name="day_sheet_add_alarm">Set an alarm</string>
+    <string name="day_sheet_note_hint">Note (optional)</string>
+    <string name="day_sheet_forbidden_warning">Fasting is not permitted on this day.</string>
+    <string name="day_sheet_future">This day has not arrived yet — it will be saved as planned.</string>
+    <string name="fast_logged">Fast recorded for %1$s</string>
+    <string name="fast_removed">Record removed</string>
+
+    <!-- ======================= History tab ======================= -->
+    <string name="history_title">History</string>
+    <string name="history_total">Total fasts</string>
+    <string name="history_this_year">This Hijri year</string>
+    <string name="history_streak">Current streak</string>
+    <string name="history_streak_days">%1$d days</string>
+    <string name="history_group_hijri">Islamic months</string>
+    <string name="history_group_gregorian">English months</string>
+    <string name="history_empty_title">Nothing recorded yet</string>
+    <string name="history_empty_subtitle">Record a fast from the Calendar tab and it will appear here, month by month.</string>
+    <string name="history_month_count">%1$d fasts</string>
+    <string name="history_month_count_one">%1$d fast</string>
+    <string name="history_open_in_calendar">Open in calendar</string>
+    <string name="history_expand">Show the dates</string>
+
+    <!-- ======================= Occasion alarms ======================= -->
+    <string name="repeat_occasion">Occasion</string>
+    <string name="section_occasion">Islamic occasion</string>
+    <string name="occasion_pick">Choose an occasion</string>
+    <string name="summary_occasion">Every %1$s</string>
+    <string name="skip_forbidden_days">Skip Eid and Tashreeq days</string>
+    <string name="skip_forbidden_days_hint">Fasting is not permitted on Eid al-Fitr, Eid al-Adha or 11–13 Dhu al-Hijjah, so those days are never scheduled.</string>
+
+    <!-- ======================= Hijri correction ======================= -->
+    <string name="settings_hijri_correct">Correct today's Hijri date</string>
+    <string name="settings_hijri_correct_desc">Tell the app what today's date really is and it works out the adjustment for you.</string>
+    <string name="hijri_correct_title">What is today's Hijri date?</string>
+    <string name="hijri_correct_message">Calculated as %1$s. Pick the day shown on your local calendar.</string>
+    <string name="hijri_correct_applied">Adjusted by %1$+d day — today is now %2$s</string>
+    <string name="hijri_correct_impossible">That date is more than %1$d days away from the calculated one.</string>
+    <string name="settings_hijri_months">Per-month adjustments</string>
+    <string name="settings_hijri_months_desc">%1$d month adjusted</string>
+    <string name="settings_hijri_months_desc_plural">%1$d months adjusted</string>
+    <string name="settings_hijri_months_none">None — months follow the calculated dates</string>
+    <string name="settings_hijri_months_clear">Clear all month adjustments</string>
+    <string name="cleared">Cleared</string>
+
     <!-- Day names used inside notification and summary text -->
     <string name="day_short_sun">Sun</string>
     <string name="day_short_mon">Mon</string>

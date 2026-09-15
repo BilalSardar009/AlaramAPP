@@ -1,0 +1,205 @@
+package com.afzal.rozaalarm;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import com.afzal.rozaalarm.util.Occasion;
+import com.afzal.rozaalarm.util.Occasions;
+
+import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * The fasting calendar rules. {@link Occasions#forHijriDay} takes the Hijri date as plain numbers,
+ * so every rule below is checked without touching the ICU calendar.
+ */
+public class OccasionsTest {
+
+    /** A weekday that is neither Monday nor Thursday, so it never adds an occasion of its own. */
+    private static final int PLAIN_DAY = Calendar.WEDNESDAY;
+
+    private static List<Occasion> on(int month, int day) {
+        return Occasions.forHijriDay(month, day, PLAIN_DAY);
+    }
+
+    // ---- the named days -----------------------------------------------------------------------
+
+    @Test
+    public void arafahIsTheNinthOfDhulHijjah() {
+        assertTrue(on(Occasions.DHUL_HIJJAH, 9).contains(Occasion.ARAFAH));
+        assertFalse(on(Occasions.DHUL_HIJJAH, 8).contains(Occasion.ARAFAH));
+        assertFalse(on(Occasions.DHUL_QIDAH, 9).contains(Occasion.ARAFAH));
+    }
+
+    @Test
+    public void ashuraIsTheTenthOfMuharramAndTasuaThePreviousDay() {
+        assertTrue(on(Occasions.MUHARRAM, 10).contains(Occasion.ASHURA));
+        assertTrue(on(Occasions.MUHARRAM, 9).contains(Occasion.TASUA));
+        assertFalse(on(Occasions.MUHARRAM, 10).contains(Occasion.TASUA));
+    }
+
+    @Test
+    public void everyDayOfRamadanIsObligatoryAndNothingElse() {
+        for (int day = 1; day <= 30; day++) {
+            List<Occasion> occasions = on(Occasions.RAMADAN, day);
+            assertEquals("Ramadan day " + day, 1, occasions.size());
+            assertEquals(Occasion.RAMADAN, occasions.get(0));
+            assertEquals(Occasion.Category.OBLIGATORY, occasions.get(0).category());
+        }
+    }
+
+    @Test
+    public void ramadanSupersedesTheWhiteDaysAndWeekdays() {
+        List<Occasion> occasions = Occasions.forHijriDay(Occasions.RAMADAN, 14, Calendar.MONDAY);
+        assertEquals(1, occasions.size());
+        assertEquals(Occasion.RAMADAN, occasions.get(0));
+    }
+
+    @Test
+    public void whiteDaysAreThe13th14thAnd15thOfAnyMonth() {
+        for (int month = 0; month <= 11; month++) {
+            if (month == Occasions.RAMADAN || month == Occasions.DHUL_HIJJAH) {
+                continue; // Covered separately: Ramadan supersedes, Dhul-Hijjah 13 is forbidden.
+            }
+            assertTrue("month " + month, on(month, 13).contains(Occasion.WHITE_DAYS));
+            assertTrue("month " + month, on(month, 14).contains(Occasion.WHITE_DAYS));
+            assertTrue("month " + month, on(month, 15).contains(Occasion.WHITE_DAYS));
+            assertFalse("month " + month, on(month, 12).contains(Occasion.WHITE_DAYS));
+            assertFalse("month " + month, on(month, 16).contains(Occasion.WHITE_DAYS));
+        }
+    }
+
+    @Test
+    public void mondaysAndThursdaysAreMarked() {
+        assertTrue(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.MONDAY)
+                .contains(Occasion.MONDAY_THURSDAY));
+        assertTrue(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.THURSDAY)
+                .contains(Occasion.MONDAY_THURSDAY));
+        assertFalse(Occasions.forHijriDay(Occasions.SAFAR, 3, Calendar.FRIDAY)
+                .contains(Occasion.MONDAY_THURSDAY));
+    }
+
+    @Test
+    public void sixOfShawwalRunsFromTheSecondToTheSeventh() {
+        assertFalse(on(Occasions.SHAWWAL, 1).contains(Occasion.SHAWWAL_SIX));
+        for (int day = 2; day <= 7; day++) {
+            assertTrue("shawwal " + day, on(Occasions.SHAWWAL, day).contains(Occasion.SHAWWAL_SIX));
+        }
+        assertFalse(on(Occasions.SHAWWAL, 8).contains(Occasion.SHAWWAL_SIX));
+    }
+
+    @Test
+    public void midShabanIsMarked() {
+        assertTrue(on(Occasions.SHABAN, 15).contains(Occasion.SHABAN_MID));
+        assertFalse(on(Occasions.RAJAB, 15).contains(Occasion.SHABAN_MID));
+    }
+
+    @Test
+    public void theFirstNineOfDhulHijjahAreMarked() {
+        for (int day = 1; day <= 9; day++) {
+            assertTrue("dhul-hijjah " + day,
+                    on(Occasions.DHUL_HIJJAH, day).contains(Occasion.DHUL_HIJJAH_FIRST_NINE));
+        }
+        assertFalse(on(Occasions.DHUL_HIJJAH, 10).contains(Occasion.DHUL_HIJJAH_FIRST_NINE));
+    }
+
+    // ---- days fasting is not permitted on -----------------------------------------------------
+
+    @Test
+    public void eidAlFitrIsTheFirstOfShawwalAndForbidden() {
+        List<Occasion> occasions = on(Occasions.SHAWWAL, 1);
+        assertEquals(1, occasions.size());
+        assertEquals(Occasion.EID_AL_FITR, occasions.get(0));
+        assertTrue(occasions.get(0).isForbidden());
+    }
+
+    @Test
+    public void eidAlAdhaIsTheTenthOfDhulHijjahAndForbidden() {
+        List<Occasion> occasions = on(Occasions.DHUL_HIJJAH, 10);
+        assertEquals(1, occasions.size());
+        assertEquals(Occasion.EID_AL_ADHA, occasions.get(0));
+        assertTrue(occasions.get(0).isForbidden());
+    }
+
+    @Test
+    public void tashreeqCoversThe11thTo13thOfDhulHijjah() {
+        for (int day = 11; day <= 13; day++) {
+            List<Occasion> occasions = on(Occasions.DHUL_HIJJAH, day);
+            assertEquals("dhul-hijjah " + day, 1, occasions.size());
+            assertEquals(Occasion.TASHREEQ, occasions.get(0));
+        }
+        assertFalse(on(Occasions.DHUL_HIJJAH, 14).contains(Occasion.TASHREEQ));
+    }
+
+    /** The accuracy point: 13 Dhul-Hijjah is a day of Tashreeq, so it is not offered as a fast. */
+    @Test
+    public void the13thOfDhulHijjahIsNotAWhiteDay() {
+        List<Occasion> occasions = on(Occasions.DHUL_HIJJAH, 13);
+        assertFalse(occasions.contains(Occasion.WHITE_DAYS));
+        assertTrue(occasions.contains(Occasion.TASHREEQ));
+    }
+
+    @Test
+    public void the14thAndOf15thDhulHijjahAreStillWhiteDays() {
+        assertTrue(on(Occasions.DHUL_HIJJAH, 14).contains(Occasion.WHITE_DAYS));
+        assertTrue(on(Occasions.DHUL_HIJJAH, 15).contains(Occasion.WHITE_DAYS));
+    }
+
+    @Test
+    public void nothingVoluntaryIsListedAlongsideAForbiddenDay() {
+        // 1 Shawwal on a Monday is Eid, and only Eid.
+        List<Occasion> occasions =
+                Occasions.forHijriDay(Occasions.SHAWWAL, 1, Calendar.MONDAY);
+        assertEquals(1, occasions.size());
+        assertEquals(Occasion.EID_AL_FITR, occasions.get(0));
+    }
+
+    // ---- ordering and identity ----------------------------------------------------------------
+
+    @Test
+    public void theMostSignificantOccasionComesFirst() {
+        // 9 Dhul-Hijjah on a Monday: Arafah leads, ahead of the ten days and the weekday.
+        List<Occasion> occasions =
+                Occasions.forHijriDay(Occasions.DHUL_HIJJAH, 9, Calendar.MONDAY);
+        assertEquals(Occasion.ARAFAH, occasions.get(0));
+        assertTrue(occasions.contains(Occasion.DHUL_HIJJAH_FIRST_NINE));
+        assertTrue(occasions.contains(Occasion.MONDAY_THURSDAY));
+    }
+
+    /** Muharram is the least specific label, so it never hides a named day. */
+    @Test
+    public void muharramDoesNotOutrankTheNamedDays() {
+        assertEquals(Occasion.WHITE_DAYS, on(Occasions.MUHARRAM, 13).get(0));
+        assertTrue(on(Occasions.MUHARRAM, 13).contains(Occasion.MUHARRAM));
+        assertEquals(Occasion.ASHURA, on(Occasions.MUHARRAM, 10).get(0));
+        assertEquals(Occasion.TASUA, on(Occasions.MUHARRAM, 9).get(0));
+        // An ordinary day of Muharram is still marked.
+        assertEquals(Occasion.MUHARRAM, on(Occasions.MUHARRAM, 5).get(0));
+    }
+
+    @Test
+    public void ordinaryDaysHaveNoOccasion() {
+        assertTrue(on(Occasions.SAFAR, 3).isEmpty());
+    }
+
+    @Test
+    public void idsRoundTripAndAreUnique() {
+        java.util.Set<String> ids = new java.util.HashSet<>();
+        for (Occasion occasion : Occasion.values()) {
+            assertTrue("duplicate id " + occasion.id(), ids.add(occasion.id()));
+            assertEquals(occasion, Occasion.fromId(occasion.id()));
+        }
+        assertEquals(null, Occasion.fromId("not-an-occasion"));
+        assertEquals(null, Occasion.fromId(null));
+    }
+
+    @Test
+    public void forbiddenOccasionsAreNotSchedulable() {
+        for (Occasion occasion : Occasion.values()) {
+            assertEquals(occasion.name(), !occasion.isForbidden(), occasion.isSchedulable());
+        }
+    }
+}

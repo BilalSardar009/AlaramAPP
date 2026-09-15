@@ -13,6 +13,17 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary true
+
+        // Export Room schemas so later releases can ship real migrations.
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
     buildTypes {

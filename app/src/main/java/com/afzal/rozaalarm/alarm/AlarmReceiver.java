@@ -11,7 +11,6 @@ import com.afzal.rozaalarm.data.Alarm;
 import com.afzal.rozaalarm.data.AlarmRepository;
 import com.afzal.rozaalarm.util.Notifications;
 import com.afzal.rozaalarm.util.Occurrences;
-import com.afzal.rozaalarm.util.Prefs;
 
 /** Entry point for both the alarm itself and its advance reminder. */
 public class AlarmReceiver extends BroadcastReceiver {
@@ -71,8 +70,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void fireReminder(Context context, Alarm alarm) {
-        long occurrence = Occurrences.next(
-                alarm, System.currentTimeMillis(), Prefs.hijriOffset(context));
+        long occurrence = Occurrences.next(alarm, System.currentTimeMillis());
         if (occurrence != Occurrences.NONE) {
             Notifications.showReminder(context, alarm, occurrence);
         }

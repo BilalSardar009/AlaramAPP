@@ -107,6 +107,14 @@ public final class TimeText {
             case Alarm.REPEAT_WEEKLY:
                 return context.getString(R.string.summary_weekly, weekDayNames(context, alarm));
 
+            case Alarm.REPEAT_OCCASION: {
+                Occasion occasion = Occasion.fromId(alarm.occasionId);
+                return occasion == null
+                        ? context.getString(R.string.occasion_pick)
+                        : context.getString(R.string.summary_occasion,
+                                OccasionText.name(context, occasion));
+            }
+
             case Alarm.REPEAT_MONTHLY:
             default:
                 if (alarm.isAyyamAlBeed()) {

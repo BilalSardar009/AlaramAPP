@@ -30,13 +30,16 @@ public final class Prefs {
         return context.getApplicationContext().getSharedPreferences(FILE, Context.MODE_PRIVATE);
     }
 
-    /** Days to shift the Hijri conversion by, to match the local moon sighting (-2 … +2). */
+    /** Days to shift the Hijri conversion by, to match the local moon sighting. */
     public static int hijriOffset(@NonNull Context context) {
         return prefs(context).getInt(KEY_HIJRI_OFFSET, 0);
     }
 
     public static void setHijriOffset(@NonNull Context context, int offsetDays) {
-        prefs(context).edit().putInt(KEY_HIJRI_OFFSET, clamp(offsetDays, -2, 2)).apply();
+        prefs(context).edit()
+                .putInt(KEY_HIJRI_OFFSET, clamp(offsetDays, -HijriDates.MAX_OFFSET,
+                        HijriDates.MAX_OFFSET))
+                .apply();
     }
 
     public static int notificationLanguage(@NonNull Context context) {

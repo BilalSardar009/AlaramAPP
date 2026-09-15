@@ -25,6 +25,8 @@ public class Alarm {
     public static final int REPEAT_DAILY = 1;
     public static final int REPEAT_WEEKLY = 2;
     public static final int REPEAT_MONTHLY = 3;
+    /** Fires on every day matching a named Islamic occasion (Ramadan, Arafah, Ashura …). */
+    public static final int REPEAT_OCCASION = 4;
 
     // ---- calendar systems ---------------------------------------------------------------------
     public static final int CALENDAR_GREGORIAN = 0;
@@ -65,6 +67,19 @@ public class Alarm {
      * last day of that month instead of skipping it.
      */
     public boolean clampToMonthEnd = true;
+
+    /**
+     * The {@link com.afzal.rozaalarm.util.Occasion} id this alarm follows, for
+     * {@link #REPEAT_OCCASION}. Null for every other repeat mode.
+     */
+    @Nullable
+    public String occasionId = null;
+
+    /**
+     * Skip Eid al-Fitr, Eid al-Adha and the days of Tashreeq, on which fasting is not permitted.
+     * This is what keeps a "13th, 14th, 15th" rule from ringing on 13 Dhul-Hijjah.
+     */
+    public boolean skipForbiddenDays = true;
 
     /** Epoch millis of the chosen date for {@link #REPEAT_ONCE}; the time of day comes from
      *  {@link #hour}/{@link #minute}. */
@@ -120,6 +135,8 @@ public class Alarm {
         copy.monthDays = source.monthDays;
         copy.weekDays = source.weekDays;
         copy.clampToMonthEnd = source.clampToMonthEnd;
+        copy.occasionId = source.occasionId;
+        copy.skipForbiddenDays = source.skipForbiddenDays;
         copy.onceDateMillis = source.onceDateMillis;
         copy.enabled = source.enabled;
         copy.vibrate = source.vibrate;

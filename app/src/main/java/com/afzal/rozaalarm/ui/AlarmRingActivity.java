@@ -186,9 +186,8 @@ public class AlarmRingActivity extends AppCompatActivity {
         long now = System.currentTimeMillis();
         binding.ringClock.setText(TimeText.time(this, now));
         binding.ringDate.setText(TimeText.fullDate(this, now));
-        int offset = Prefs.hijriOffset(this);
-        binding.ringHijri.setText(HijriDates.formatEnglish(now, offset)
-                + "  ·  " + HijriDates.formatUrdu(now, offset));
+        binding.ringHijri.setText(HijriDates.formatEnglish(now)
+                + "  ·  " + HijriDates.formatUrdu(now));
     }
 
     private void updateSnoozeLabel() {

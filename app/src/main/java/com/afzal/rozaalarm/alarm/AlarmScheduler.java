@@ -14,7 +14,6 @@ import com.afzal.rozaalarm.data.Alarm;
 import com.afzal.rozaalarm.data.AlarmRepository;
 import com.afzal.rozaalarm.ui.MainActivity;
 import com.afzal.rozaalarm.util.Occurrences;
-import com.afzal.rozaalarm.util.Prefs;
 
 import java.util.List;
 
@@ -55,15 +54,14 @@ public final class AlarmScheduler {
             return;
         }
 
-        int hijriOffset = Prefs.hijriOffset(context);
         long now = fromMillis;
 
-        long nextAlarm = Occurrences.next(alarm, now, hijriOffset);
+        long nextAlarm = Occurrences.next(alarm, now);
         if (nextAlarm != Occurrences.NONE) {
             setExact(context, nextAlarm, alarmPendingIntent(context, alarm.id), true);
         }
 
-        long nextReminder = Occurrences.nextReminder(alarm, now, hijriOffset);
+        long nextReminder = Occurrences.nextReminder(alarm, now);
         if (nextReminder != Occurrences.NONE) {
             setExact(context, nextReminder, reminderPendingIntent(context, alarm.id), false);
         }
@@ -111,13 +109,12 @@ public final class AlarmScheduler {
 
     /** The next time this alarm will ring, or {@link Occurrences#NONE}. */
     public static long nextTrigger(@NonNull Context context, @NonNull Alarm alarm) {
-        return Occurrences.next(alarm, System.currentTimeMillis(), Prefs.hijriOffset(context));
+        return Occurrences.next(alarm, System.currentTimeMillis());
     }
 
     /** The next reminder instant, or {@link Occurrences#NONE}. */
     public static long nextReminder(@NonNull Context context, @NonNull Alarm alarm) {
-        return Occurrences.nextReminder(alarm, System.currentTimeMillis(),
-                Prefs.hijriOffset(context));
+        return Occurrences.nextReminder(alarm, System.currentTimeMillis());
     }
 
     /** False on Android 12+ when the user has revoked the "alarms &amp; reminders" permission. */

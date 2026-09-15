@@ -8,4 +8,8 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <plurals name="fasts_count">
+        <item quantity="one">%d fast</item>
+        <item quantity="other">%d fasts</item>
+    </plurals>
 </resources>

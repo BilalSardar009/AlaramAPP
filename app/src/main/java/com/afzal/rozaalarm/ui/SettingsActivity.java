@@ -15,16 +15,19 @@ import androidx.core.content.ContextCompat;
 import com.afzal.rozaalarm.BuildConfig;
 import com.afzal.rozaalarm.R;
 import com.afzal.rozaalarm.alarm.AlarmScheduler;
+import com.afzal.rozaalarm.data.HijriCorrections;
 import com.afzal.rozaalarm.databinding.ActivitySettingsBinding;
 import com.afzal.rozaalarm.util.HijriDates;
 import com.afzal.rozaalarm.util.Prefs;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 
 /** App preferences: notification language, Hijri adjustment, and the reliability permissions. */
 public class SettingsActivity extends AppCompatActivity {
 
     private ActivitySettingsBinding binding;
+    private HijriCorrections corrections;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        corrections = HijriCorrections.get(this);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
         binding.versionText.setText(getString(R.string.settings_version, BuildConfig.VERSION_NAME));
 
@@ -40,16 +44,17 @@ public class SettingsActivity extends AppCompatActivity {
         binding.batteryRow.setOnClickListener(v -> openBatterySettings());
         binding.notificationPermissionRow.setOnClickListener(v -> openAppNotificationSettings());
 
-        binding.hijriOffsetSlider.setValue(Prefs.hijriOffset(this));
+        binding.hijriOffsetSlider.setValue(HijriDates.clampOffset(Prefs.hijriOffset(this)));
         binding.hijriOffsetSlider.addOnChangeListener((slider, value, fromUser) -> {
             if (!fromUser) {
                 return;
             }
-            Prefs.setHijriOffset(this, (int) value);
-            updateHijriPreview();
-            // Hijri rules resolve to different dates now, so every alarm needs re-registering.
-            AlarmScheduler.rescheduleAllAsync(this);
+            // Hijri rules resolve to different dates now, so this also re-registers every alarm.
+            corrections.setGlobalOffset((int) value, this::updateHijriPreview);
         });
+
+        binding.correctTodayRow.setOnClickListener(v -> showCorrectTodayDialog());
+        binding.monthAdjustRow.setOnClickListener(v -> showMonthAdjustmentsDialog());
 
         binding.animationsSwitch.setChecked(Prefs.richAnimations(this));
         binding.animationsSwitch.setOnCheckedChangeListener(
@@ -61,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         updateLanguageValue();
         updateHijriPreview();
+        updateMonthAdjustmentRow();
         updatePermissionRows();
     }
 
@@ -104,12 +110,81 @@ public class SettingsActivity extends AppCompatActivity {
     // ---- hijri --------------------------------------------------------------------------------
 
     private void updateHijriPreview() {
-        int offset = Prefs.hijriOffset(this);
+        int offset = HijriDates.globalOffset();
         long now = System.currentTimeMillis();
         binding.hijriTodayEnglish.setText(
-                getString(R.string.settings_hijri_today, HijriDates.formatEnglish(now, offset))
+                getString(R.string.settings_hijri_today, HijriDates.formatEnglish(now))
                         + "   " + getString(R.string.settings_hijri_offset_value, offset));
-        binding.hijriTodayUrdu.setText(HijriDates.formatUrdu(now, offset));
+        binding.hijriTodayUrdu.setText(HijriDates.formatUrdu(now));
+    }
+
+    /** Asks what today's date really is, and derives the global correction from the answer. */
+    private void showCorrectTodayDialog() {
+        long now = System.currentTimeMillis();
+        int calculated = HijriDates.dayOfMonth(now);
+
+        // A Hijri month runs to 30 days, so every possible answer is offered.
+        String[] days = new String[30];
+        for (int i = 0; i < days.length; i++) {
+            days[i] = String.valueOf(i + 1);
+        }
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.hijri_correct_title)
+                .setMessage(getString(R.string.hijri_correct_message,
+                        HijriDates.formatEnglish(now)))
+                .setSingleChoiceItems(days, calculated - 1, (dialog, which) -> {
+                    dialog.dismiss();
+                    applyTodayCorrection(which + 1);
+                })
+                .setNegativeButton(R.string.perm_later, null)
+                .show();
+    }
+
+    private void applyTodayCorrection(int actualHijriDay) {
+        int applied = corrections.correctToday(actualHijriDay, () -> {
+            updateHijriPreview();
+            binding.hijriOffsetSlider.setValue(HijriDates.globalOffset());
+            Snackbar.make(binding.settingsRoot,
+                    getString(R.string.hijri_correct_applied, HijriDates.globalOffset(),
+                            HijriDates.formatEnglish(System.currentTimeMillis())),
+                    Snackbar.LENGTH_LONG).show();
+        });
+        if (applied == Integer.MIN_VALUE) {
+            Snackbar.make(binding.settingsRoot,
+                    getString(R.string.hijri_correct_impossible, HijriDates.MAX_OFFSET),
+                    Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateMonthAdjustmentRow() {
+        corrections.io().execute(() -> {
+            int count = corrections.monthOffsetCount();
+            runOnUiThread(() -> {
+                if (count == 0) {
+                    binding.monthAdjustValue.setText(R.string.settings_hijri_months_none);
+                } else {
+                    binding.monthAdjustValue.setText(getString(count == 1
+                                    ? R.string.settings_hijri_months_desc
+                                    : R.string.settings_hijri_months_desc_plural, count));
+                }
+            });
+        });
+    }
+
+    /** Individual months are adjusted from the Calendar tab; this only offers a reset. */
+    private void showMonthAdjustmentsDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.settings_hijri_months)
+                .setMessage(R.string.calendar_adjust_month_message)
+                .setPositiveButton(R.string.settings_hijri_months_clear, (d, w) ->
+                        corrections.clearMonthOffsets(() -> {
+                            updateMonthAdjustmentRow();
+                            Snackbar.make(binding.settingsRoot, R.string.cleared,
+                                    Snackbar.LENGTH_SHORT).show();
+                        }))
+                .setNegativeButton(R.string.perm_later, null)
+                .show();
     }
 
     // ---- permission rows ----------------------------------------------------------------------
