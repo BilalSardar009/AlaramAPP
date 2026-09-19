@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         setIntent(intent);
         if (intent.hasExtra(EXTRA_SHOW_HIJRI_MONTH)) {
-            binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
-            showTab(R.id.tab_calendar);
+            // The request is already on the intent; this takes the same single route to the tab.
+            goToCalendarTab();
         }
     }
 
@@ -122,12 +122,19 @@ public class MainActivity extends AppCompatActivity {
             }
             intent.putExtra(EXTRA_SELECT_DAYS, keys);
         }
-        pendingCalendarRequest = true;
+        goToCalendarTab();
+    }
 
-        // Exactly one route to the tab. Selecting a different item fires the listener, which does
-        // the switch; selecting the one already chosen fires nothing, so the switch is made here.
-        // Going both ways would build the tab twice, and the second build would find the request
-        // above already spent — the calendar would arrive on today with nothing selected.
+    /**
+     * Takes the one route to the calendar tab, rebuilding it for the request on the intent.
+     *
+     * <p>Selecting a different item fires the nav listener, which does the switch; selecting the
+     * one already chosen fires nothing, so the switch is made here. Going both ways would build
+     * the tab twice, and the second build would find the request already spent — the calendar
+     * would arrive on today with nothing selected.</p>
+     */
+    private void goToCalendarTab() {
+        pendingCalendarRequest = true;
         if (binding.bottomNav.getSelectedItemId() == R.id.tab_calendar) {
             showTab(R.id.tab_calendar);
         } else {
