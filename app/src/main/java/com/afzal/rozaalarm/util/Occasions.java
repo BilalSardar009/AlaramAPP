@@ -101,6 +101,20 @@ public final class Occasions {
         return Collections.unmodifiableList(found);
     }
 
+    /**
+     * True when {@code occasion} covers the given Hijri day.
+     *
+     * <p>This is not the same question as {@link #forHijriDay}: a shortcut such as
+     * {@link Occasion#MUHARRAM_9_10} covers two days that the calendar labels individually, so it
+     * is answered here rather than by adding a third label to those days.</p>
+     */
+    public static boolean covers(@NonNull Occasion occasion, int hijriMonth, int hijriDay) {
+        if (occasion == Occasion.MUHARRAM_9_10) {
+            return hijriMonth == MUHARRAM && (hijriDay == 9 || hijriDay == 10);
+        }
+        return forHijriDay(hijriMonth, hijriDay).contains(occasion);
+    }
+
     /** Convenience wrapper that converts the instant first. */
     @NonNull
     public static List<Occasion> forInstant(long millis) {
@@ -127,6 +141,7 @@ public final class Occasions {
 
     /** True when {@code millis} falls on the given occasion. */
     public static boolean matches(@NonNull Occasion occasion, long millis) {
-        return forInstant(millis).contains(occasion);
+        HijriDates.Snapshot hijri = HijriDates.snapshot(millis);
+        return covers(occasion, hijri.month, hijri.day);
     }
 }

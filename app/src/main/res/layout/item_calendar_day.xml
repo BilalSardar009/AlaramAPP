@@ -53,6 +53,19 @@
         app:tint="?attr/colorPrimary"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/dayAlarm"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_alarm"
+        android:visibility="gone"
+        app:tint="@color/brand_gold"
+        tools:visibility="visible" />
+
     <View
         android:id="@+id/dayDot"
         android:layout_width="5dp"

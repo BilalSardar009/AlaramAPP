@@ -190,6 +190,59 @@ public class OccasionsTest {
         assertEquals(null, Occasion.fromId(null));
     }
 
+    // ---- the 9-and-10 Muharram shortcut -------------------------------------------------------
+
+    /**
+     * The shortcut covers both days, but it is never drawn on the calendar: those two days are
+     * already labelled Tasu'a and Ashura, and a third marker would say the same thing twice.
+     */
+    @Test
+    public void muharram9And10IsCoveredButNeverLabelled() {
+        assertTrue(Occasions.covers(Occasion.MUHARRAM_9_10, Occasions.MUHARRAM, 9));
+        assertTrue(Occasions.covers(Occasion.MUHARRAM_9_10, Occasions.MUHARRAM, 10));
+        assertFalse(Occasions.covers(Occasion.MUHARRAM_9_10, Occasions.MUHARRAM, 8));
+        assertFalse(Occasions.covers(Occasion.MUHARRAM_9_10, Occasions.MUHARRAM, 11));
+        assertFalse(Occasions.covers(Occasion.MUHARRAM_9_10, Occasions.SAFAR, 10));
+
+        for (int month = 0; month <= 11; month++) {
+            for (int day = 1; day <= 30; day++) {
+                assertFalse("month " + month + " day " + day,
+                        on(month, day).contains(Occasion.MUHARRAM_9_10));
+            }
+        }
+    }
+
+    @Test
+    public void coversAgreesWithTheLabelsForEveryOtherOccasion() {
+        for (Occasion occasion : Occasion.values()) {
+            if (occasion == Occasion.MUHARRAM_9_10) {
+                continue;
+            }
+            for (int month = 0; month <= 11; month++) {
+                for (int day = 1; day <= 30; day++) {
+                    assertEquals(occasion + " on " + month + "/" + day,
+                            on(month, day).contains(occasion),
+                            Occasions.covers(occasion, month, day));
+                }
+            }
+        }
+    }
+
+    /** Ramadan and the two Muharram days are the shortcuts people ask for first. */
+    @Test
+    public void theShortcutListLeadsWithRamadanAndMuharram() {
+        List<Occasion> shortcuts = com.afzal.rozaalarm.util.OccasionText.schedulable();
+
+        assertEquals(Occasion.RAMADAN, shortcuts.get(0));
+        assertEquals(Occasion.MUHARRAM_9_10, shortcuts.get(1));
+        assertTrue(shortcuts.contains(Occasion.WHITE_DAYS));
+        assertFalse(shortcuts.contains(Occasion.MONDAY_THURSDAY));
+        for (Occasion occasion : Occasion.values()) {
+            assertEquals(occasion.name(), occasion.isSchedulable(), shortcuts.contains(occasion));
+        }
+        assertEquals(new java.util.HashSet<>(shortcuts).size(), shortcuts.size());
+    }
+
     @Test
     public void forbiddenAndRetiredOccasionsAreNotSchedulable() {
         for (Occasion occasion : Occasion.values()) {

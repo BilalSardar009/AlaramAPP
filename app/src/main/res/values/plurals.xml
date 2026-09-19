@@ -12,4 +12,30 @@
         <item quantity="one">%d fast</item>
         <item quantity="other">%d fasts</item>
     </plurals>
+
+    <!-- Selection and the alarms it creates -->
+    <plurals name="selected_days_count">
+        <item quantity="one">%d day selected</item>
+        <item quantity="other">%d days selected</item>
+    </plurals>
+    <plurals name="chosen_days_count">
+        <item quantity="one">%d chosen day</item>
+        <item quantity="other">%d chosen days</item>
+    </plurals>
+    <plurals name="record_days_count">
+        <item quantity="one">Record %d fast</item>
+        <item quantity="other">Record %d fasts</item>
+    </plurals>
+    <plurals name="recorded_count">
+        <item quantity="one">%d fast recorded</item>
+        <item quantity="other">%d fasts recorded</item>
+    </plurals>
+    <plurals name="marked_missed_count">
+        <item quantity="one">%d day marked as missed</item>
+        <item quantity="other">%d days marked as missed</item>
+    </plurals>
+    <plurals name="alarm_label_days">
+        <item quantity="one">Roza · %d day</item>
+        <item quantity="other">Roza · %d days</item>
+    </plurals>
 </resources>

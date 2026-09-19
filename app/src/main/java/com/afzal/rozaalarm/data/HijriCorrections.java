@@ -96,18 +96,46 @@ public class HijriCorrections {
     /**
      * Derives the global correction from the user telling us what today's Hijri date really is.
      *
-     * @return the offset that was applied, or {@link Integer#MIN_VALUE} when no correction within
+     * <p>The month is part of the answer, not just the day: near the turn of a month the same day
+     * number exists on either side of it, and only the pair says which one was meant.</p>
+     *
+     * @param actualHijriMonth zero based, 0 = Muharram
+     * @return the offset that was applied, or {@link #NO_SUCH_OFFSET} when no correction within
      *         ±{@link HijriDates#MAX_OFFSET} days produces that date.
      */
-    public int correctToday(int actualHijriDay, @Nullable Runnable onApplied) {
+    public int correctToday(int actualHijriMonth, int actualHijriDay,
+                            @Nullable Runnable onApplied) {
+        int candidate = offsetForToday(actualHijriMonth, actualHijriDay);
+        if (candidate != NO_SUCH_OFFSET) {
+            setGlobalOffset(candidate, onApplied);
+        }
+        return candidate;
+    }
+
+    /** Returned by {@link #correctToday} when the date asked for is out of reach. */
+    public static final int NO_SUCH_OFFSET = Integer.MIN_VALUE;
+
+    /**
+     * The correction that would make today read as the given Hijri date, or {@link #NO_SUCH_OFFSET}.
+     *
+     * <p>Candidates are tried from no correction outwards, so the smallest shift that produces the
+     * date wins.</p>
+     */
+    public static int offsetForToday(int actualHijriMonth, int actualHijriDay) {
         long now = System.currentTimeMillis();
-        for (int candidate = -HijriDates.MAX_OFFSET; candidate <= HijriDates.MAX_OFFSET; candidate++) {
-            if (HijriDates.dayOfMonth(now, candidate) == actualHijriDay) {
-                setGlobalOffset(candidate, onApplied);
-                return candidate;
+        for (int distance = 0; distance <= HijriDates.MAX_OFFSET; distance++) {
+            for (int sign = -1; sign <= 1; sign += 2) {
+                int candidate = distance * sign;
+                if (HijriDates.dayOfMonth(now, candidate) == actualHijriDay
+                        && HijriDates.month(now, candidate) == actualHijriMonth) {
+                    return candidate;
+                }
+                if (distance == 0) {
+                    break;
+                }
             }
         }
-        return Integer.MIN_VALUE;
+        return NO_SUCH_OFFSET;
     }
 
     /** Corrects one Hijri month on top of the global correction. Zero removes the correction. */

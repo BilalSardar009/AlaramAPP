@@ -15,6 +15,8 @@ public class CalendarDay {
     public final int hijriDay;
     public final int gregorianDay;
     public final long millis;
+    /** Local {@code yyyyMMdd} of this day — the identity used for selection and for alarms. */
+    public final int dateKey;
     public final boolean today;
 
     @NonNull
@@ -26,21 +28,26 @@ public class CalendarDay {
     /** True when the record for this day is a missed fast rather than a kept one. */
     public boolean missed;
 
+    /** True when an alarm is set to ring on this day. */
+    public boolean alarmed;
+
     private CalendarDay() {
         this.blank = true;
         this.hijriDay = 0;
         this.gregorianDay = 0;
         this.millis = 0L;
+        this.dateKey = 0;
         this.today = false;
         this.occasions = Collections.emptyList();
     }
 
-    public CalendarDay(int hijriDay, int gregorianDay, long millis, boolean today,
+    public CalendarDay(int hijriDay, int gregorianDay, long millis, int dateKey, boolean today,
                        @NonNull List<Occasion> occasions) {
         this.blank = false;
         this.hijriDay = hijriDay;
         this.gregorianDay = gregorianDay;
         this.millis = millis;
+        this.dateKey = dateKey;
         this.today = today;
         this.occasions = occasions;
     }

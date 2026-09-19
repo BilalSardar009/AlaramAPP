@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,10 +41,8 @@ public class AlarmAdapter extends ListAdapter<Alarm, AlarmAdapter.AlarmViewHolde
                     && oldItem.hour == newItem.hour
                     && oldItem.minute == newItem.minute
                     && oldItem.repeatMode == newItem.repeatMode
-                    && oldItem.calendarType == newItem.calendarType
-                    && oldItem.monthDays.equals(newItem.monthDays)
-                    && oldItem.weekDays.equals(newItem.weekDays)
-                    && oldItem.onceDateMillis == newItem.onceDateMillis
+                    && oldItem.dateKeys.equals(newItem.dateKeys)
+                    && objectsEqual(oldItem.occasionId, newItem.occasionId)
                     && oldItem.label.equals(newItem.label)
                     && oldItem.preReminderEnabled == newItem.preReminderEnabled
                     && oldItem.preReminderDaysBefore == newItem.preReminderDaysBefore
@@ -51,6 +50,10 @@ public class AlarmAdapter extends ListAdapter<Alarm, AlarmAdapter.AlarmViewHolde
                     && oldItem.preReminderMinute == newItem.preReminderMinute;
         }
     };
+
+    private static boolean objectsEqual(@Nullable String first, @Nullable String second) {
+        return first == null ? second == null : first.equals(second);
+    }
 
     private final Listener listener;
 

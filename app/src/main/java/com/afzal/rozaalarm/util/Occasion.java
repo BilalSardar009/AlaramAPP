@@ -23,6 +23,14 @@ public enum Occasion {
     /** 9 Muharram, fasted together with Ashura. */
     TASUA("tasua", Category.RECOMMENDED),
 
+    /**
+     * 9 and 10 Muharram together — the pair most people actually keep.
+     *
+     * <p>It is offered as a shortcut only; the calendar still labels the two days Tasu'a and
+     * Ashura, so this never adds a third marker of its own.</p>
+     */
+    MUHARRAM_9_10("muharram_9_10", Category.EMPHASISED),
+
     /** The first nine days of Dhul-Hijjah. */
     DHUL_HIJJAH_FIRST_NINE("dhul_hijjah_nine", Category.RECOMMENDED),
 
@@ -85,11 +93,11 @@ public enum Occasion {
     }
 
     /**
-     * True when this occasion is offered as an alarm rule and drawn on the calendar.
+     * True when this occasion is offered as a shortcut on the calendar screen.
      *
      * <p>{@link #MONDAY_THURSDAY} is kept so alarms saved before it was retired still resolve, but
-     * it is no longer offered: a weekly alarm on Monday and Thursday says the same thing without
-     * marking a third of the calendar.</p>
+     * it is no longer offered: it would mark roughly nine days a month, which drowns out the days
+     * that really are special.</p>
      */
     public boolean isSchedulable() {
         return !isForbidden() && this != MONDAY_THURSDAY;

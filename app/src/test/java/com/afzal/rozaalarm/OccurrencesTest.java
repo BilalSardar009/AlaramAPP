@@ -1,6 +1,7 @@
 package com.afzal.rozaalarm;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.afzal.rozaalarm.data.Alarm;
@@ -13,22 +14,28 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Covers the repeat rules this app exists for.
+ * Covers the date alarms the calendar's multi-select produces.
  *
- * <p>These run on a plain JVM, so they stay on the Gregorian side of {@link Occurrences}. The
- * Hijri branch and the forbidden-day guard both reach {@code android.icu}, which is unavailable
- * here, so every alarm below sets {@code skipForbiddenDays = false}. Those paths are covered by
- * {@link OccasionsTest} (the pure rules) and by the instrumented calendar tests.</p>
+ * <p>These run on a plain JVM, so they stay off {@code android.icu}: the occasion branch and the
+ * forbidden-day guard both reach it, which is why every alarm below sets
+ * {@code skipForbiddenDays = false}. The rules those paths are built on are covered by
+ * {@link OccasionsTest}, which takes the Hijri date as plain numbers.</p>
  */
 public class OccurrencesTest {
 
-    /** The White Days: 13th, 14th and 15th of every month at 3am. */
-    private static Alarm whiteDays() {
+    private static long at(int year, int month, int day, int hour, int minute) {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(year, month, day, hour, minute, 0);
+        return cal.getTimeInMillis();
+    }
+
+    /** An alarm on the given {@code yyyyMMdd} days at 3am. */
+    private static Alarm onDays(Integer... dateKeys) {
         Alarm alarm = new Alarm();
-        alarm.label = "Ayyam al-Beed Sehri";
-        alarm.repeatMode = Alarm.REPEAT_MONTHLY;
-        alarm.calendarType = Alarm.CALENDAR_GREGORIAN;
-        alarm.setMonthDayList(Arrays.asList(13, 14, 15));
+        alarm.label = "Roza";
+        alarm.repeatMode = Alarm.REPEAT_DATES;
+        alarm.setDateKeyList(Arrays.asList(dateKeys));
         alarm.hour = 3;
         alarm.minute = 0;
         alarm.preReminderEnabled = true;
@@ -40,161 +47,156 @@ public class OccurrencesTest {
         return alarm;
     }
 
-    private static Alarm plainAlarm(int repeatMode, int hour, int minute) {
-        Alarm alarm = new Alarm();
-        alarm.repeatMode = repeatMode;
-        alarm.hour = hour;
-        alarm.minute = minute;
-        alarm.skipForbiddenDays = false;
-        return alarm;
-    }
-
-    private static long at(int year, int month, int day, int hour, int minute) {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(year, month, day, hour, minute, 0);
-        return cal.getTimeInMillis();
-    }
+    // ---- the days themselves ------------------------------------------------------------------
 
     @Test
-    public void whiteDaysFireOnThe13th14thAnd15th() {
-        List<Long> next = Occurrences.nextMany(whiteDays(), at(2027, Calendar.MARCH, 1, 9, 0), 6);
+    public void everySelectedDayRingsInOrder() {
+        Alarm alarm = onDays(20270315, 20270313, 20270314);
+        List<Long> next = Occurrences.nextMany(alarm, at(2027, Calendar.MARCH, 1, 9, 0), 5);
 
-        assertEquals(6, next.size());
+        assertEquals(3, next.size());
         assertEquals(at(2027, Calendar.MARCH, 13, 3, 0), (long) next.get(0));
         assertEquals(at(2027, Calendar.MARCH, 14, 3, 0), (long) next.get(1));
         assertEquals(at(2027, Calendar.MARCH, 15, 3, 0), (long) next.get(2));
-        assertEquals(at(2027, Calendar.APRIL, 13, 3, 0), (long) next.get(3));
-        assertEquals(at(2027, Calendar.APRIL, 14, 3, 0), (long) next.get(4));
-        assertEquals(at(2027, Calendar.APRIL, 15, 3, 0), (long) next.get(5));
     }
 
     @Test
-    public void reminderLandsOnTheEveningOfThe12th() {
-        assertEquals(at(2027, Calendar.MARCH, 12, 20, 0),
-                Occurrences.nextReminder(whiteDays(), at(2027, Calendar.MARCH, 1, 9, 0)));
+    public void daysAlreadyGoneAreNotOffered() {
+        Alarm alarm = onDays(20270313, 20270314, 20270315);
+
+        // Mid-morning on the 14th: the 13th and the 14th have both rung.
+        assertEquals(at(2027, Calendar.MARCH, 15, 3, 0),
+                Occurrences.next(alarm, at(2027, Calendar.MARCH, 14, 9, 0)));
     }
 
     @Test
-    public void reminderSkipsTheMiddleOfARun() {
-        // Late on the 12th the reminder has been delivered; the 14th and 15th are mid-run, so the
-        // next reminder belongs to next month's 13th.
-        assertEquals(at(2027, Calendar.APRIL, 12, 20, 0),
-                Occurrences.nextReminder(whiteDays(), at(2027, Calendar.MARCH, 12, 21, 0)));
+    public void anAlarmWhoseDaysHaveAllPassedNeverFires() {
+        assertEquals(Occurrences.NONE,
+                Occurrences.next(onDays(20200101), System.currentTimeMillis()));
     }
 
     @Test
-    public void everyDayOfARunRemindsWhenTheOptionIsOff() {
-        Alarm alarm = whiteDays();
-        alarm.preReminderFirstDayOnly = false;
-        assertEquals(at(2027, Calendar.MARCH, 13, 20, 0),
-                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 12, 21, 0)));
+    public void anAlarmWithNoDaysNeverFires() {
+        Alarm alarm = onDays();
+        assertTrue(alarm.dateKeyList().isEmpty());
+        assertEquals(Occurrences.NONE, Occurrences.next(alarm, System.currentTimeMillis()));
+    }
+
+    /**
+     * The grid lets you move to any Hijri month, so a chosen day can sit years out. It is read
+     * from the list rather than walked to, so distance costs nothing and nothing is missed.
+     */
+    @Test
+    public void aDayYearsAwayIsStillFound() {
+        Alarm alarm = onDays(20310612);
+        assertEquals(at(2031, Calendar.JUNE, 12, 3, 0),
+                Occurrences.next(alarm, at(2027, Calendar.MARCH, 1, 9, 0)));
     }
 
     @Test
-    public void aDailyAlarmStillReminds() {
-        // "First day of a run" is meaningless for a daily alarm, so it must not suppress reminders.
-        Alarm alarm = plainAlarm(Alarm.REPEAT_DAILY, 3, 0);
-        alarm.preReminderEnabled = true;
-        alarm.preReminderFirstDayOnly = true;
-        alarm.preReminderDaysBefore = 1;
-        alarm.preReminderHour = 20;
-        alarm.preReminderMinute = 0;
-
-        assertEquals(at(2027, Calendar.MARCH, 10, 20, 0),
-                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 10, 9, 0)));
-    }
-
-    @Test
-    public void the31stClampsToTheLastDayOfAShortMonth() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_MONTHLY, 5, 30);
-        alarm.setMonthDayList(Arrays.asList(31));
-        alarm.clampToMonthEnd = true;
-
-        long from = at(2027, Calendar.FEBRUARY, 1, 0, 0);
-        assertEquals(at(2027, Calendar.FEBRUARY, 28, 5, 30), Occurrences.next(alarm, from));
-
-        alarm.clampToMonthEnd = false;
-        assertEquals(at(2027, Calendar.MARCH, 31, 5, 30), Occurrences.next(alarm, from));
-    }
-
-    @Test
-    public void weeklyRuleHitsTheSelectedWeekdays() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_WEEKLY, 4, 15);
-        alarm.setWeekDayList(Arrays.asList(Calendar.MONDAY, Calendar.THURSDAY));
-
-        // Starting midday on Tuesday 2 March 2027.
-        List<Long> next = Occurrences.nextMany(alarm, at(2027, Calendar.MARCH, 2, 12, 0), 3);
-        assertEquals(at(2027, Calendar.MARCH, 4, 4, 15), (long) next.get(0));
-        assertEquals(at(2027, Calendar.MARCH, 8, 4, 15), (long) next.get(1));
-        assertEquals(at(2027, Calendar.MARCH, 11, 4, 15), (long) next.get(2));
-    }
-
-    @Test
-    public void dailyRollsOverOnceTheTimeHasPassed() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_DAILY, 3, 0);
-
-        assertEquals(at(2027, Calendar.MARCH, 10, 3, 0),
-                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 1, 0)));
-        assertEquals(at(2027, Calendar.MARCH, 11, 3, 0),
-                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 4, 0)));
-    }
-
-    /** Picking today and a time still to come rings today. */
-    @Test
-    public void aOneOffLaterTodayRingsToday() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
-        alarm.onceDateMillis = at(2027, Calendar.MARCH, 10, 0, 0);
+    public void laterTodayStillRingsToday() {
+        Alarm alarm = onDays(20270310);
+        alarm.hour = 9;
 
         assertEquals(at(2027, Calendar.MARCH, 10, 9, 0),
                 Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 7, 0)));
     }
 
-    /**
-     * Picking today and a time that has already gone by is not an error: as on any alarm clock,
-     * it rings at that time tomorrow.
-     */
+    /** A time that has already gone by today does not quietly roll to tomorrow. */
     @Test
-    public void aOneOffEarlierTodayRollsToTomorrow() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
-        alarm.onceDateMillis = at(2027, Calendar.MARCH, 10, 0, 0);
-
-        assertEquals(at(2027, Calendar.MARCH, 11, 9, 0),
-                Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 11, 0)));
-    }
-
-    /** A date that is genuinely past has no firing, and does not quietly roll forward. */
-    @Test
-    public void aOneOffOnAnEarlierDateDoesNotRoll() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 9, 0);
-        alarm.onceDateMillis = at(2027, Calendar.MARCH, 9, 0, 0);
+    public void earlierTodayDoesNotRollForward() {
+        Alarm alarm = onDays(20270310);
+        alarm.hour = 9;
 
         assertEquals(Occurrences.NONE,
                 Occurrences.next(alarm, at(2027, Calendar.MARCH, 10, 11, 0)));
     }
 
-    @Test
-    public void aOneOffInThePastNeverFires() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_ONCE, 7, 0);
-        alarm.onceDateMillis = at(2020, Calendar.JANUARY, 1, 0, 0);
+    // ---- reminders ----------------------------------------------------------------------------
 
-        assertEquals(Occurrences.NONE, Occurrences.next(alarm, System.currentTimeMillis()));
+    @Test
+    public void reminderLandsOnTheEveningBeforeTheFirstDay() {
+        assertEquals(at(2027, Calendar.MARCH, 12, 20, 0),
+                Occurrences.nextReminder(onDays(20270313, 20270314, 20270315),
+                        at(2027, Calendar.MARCH, 1, 9, 0)));
     }
 
     @Test
-    public void monthlyRuleWithNoDaysSelectedNeverFires() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_MONTHLY, 3, 0);
-        alarm.monthDays = "";
-
-        assertEquals(Occurrences.NONE, Occurrences.next(alarm, System.currentTimeMillis()));
+    public void reminderSkipsTheMiddleOfARun() {
+        // Late on the 12th the reminder has gone out; the 14th and 15th are mid-run, so there is
+        // nothing left to remind about.
+        assertEquals(Occurrences.NONE,
+                Occurrences.nextReminder(onDays(20270313, 20270314, 20270315),
+                        at(2027, Calendar.MARCH, 12, 21, 0)));
     }
+
+    @Test
+    public void everyDayOfARunRemindsWhenTheOptionIsOff() {
+        Alarm alarm = onDays(20270313, 20270314, 20270315);
+        alarm.preReminderFirstDayOnly = false;
+
+        assertEquals(at(2027, Calendar.MARCH, 13, 20, 0),
+                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 12, 21, 0)));
+    }
+
+    @Test
+    public void twoSeparateRunsEachGetTheirOwnReminder() {
+        Alarm alarm = onDays(20270313, 20270314, 20270420, 20270421);
+
+        assertEquals(at(2027, Calendar.MARCH, 12, 20, 0),
+                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 1, 9, 0)));
+        assertEquals(at(2027, Calendar.APRIL, 19, 20, 0),
+                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 15, 9, 0)));
+    }
+
+    @Test
+    public void remindersCanBeTurnedOff() {
+        Alarm alarm = onDays(20270313);
+        alarm.preReminderEnabled = false;
+
+        assertEquals(Occurrences.NONE,
+                Occurrences.nextReminder(alarm, at(2027, Calendar.MARCH, 1, 9, 0)));
+    }
+
+    @Test
+    public void startsMidRunOnlyCountsAdjacentDays() {
+        Alarm alarm = onDays(20270313, 20270314, 20270316);
+
+        assertFalse(Occurrences.startsMidRun(alarm, at(2027, Calendar.MARCH, 13, 3, 0)));
+        assertTrue(Occurrences.startsMidRun(alarm, at(2027, Calendar.MARCH, 14, 3, 0)));
+        assertFalse(Occurrences.startsMidRun(alarm, at(2027, Calendar.MARCH, 16, 3, 0)));
+    }
+
+    // ---- occasion alarms ----------------------------------------------------------------------
 
     @Test
     public void anOccasionAlarmWithoutAnOccasionNeverFires() {
-        Alarm alarm = plainAlarm(Alarm.REPEAT_OCCASION, 3, 0);
+        Alarm alarm = new Alarm();
+        alarm.repeatMode = Alarm.REPEAT_OCCASION;
         alarm.occasionId = null;
+        alarm.skipForbiddenDays = false;
 
         assertEquals(Occurrences.NONE, Occurrences.next(alarm, System.currentTimeMillis()));
+    }
+
+    // ---- the date key <-> instant conversion --------------------------------------------------
+
+    @Test
+    public void dateKeysConvertBackToTheDayTheyName() {
+        assertEquals(at(2027, Calendar.MARCH, 13, 5, 30),
+                Occurrences.instantOfDateKey(20270313, 5, 30));
+        assertEquals(at(2026, Calendar.DECEMBER, 31, 0, 0),
+                Occurrences.instantOfDateKey(20261231, 0, 0));
+    }
+
+    // ---- the stored form ----------------------------------------------------------------------
+
+    @Test
+    public void dateKeyListSortsDeduplicatesAndDropsJunk() {
+        Alarm alarm = new Alarm();
+        alarm.dateKeys = "20270315, 20270313, abc, 20270313, , 20270314";
+
+        assertEquals(Arrays.asList(20270313, 20270314, 20270315), alarm.dateKeyList());
     }
 
     @Test
@@ -205,20 +207,16 @@ public class OccurrencesTest {
     }
 
     @Test
-    public void ayyamAlBeedIsRecognised() {
-        assertTrue(whiteDays().isAyyamAlBeed());
-    }
-
-    @Test
-    public void copyCarriesTheOccasionFields() {
-        Alarm source = whiteDays();
-        source.repeatMode = Alarm.REPEAT_OCCASION;
+    public void copyCarriesTheFieldsThatDefineTheAlarm() {
+        Alarm source = onDays(20270313, 20270314);
         source.occasionId = "arafah";
         source.skipForbiddenDays = true;
 
         Alarm copy = Alarm.copyOf(source);
         assertEquals(0L, copy.id);
+        assertEquals("20270313,20270314", copy.dateKeys);
         assertEquals("arafah", copy.occasionId);
+        assertEquals(Alarm.REPEAT_DATES, copy.repeatMode);
         assertTrue(copy.skipForbiddenDays);
     }
 }

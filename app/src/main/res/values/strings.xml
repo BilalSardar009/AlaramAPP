@@ -5,22 +5,13 @@
     <string name="bismillah">بِسْمِ اللہِ الرَّحْمٰنِ الرَّحِیْم</string>
 
     <!-- ======================= Home ======================= -->
-    <string name="greeting_salaam">Assalam-u-Alaikum</string>
-    <string name="home_subtitle">Your fasting alarms</string>
-    <string name="next_alarm_caption">NEXT ALARM</string>
-    <string name="next_alarm_none">No alarm scheduled</string>
-    <string name="next_alarm_none_hint">Add one to get started</string>
     <string name="countdown_now">Ringing now</string>
     <string name="countdown_days">in %1$dd %2$dh</string>
     <string name="countdown_hours">in %1$dh %2$dm</string>
     <string name="countdown_minutes">in %1$d min</string>
     <string name="today_caption">TODAY</string>
-    <string name="empty_title">No alarms yet</string>
-    <string name="empty_subtitle">Tap the button below to schedule your first fasting alarm.</string>
-    <string name="fab_add_alarm">New Alarm</string>
     <string name="action_settings">Settings</string>
     <string name="action_delete">Delete</string>
-    <string name="action_duplicate">Duplicate</string>
     <string name="alarm_deleted">Alarm deleted</string>
     <string name="action_undo">Undo</string>
     <string name="alarm_turned_off">Alarm turned off</string>
@@ -30,49 +21,23 @@
     <string name="cd_app_logo">App logo</string>
     <string name="chip_reminder">Reminder %1$s before · %2$s</string>
     <string name="alarm_options_title">Alarm options</string>
-    <string name="action_edit">Edit</string>
-    <string name="duplicate_suffix">%1$s (copy)</string>
-    <string name="swipe_to_delete">Swipe to delete</string>
 
     <!-- ======================= Editor ======================= -->
-    <string name="title_new_alarm">New Alarm</string>
-    <string name="title_edit_alarm">Edit Alarm</string>
     <string name="hint_alarm_label">Alarm name</string>
     <string name="default_alarm_label">Roza Alarm</string>
     <string name="seed_alarm_label">Ayyam al-Beed Sehri</string>
     <string name="section_time">Time</string>
-    <string name="section_repeat">Repeat</string>
     <string name="section_reminder">Advance reminder</string>
     <string name="section_options">Options</string>
-    <string name="more_options">More options</string>
-    <string name="fewer_options">Fewer options</string>
-    <string name="tap_to_change_time">Tap to change</string>
 
-    <string name="repeat_once">Once</string>
-    <string name="repeat_daily">Daily</string>
-    <string name="repeat_weekly">Weekly</string>
-    <string name="repeat_monthly">Monthly</string>
 
-    <string name="calendar_system">Calendar</string>
-    <string name="calendar_gregorian">Gregorian</string>
-    <string name="calendar_hijri">Hijri</string>
-    <string name="calendar_hijri_hint">Days are counted in the Islamic month (Umm al-Qura).</string>
-    <string name="calendar_gregorian_hint">Days are counted in the English month.</string>
 
-    <string name="days_of_month">Days of the month</string>
-    <string name="days_of_week">Days of the week</string>
     <string name="pick_date">Pick a date</string>
-    <string name="clamp_month_end">Shift to the last day in shorter months</string>
     <string name="selected_days_none">Select at least one day</string>
 
 
-    <string name="reminder_enable">Remind me in advance</string>
     <string name="reminder_days_before">Days before</string>
-    <string name="reminder_days_value">%1$d day before</string>
-    <string name="reminder_days_value_plural">%1$d days before</string>
     <string name="reminder_time">Reminder time</string>
-    <string name="reminder_first_day_only">Only before the first day of a run</string>
-    <string name="reminder_first_day_only_hint">For 13–15 you get one reminder on the 12th instead of three.</string>
     <string name="reminder_next_preview">Reminder: %1$s</string>
     <string name="reminder_next_none">No reminder scheduled</string>
 
@@ -80,14 +45,10 @@
     <string name="option_tone">Alarm tone</string>
     <string name="option_tone_default">Default alarm tone</string>
     <string name="option_snooze">Snooze length</string>
-    <string name="option_snooze_value">%1$d minutes</string>
 
-    <string name="preview_next_rings">Next: %1$s</string>
-    <string name="preview_upcoming">Upcoming</string>
     <string name="preview_none">This rule never fires — check the selected days.</string>
     <string name="action_save">Save alarm</string>
     <string name="saved_toast">Saved · rings %1$s</string>
-    <string name="error_pick_days">Please select at least one day.</string>
     <string name="error_pick_future_date">Please pick a date and time in the future.</string>
 
     <!-- ======================= Ringing ======================= -->
@@ -104,8 +65,6 @@
     <string name="settings_language_english">English only</string>
     <string name="settings_language_urdu">اردو صرف</string>
     <string name="settings_calendar">Islamic calendar</string>
-    <string name="settings_hijri_offset">Hijri date adjustment</string>
-    <string name="settings_hijri_offset_desc">Shift the Hijri date to match your local moon sighting.</string>
     <string name="settings_hijri_offset_value">%1$+d day</string>
     <string name="settings_hijri_today">Today: %1$s</string>
     <string name="settings_reliability">Reliability</string>
@@ -117,12 +76,9 @@
     <string name="settings_notification_access_desc">Needed to show alarms and reminders.</string>
     <string name="settings_granted">Granted</string>
     <string name="settings_not_granted">Tap to allow</string>
-    <string name="settings_appearance">Appearance</string>
-    <string name="settings_animations">Rich animations</string>
-    <string name="settings_animations_desc">Turn off for a calmer, faster interface.</string>
     <string name="settings_about">About</string>
     <string name="settings_version">Version %1$s</string>
-    <string name="about_body">Afzal\'s Roza Alarm keeps your voluntary fasts on schedule — the White Days of every month, Mondays and Thursdays, or any date you choose. Reminders arrive the evening before so Suhoor is never a rush.</string>
+    <string name="about_body">Afzal\'s Roza Alarm keeps your fasts on schedule — Ramadan, 9 and 10 Muharram, the White Days of every month, or any dates you pick off the calendar. Reminders arrive the evening before so Suhoor is never a rush.</string>
 
     <!-- ======================= Permissions ======================= -->
     <string name="perm_title">One more step</string>
@@ -134,14 +90,6 @@
 
     <!-- ======================= Repeat summaries ======================= -->
     <string name="summary_once">Once on %1$s</string>
-    <string name="summary_daily">Every day</string>
-    <string name="summary_weekly">Every %1$s</string>
-    <string name="summary_monthly_gregorian">Every month on %1$s</string>
-    <string name="summary_monthly_hijri">Every Hijri month on %1$s</string>
-    <string name="summary_ayyam_gregorian">White Days · 13, 14, 15 each month</string>
-    <string name="summary_ayyam_hijri">Ayyam al-Beed · 13, 14, 15 of every Hijri month</string>
-    <string name="summary_day_join">, </string>
-    <string name="summary_with_reminder">%1$s · reminder %2$s before</string>
 
     <!-- ======================= Notifications (bilingual) ======================= -->
     <string name="channel_alarm_name">Fasting alarms</string>
@@ -250,7 +198,6 @@
     <string name="occ_category_forbidden">Not permitted</string>
 
     <!-- ======================= Tabs ======================= -->
-    <string name="tab_alarms">Alarms</string>
     <string name="tab_calendar">Calendar</string>
     <string name="tab_history">History</string>
 
@@ -259,8 +206,6 @@
     <string name="calendar_prev_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
     <string name="calendar_today">Today</string>
-    <string name="calendar_legend">Legend</string>
-    <string name="calendar_legend_fasted">Fast recorded</string>
     <string name="calendar_legend_recommended">Fasting day</string>
     <string name="calendar_legend_obligatory">Ramadan</string>
     <string name="calendar_legend_forbidden">Not permitted</string>
@@ -271,18 +216,14 @@
     <string name="calendar_adjust_month_message">If this month was announced earlier or later than calculated, shift it here. This affects alarms that use the Islamic calendar.</string>
     <string name="calendar_adjust_none">No adjustment</string>
     <string name="calendar_no_occasion">No special fast on this day</string>
-    <string name="calendar_tap_hint">Tap any day to record a fast or read about it.</string>
+    <string name="calendar_tap_hint">Tap days to select them — pick as many as you like, then set one alarm for all of them.</string>
 
     <!-- ======================= Day sheet ======================= -->
     <string name="day_sheet_record">Record a fast</string>
-    <string name="day_sheet_recorded">Fast recorded</string>
     <string name="day_sheet_remove">Remove record</string>
     <string name="day_sheet_missed">Mark as missed</string>
     <string name="day_sheet_missed_recorded">Marked as missed</string>
-    <string name="day_sheet_add_alarm">Set an alarm</string>
-    <string name="day_sheet_note_hint">Note (optional)</string>
     <string name="day_sheet_forbidden_warning">Fasting is not permitted on this day.</string>
-    <string name="day_sheet_future">This day has not arrived yet — it will be saved as planned.</string>
     <string name="fast_logged">Fast recorded for %1$s</string>
     <string name="fast_removed">Record removed</string>
 
@@ -291,19 +232,14 @@
     <string name="history_total">Total fasts</string>
     <string name="history_this_year">This Hijri year</string>
     <string name="history_streak">Current streak</string>
-    <string name="history_streak_days">%1$d days</string>
     <string name="history_group_hijri">Islamic months</string>
     <string name="history_group_gregorian">English months</string>
     <string name="history_empty_title">Nothing recorded yet</string>
     <string name="history_empty_subtitle">Record a fast from the Calendar tab and it will appear here, month by month.</string>
-    <string name="history_month_count">%1$d fasts</string>
-    <string name="history_month_count_one">%1$d fast</string>
     <string name="history_open_in_calendar">Open in calendar</string>
     <string name="history_expand">Show the dates</string>
 
     <!-- ======================= Occasion alarms ======================= -->
-    <string name="repeat_occasion">Fasting day</string>
-    <string name="section_occasion">Which fast</string>
     <string name="occasion_pick">Choose which fast</string>
     <string name="summary_occasion">Every %1$s</string>
     <string name="skip_forbidden_days">Skip Eid and Tashreeq days</string>
@@ -312,16 +248,8 @@
     <!-- ======================= Hijri correction ======================= -->
     <string name="settings_hijri_correct">Correct today\'s Hijri date</string>
     <string name="settings_hijri_correct_desc">Tell the app what today\'s date really is and it works out the adjustment for you.</string>
-    <string name="hijri_correct_title">What is today\'s Hijri date?</string>
-    <string name="hijri_correct_message">Calculated as %1$s. Pick the day shown on your local calendar.</string>
     <string name="hijri_correct_applied">Adjusted by %1$+d day — today is now %2$s</string>
     <string name="hijri_correct_impossible">That date is more than %1$d days away from the calculated one.</string>
-    <string name="settings_hijri_months">Per-month adjustments</string>
-    <string name="settings_hijri_months_desc">%1$d month adjusted</string>
-    <string name="settings_hijri_months_desc_plural">%1$d months adjusted</string>
-    <string name="settings_hijri_months_none">None — months follow the calculated dates</string>
-    <string name="settings_hijri_months_clear">Clear all month adjustments</string>
-    <string name="cleared">Cleared</string>
 
     <!-- Day names used inside notification and summary text -->
     <string name="day_short_sun">Sun</string>
@@ -331,4 +259,38 @@
     <string name="day_short_thu">Thu</string>
     <string name="day_short_fri">Fri</string>
     <string name="day_short_sat">Sat</string>
+
+    <!-- Month picker, selection and shortcuts -->
+    <string name="calendar_month_label">Islamic month</string>
+    <string name="calendar_year_label">Year</string>
+    <string name="calendar_selection_none">No days selected</string>
+    <string name="calendar_selection_none_hint">Tap a day on the calendar above to begin.</string>
+    <string name="calendar_selection_span">%1$s – %2$s</string>
+    <string name="calendar_clear_selection">Clear</string>
+    <string name="calendar_set_alarm">Set an alarm</string>
+    <string name="calendar_set_alarm_for">Set one alarm for %1$d days</string>
+    <string name="calendar_some_forbidden">Some of these are Eid or Tashreeq days — fasting is not permitted on them, so they are left out.</string>
+    <string name="calendar_shortcuts_title">Fasting days</string>
+    <string name="calendar_shortcuts_hint">Tap a fast to set its alarm. Tap it again to change the time.</string>
+    <string name="calendar_alarms_title">Your alarms</string>
+    <string name="calendar_alarms_empty">No alarms yet. Pick days above, or tap one of the fasting days.</string>
+    <string name="calendar_set_date">Set today\'s date</string>
+    <string name="alarm_label_single_day">Roza · %1$s</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_change_time">Change time</string>
+
+    <!-- Set today\'s Islamic date -->
+    <string name="hijri_set_title">Set today\'s Islamic date</string>
+    <string name="hijri_set_message">The app reads today as %1$s. Set it to the date your own calendar shows and every other date moves with it.</string>
+    <string name="hijri_set_day">Day</string>
+    <string name="hijri_set_month">Month</string>
+    <string name="hijri_set_apply">Set date</string>
+    <string name="hijri_set_preview">Islamic dates shift by %1$+d day.</string>
+    <string name="hijri_set_preview_none">This is the date the app already shows.</string>
+
+    <!-- Muharram 9 and 10 -->
+    <string name="occ_muharram_9_10_en">9 &amp; 10 Muharram</string>
+    <string name="occ_muharram_9_10_ur">۹ اور ۱۰ محرم</string>
+    <string name="occ_muharram_9_10_note_en">Tasu\'a and Ashura, kept together</string>
+    <string name="occ_muharram_9_10_note_ur">تاسوعا اور عاشورا، دونوں روزے</string>
 </resources>

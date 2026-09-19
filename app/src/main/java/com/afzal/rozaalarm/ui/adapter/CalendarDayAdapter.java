@@ -16,45 +16,51 @@ import com.afzal.rozaalarm.util.OccasionText;
 import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-/** Draws the month grid: Hijri day large, Gregorian day small, plus fast and occasion markers. */
+/**
+ * Draws the month grid: Hijri day large, Gregorian day small, plus fast, alarm and occasion
+ * markers. Any number of days can be selected at once, so one alarm can cover a whole run.
+ */
 public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.DayViewHolder> {
 
     public interface Listener {
-        void onDaySelected(@NonNull CalendarDay day);
+        /** The user tapped a day; it should be added to or removed from the selection. */
+        void onDayToggled(@NonNull CalendarDay day);
     }
 
     private final List<CalendarDay> days = new ArrayList<>();
+    private final Set<Integer> selectedKeys = new HashSet<>();
     private final Listener listener;
-
-    private int selectedPosition = RecyclerView.NO_POSITION;
 
     public CalendarDayAdapter(@NonNull Listener listener) {
         this.listener = listener;
     }
 
-    public void submit(@NonNull List<CalendarDay> newDays, int selectIndex) {
+    public void submit(@NonNull List<CalendarDay> newDays, @NonNull Set<Integer> selection) {
         days.clear();
         days.addAll(newDays);
-        selectedPosition = selectIndex;
+        selectedKeys.clear();
+        selectedKeys.addAll(selection);
         notifyDataSetChanged();
     }
 
-    /** Selects a cell by grid position, redrawing only the two affected cells. */
-    public void select(int position) {
-        int previous = selectedPosition;
-        selectedPosition = position;
-        if (previous != RecyclerView.NO_POSITION) {
-            notifyItemChanged(previous);
+    /** Redraws only the cells whose selected state actually changed. */
+    public void updateSelection(@NonNull Set<Integer> selection) {
+        Set<Integer> previous = new HashSet<>(selectedKeys);
+        selectedKeys.clear();
+        selectedKeys.addAll(selection);
+        for (int i = 0; i < days.size(); i++) {
+            CalendarDay day = days.get(i);
+            if (day.blank) {
+                continue;
+            }
+            if (previous.contains(day.dateKey) != selectedKeys.contains(day.dateKey)) {
+                notifyItemChanged(i);
+            }
         }
-        if (position != RecyclerView.NO_POSITION) {
-            notifyItemChanged(position);
-        }
-    }
-
-    public int selectedPosition() {
-        return selectedPosition;
     }
 
     @NonNull
@@ -66,7 +72,8 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
-        holder.bind(days.get(position), position == selectedPosition, listener, this);
+        CalendarDay day = days.get(position);
+        holder.bind(day, !day.blank && selectedKeys.contains(day.dateKey), listener);
     }
 
     @Override
@@ -83,8 +90,7 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
             this.binding = binding;
         }
 
-        void bind(@NonNull CalendarDay day, boolean selected, @NonNull Listener listener,
-                  @NonNull CalendarDayAdapter adapter) {
+        void bind(@NonNull CalendarDay day, boolean selected, @NonNull Listener listener) {
             Context context = binding.getRoot().getContext();
 
             if (day.blank) {
@@ -93,6 +99,7 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
                 binding.dayHighlight.setVisibility(View.INVISIBLE);
                 binding.dayDot.setVisibility(View.GONE);
                 binding.dayLogged.setVisibility(View.GONE);
+                binding.dayAlarm.setVisibility(View.GONE);
                 binding.dayRoot.setClickable(false);
                 binding.dayRoot.setOnClickListener(null);
                 return;
@@ -148,10 +155,9 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
                 binding.dayLogged.setVisibility(View.GONE);
             }
 
-            binding.dayRoot.setOnClickListener(v -> {
-                adapter.select(getBindingAdapterPosition());
-                listener.onDaySelected(day);
-            });
+            binding.dayAlarm.setVisibility(day.alarmed ? View.VISIBLE : View.GONE);
+
+            binding.dayRoot.setOnClickListener(v -> listener.onDayToggled(day));
         }
     }
 }

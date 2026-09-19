@@ -8,9 +8,17 @@
         app:iconTint="@color/ink"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_adjust_month"
+        android:id="@+id/action_set_date"
         android:icon="@drawable/ic_edit_calendar"
-        android:title="@string/calendar_adjust_month"
+        android:title="@string/calendar_set_date"
         app:iconTint="@color/ink"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_adjust_month"
+        android:title="@string/calendar_adjust_month"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 </menu>

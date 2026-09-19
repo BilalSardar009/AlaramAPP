@@ -93,76 +93,27 @@ public final class TimeText {
         return context.getString(R.string.countdown_minutes, (int) (delta / MINUTE));
     }
 
-    /** One line describing the repeat rule, e.g. "White Days · 13, 14, 15 each month". */
+    /** One line describing the rule, e.g. "Every White Days" or "3 chosen days". */
     @NonNull
     public static String repeatSummary(@NonNull Context context, @NonNull Alarm alarm) {
-        switch (alarm.repeatMode) {
-            case Alarm.REPEAT_ONCE:
-                return context.getString(R.string.summary_once,
-                        date(context, Occurrences.onceInstant(alarm)));
-
-            case Alarm.REPEAT_DAILY:
-                return context.getString(R.string.summary_daily);
-
-            case Alarm.REPEAT_WEEKLY:
-                return context.getString(R.string.summary_weekly, weekDayNames(context, alarm));
-
-            case Alarm.REPEAT_OCCASION: {
-                Occasion occasion = Occasion.fromId(alarm.occasionId);
-                return occasion == null
-                        ? context.getString(R.string.occasion_pick)
-                        : context.getString(R.string.summary_occasion,
-                                OccasionText.name(context, occasion));
+        if (alarm.repeatMode == Alarm.REPEAT_DATES) {
+            List<Integer> keys = alarm.dateKeyList();
+            if (keys.isEmpty()) {
+                return context.getString(R.string.selected_days_none);
             }
-
-            case Alarm.REPEAT_MONTHLY:
-            default:
-                if (alarm.isAyyamAlBeed()) {
-                    return context.getString(alarm.calendarType == Alarm.CALENDAR_HIJRI
-                            ? R.string.summary_ayyam_hijri
-                            : R.string.summary_ayyam_gregorian);
-                }
-                String days = monthDayNames(context, alarm);
-                return context.getString(alarm.calendarType == Alarm.CALENDAR_HIJRI
-                        ? R.string.summary_monthly_hijri
-                        : R.string.summary_monthly_gregorian, days);
-        }
-    }
-
-    @NonNull
-    public static String monthDayNames(@NonNull Context context, @NonNull Alarm alarm) {
-        List<Integer> days = alarm.monthDayList();
-        if (days.isEmpty()) {
-            return context.getString(R.string.selected_days_none);
-        }
-        StringBuilder sb = new StringBuilder();
-        String join = context.getString(R.string.summary_day_join);
-        for (int i = 0; i < days.size(); i++) {
-            if (i > 0) {
-                sb.append(join);
+            if (keys.size() == 1) {
+                return context.getString(R.string.summary_once, date(context,
+                        Occurrences.instantOfDateKey(keys.get(0), alarm.hour, alarm.minute)));
             }
-            sb.append(alarm.calendarType == Alarm.CALENDAR_HIJRI
-                    ? String.valueOf(days.get(i))
-                    : ordinal(days.get(i)));
+            return context.getResources().getQuantityString(
+                    R.plurals.chosen_days_count, keys.size(), keys.size());
         }
-        return sb.toString();
-    }
 
-    @NonNull
-    public static String weekDayNames(@NonNull Context context, @NonNull Alarm alarm) {
-        List<Integer> days = alarm.weekDayList();
-        if (days.isEmpty()) {
-            return context.getString(R.string.summary_daily);
-        }
-        StringBuilder sb = new StringBuilder();
-        String join = context.getString(R.string.summary_day_join);
-        for (int i = 0; i < days.size(); i++) {
-            if (i > 0) {
-                sb.append(join);
-            }
-            sb.append(weekDayName(context, days.get(i)));
-        }
-        return sb.toString();
+        Occasion occasion = Occasion.fromId(alarm.occasionId);
+        return occasion == null
+                ? context.getString(R.string.occasion_pick)
+                : context.getString(R.string.summary_occasion,
+                        OccasionText.name(context, occasion));
     }
 
     @NonNull
@@ -175,20 +126,6 @@ public final class TimeText {
             case Calendar.THURSDAY: return context.getString(R.string.day_short_thu);
             case Calendar.FRIDAY: return context.getString(R.string.day_short_fri);
             case Calendar.SATURDAY: default: return context.getString(R.string.day_short_sat);
-        }
-    }
-
-    /** 1 -> "1st", 13 -> "13th", 22 -> "22nd". */
-    @NonNull
-    public static String ordinal(int value) {
-        if (value >= 11 && value <= 13) {
-            return value + "th";
-        }
-        switch (value % 10) {
-            case 1: return value + "st";
-            case 2: return value + "nd";
-            case 3: return value + "rd";
-            default: return value + "th";
         }
     }
 }

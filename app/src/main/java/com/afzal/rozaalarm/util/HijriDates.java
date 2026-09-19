@@ -39,8 +39,13 @@ public final class HijriDates {
             "ذوالقعدہ", "ذوالحجہ"
     };
 
-    /** The furthest a correction may move a date, in either direction. */
-    public static final int MAX_OFFSET = 3;
+    /**
+     * The furthest a correction may move a date, in either direction.
+     *
+     * <p>Pakistan's Ruet-e-Hilal announcements have run as much as two days behind the Umm al-Qura
+     * calculation, so the range has to clear that comfortably.</p>
+     */
+    public static final int MAX_OFFSET = 5;
 
     private static final long DAY_MILLIS = 24L * 60L * 60L * 1000L;
 
