@@ -17,11 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.afzal.rozaalarm.R;
 import com.afzal.rozaalarm.alarm.AlarmScheduler;
 import com.afzal.rozaalarm.databinding.ActivityMainBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.util.List;
 
 /**
  * Hosts the three tabs — the alarms, the calendar and the history — and owns the permission
@@ -38,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String STATE_TAB = "selected_tab";
 
     private ActivityMainBinding binding;
+
+    /** Set when a calendar request is waiting to be picked up by the tab it is meant for. */
+    private boolean pendingCalendarRequest;
     private int selectedTabId = R.id.tab_home;
 
     private final ActivityResultLauncher<String> notificationPermissionLauncher =
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
      * hand over the days of that fast so an alarm is always set from days you can see.</p>
      */
     public void showCalendarMonth(int hijriYear, int hijriMonth,
-                                  @Nullable java.util.List<Integer> selectDayKeys) {
+                                  @Nullable List<Integer> selectDayKeys) {
         Intent intent = getIntent();
         intent.putExtra(EXTRA_SHOW_HIJRI_YEAR, hijriYear);
         intent.putExtra(EXTRA_SHOW_HIJRI_MONTH, hijriMonth);
@@ -116,32 +122,49 @@ public class MainActivity extends AppCompatActivity {
             }
             intent.putExtra(EXTRA_SELECT_DAYS, keys);
         }
+        pendingCalendarRequest = true;
 
-        // The calendar is rebuilt so it picks the request up even when the tab already exists.
-        Fragment existing = getSupportFragmentManager().findFragmentByTag("tab:" + R.id.tab_calendar);
-        if (existing != null) {
-            getSupportFragmentManager().beginTransaction().remove(existing).commitNow();
+        // Exactly one route to the tab. Selecting a different item fires the listener, which does
+        // the switch; selecting the one already chosen fires nothing, so the switch is made here.
+        // Going both ways would build the tab twice, and the second build would find the request
+        // above already spent — the calendar would arrive on today with nothing selected.
+        if (binding.bottomNav.getSelectedItemId() == R.id.tab_calendar) {
+            showTab(R.id.tab_calendar);
+        } else {
+            binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
         }
-        binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
-        showTab(R.id.tab_calendar);
     }
 
     // ---- tabs ---------------------------------------------------------------------------------
 
+    /**
+     * Shows one tab, building it fresh.
+     *
+     * <p>The transaction is committed synchronously so that what is on screen and what
+     * {@link FragmentManager} reports never disagree: with an asynchronous commit, a second call
+     * arriving in the same pass cannot see the fragment the first one queued.</p>
+     */
     private void showTab(int itemId) {
         selectedTabId = itemId;
         String tag = "tab:" + itemId;
 
-        Fragment existing = getSupportFragmentManager().findFragmentByTag(tag);
-        if (existing != null && existing.isVisible()) {
+        FragmentManager manager = getSupportFragmentManager();
+        // After onSaveInstanceState a commit throws, and the tab will be restored anyway.
+        if (manager.isStateSaved()) {
             return;
         }
 
-        Fragment fragment = existing != null ? existing : createFragment(itemId);
-        getSupportFragmentManager().beginTransaction()
+        boolean forced = itemId == R.id.tab_calendar && pendingCalendarRequest;
+        Fragment current = manager.findFragmentById(R.id.tabContainer);
+        if (!forced && current != null && tag.equals(current.getTag())) {
+            return;
+        }
+        pendingCalendarRequest = false;
+
+        manager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.tabContainer, fragment, tag)
-                .commit();
+                .replace(R.id.tabContainer, createFragment(itemId), tag)
+                .commitNow();
     }
 
     @NonNull
