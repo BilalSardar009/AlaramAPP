@@ -242,8 +242,8 @@
     <string name="skip_forbidden_days_hint">Fasting is not permitted on Eid al-Fitr, Eid al-Adha or 11–13 Dhu al-Hijjah, so those days are never scheduled.</string>
 
     <!-- ======================= Hijri correction ======================= -->
-    <string name="settings_hijri_correct">Correct today\'s Hijri date</string>
-    <string name="settings_hijri_correct_desc">Tell the app what today\'s date really is and it works out the adjustment for you.</string>
+    <string name="settings_hijri_correct">Set today\'s Islamic date</string>
+    <string name="settings_hijri_correct_desc">Pick the date your own calendar shows and every date in the app moves with it.</string>
 
     <!-- Day names used inside notification and summary text -->
     <string name="day_short_sun">Sun</string>
