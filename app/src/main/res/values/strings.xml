@@ -275,7 +275,7 @@
     <!-- Sections of the calendar screen, each one saying what it is for -->
     <string name="calendar_today_question">Is this the date your calendar shows?</string>
     <string name="calendar_set_date">Change today\'s date</string>
-    <string name="calendar_step_days">2 · Pick your days</string>
+    <string name="calendar_step_days">Pick your days</string>
     <string name="calendar_step_days_hint">Tap any day on the calendar to select it, then tap more days to add them — they can be in different months. Tap a selected day again to take it off.</string>
     <string name="calendar_selection_none_hint">Tap a day on the calendar above to begin.</string>
     <string name="calendar_set_alarm_for">Set one alarm for these %1$d days</string>
@@ -306,7 +306,7 @@
     <string name="home_alarms_empty">No alarms yet.</string>
 
     <!-- Calendar -->
-    <string name="calendar_step_month">Month</string>
+    <string name="calendar_step_month">Choose a month</string>
     <string name="calendar_year_span">%1$d AH  ·  %2$s – %3$s</string>
     <string name="day_sheet_record">Mark kept</string>
     <string name="day_sheet_missed">Mark missed</string>
