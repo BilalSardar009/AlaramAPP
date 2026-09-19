@@ -142,6 +142,18 @@ exactly one Arafah, one Ashura, one of each Eid and three days of Tashreeq.
 The app asks for these in context and Settings shows the live status of each, with a shortcut to
 the relevant system screen.
 
+## Getting the app onto a phone
+
+Every push builds an installable APK, so nothing has to be built locally:
+
+1. open the repository's **Actions** tab and click the newest **Build APK** run;
+2. scroll to **Artifacts** and download **roza-alarm-debug-apk**;
+3. unzip it and open the `.apk` on the phone. Android will ask once for permission to install from
+   this source.
+
+It installs alongside a Play-store build rather than over it — the debug build has its own
+application id (`com.afzal.rozaalarm.debug`).
+
 ## Building
 
 Requires Android Studio (Koala or newer) or a local Android SDK with platform 34.
@@ -150,7 +162,7 @@ Requires Android Studio (Koala or newer) or a local Android SDK with platform 34
 git clone https://github.com/BilalSardar009/AlaramAPP.git
 cd AlaramAPP
 ./gradlew assembleDebug      # APK at app/build/outputs/apk/debug/
-./gradlew test               # scheduling unit tests
+./gradlew testDebugUnitTest  # scheduling unit tests
 ```
 
 | | |

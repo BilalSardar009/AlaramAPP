@@ -263,7 +263,6 @@
     <string name="calendar_set_alarm">Set an alarm</string>
     <string name="calendar_some_forbidden">Some of these are Eid or Tashreeq days — fasting is not permitted on them, so they are left out.</string>
     <string name="calendar_alarms_title">Your alarms</string>
-    <string name="calendar_set_date">Set today\'s date</string>
     <string name="alarm_label_single_day">Roza · %1$s</string>
     <string name="action_rename">Rename</string>
     <string name="action_change_time">Change time</string>
