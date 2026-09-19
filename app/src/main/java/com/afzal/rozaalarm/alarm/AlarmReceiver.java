@@ -51,11 +51,16 @@ public class AlarmReceiver extends BroadcastReceiver {
         });
     }
 
+    /** Far enough past the firing that the occurrence which just rang is never re-counted. */
+    private static final long SPENT_MARGIN_MILLIS = 60_000L;
+
     private void fireAlarm(Context context, AlarmRepository repository, Alarm alarm) {
         alarm.lastTriggeredAt = System.currentTimeMillis();
 
-        if (alarm.repeatMode == Alarm.REPEAT_ONCE) {
-            // A one-off alarm has done its job; keep the row so the user can re-enable it.
+        // A date alarm whose last day has now rung has done its job. The row stays so the user
+        // can see what it was and delete it themselves.
+        if (Occurrences.next(alarm, alarm.lastTriggeredAt + SPENT_MARGIN_MILLIS)
+                == Occurrences.NONE) {
             alarm.enabled = false;
         }
         repository.updateSync(alarm);

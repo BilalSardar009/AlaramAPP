@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="24dp"
+        android:paddingBottom="32dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -36,88 +36,206 @@
             android:paddingStart="@dimen/screen_margin"
             android:paddingEnd="@dimen/screen_margin">
 
-            <!-- ============ Month header ============ -->
+            <!-- ============ Today, and the one control that fixes it ============ -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Roza.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingStart="18dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/today_caption"
+                        android:textAppearance="@style/TextAppearance.Roza.Caption"
+                        android:textColor="@color/brand_gold" />
+
+                    <TextView
+                        android:id="@+id/todayHijri"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:textColor="@color/ink"
+                        android:textSize="26sp"
+                        tools:text="6 Rabi' al-Thani 1448 AH" />
+
+                    <TextView
+                        android:id="@+id/todayHijriUrdu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/brand_green"
+                        android:textSize="17sp"
+                        tools:text="۶ ربیع الثانی ۱۴۴۸ھ" />
+
+                    <TextView
+                        android:id="@+id/todayGregorian"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:textColor="@color/ink_muted"
+                        android:textSize="13sp"
+                        tools:text="Saturday, 19 September 2026" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:dividerColor="@color/hairline" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="@string/calendar_today_question"
+                        android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/setDateButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="50dp"
+                        android:text="@string/calendar_set_date"
+                        app:cornerRadius="25dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============ 1 · Choose a month ============ -->
+            <TextView
+                style="@style/Widget.Roza.SectionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_step_month" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_month_header"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="6dp"
-                android:paddingTop="14dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="14dp">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/prevMonth"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/calendar_prev_month"
                     android:src="@drawable/ic_chevron_left"
                     app:tint="@color/brand_green" />
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="1.8"
+                    android:hint="@string/calendar_month_label">
 
-                    <TextView
-                        android:id="@+id/monthTitle"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/monthPicker"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textColor="@color/ink"
-                        android:textSize="21sp"
-                        tools:text="Ramadan 1448 AH" />
-
-                    <TextView
-                        android:id="@+id/monthTitleUrdu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/brand_green"
+                        android:inputType="none"
                         android:textSize="15sp"
-                        tools:text="رمضان ۱۴۴۸ھ" />
+                        tools:ignore="LabelFor" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/monthSpan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:textColor="@color/ink_muted"
-                        android:textSize="12sp"
-                        tools:text="12 Mar – 10 Apr 2027" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:hint="@string/calendar_year_label">
 
-                    <TextView
-                        android:id="@+id/monthAdjusted"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/yearPicker"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/bg_soft_pill"
-                        android:paddingStart="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="3dp"
-                        android:textColor="@color/brand_green_dark"
-                        android:textSize="11sp"
-                        android:visibility="gone"
-                        tools:text="Adjusted by +1 day"
-                        tools:visibility="visible" />
-                </LinearLayout>
+                        android:inputType="none"
+                        android:textSize="15sp"
+                        tools:ignore="LabelFor" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/nextMonth"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/calendar_next_month"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/brand_green" />
             </LinearLayout>
 
-            <!-- ============ Weekday header ============ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/monthTitleUrdu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brand_green"
+                        android:textSize="16sp"
+                        tools:text="ربیع الثانی ۱۴۴۸ھ" />
+
+                    <TextView
+                        android:id="@+id/monthSpan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ink_muted"
+                        android:textSize="12sp"
+                        tools:text="Mon, 14 Sep – Tue, 13 Oct" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/todayButton"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/calendar_today" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/monthAdjusted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_soft_pill"
+                android:paddingStart="10dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:textColor="@color/brand_green_dark"
+                android:textSize="11sp"
+                android:visibility="gone"
+                tools:text="This month is adjusted by +1 day"
+                tools:visibility="visible" />
+
             <LinearLayout
                 android:id="@+id/weekdayHeader"
                 android:layout_width="match_parent"
@@ -135,21 +253,63 @@
                 tools:itemCount="35"
                 tools:listitem="@layout/item_calendar_day" />
 
-            <!-- ============ Legend ============ -->
-            <LinearLayout
-                android:id="@+id/legendRow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal" />
-
-            <!-- ============ Selected day ============ -->
+            <!-- ============ What the marks mean ============ -->
             <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.Roza.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="?attr/colorSurface">
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/paper_sunken"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calendar_marks_title"
+                        android:textAppearance="@style/TextAppearance.Roza.Section"
+                        android:textColor="@color/ink_muted" />
+
+                    <LinearLayout
+                        android:id="@+id/legendColours"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" />
+
+                    <LinearLayout
+                        android:id="@+id/legendMarkers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============ 2 · Pick your days ============ -->
+            <TextView
+                style="@style/Widget.Roza.SectionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_step_days" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/calendar_step_days_hint"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Roza.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -158,21 +318,21 @@
                     android:padding="18dp">
 
                     <TextView
-                        android:id="@+id/selectedGregorian"
+                        android:id="@+id/selectionTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorOnSurface"
-                        tools:text="Sunday, 21 March 2027" />
+                        tools:text="Saturday, 19 September 2026" />
 
                     <TextView
-                        android:id="@+id/selectedHijri"
+                        android:id="@+id/selectionSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="?attr/colorPrimary"
-                        tools:text="13 Shawwal 1448 AH · ۱۳ شوال ۱۴۴۸ھ" />
+                        tools:text="6 Rabi' al-Thani 1448 AH" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/occasionChips"
@@ -206,21 +366,32 @@
                         tools:visibility="visible" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/recordButton"
+                        android:id="@+id/alarmButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:minHeight="52dp"
-                        android:text="@string/day_sheet_record"
-                        app:cornerRadius="26dp"
-                        app:icon="@drawable/ic_check"
+                        android:minHeight="54dp"
+                        android:text="@string/calendar_set_alarm"
+                        app:cornerRadius="27dp"
+                        app:icon="@drawable/ic_alarm"
                         app:iconGravity="textStart" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/recordButton"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/day_sheet_record"
+                            android:textSize="12sp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/missedButton"
@@ -230,31 +401,78 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@string/day_sheet_missed" />
+                            android:text="@string/day_sheet_missed"
+                            android:textSize="12sp" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/alarmButton"
+                            android:id="@+id/clearButton"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@string/day_sheet_add_alarm"
-                            app:icon="@drawable/ic_alarm"
-                            app:iconGravity="textStart" />
+                            android:text="@string/calendar_clear_selection"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- ============ 3 · Ready-made fasts ============ -->
+            <TextView
+                style="@style/Widget.Roza.SectionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_step_shortcuts" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:text="@string/calendar_tap_hint"
+                android:layout_marginBottom="10dp"
+                android:text="@string/calendar_shortcuts_hint"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/shortcutChips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleLine="false" />
+
+            <!-- ============ Your alarms ============ -->
+            <TextView
+                style="@style/Widget.Roza.SectionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_alarms_title" />
+
+            <TextView
+                android:id="@+id/alarmsHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/calendar_alarms_hint"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <TextView
+                android:id="@+id/alarmsEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calendar_alarms_empty"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/alarmList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_alarm" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

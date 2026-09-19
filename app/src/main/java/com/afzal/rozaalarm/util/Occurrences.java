@@ -3,6 +3,7 @@ package com.afzal.rozaalarm.util;
 import androidx.annotation.NonNull;
 
 import com.afzal.rozaalarm.data.Alarm;
+import com.afzal.rozaalarm.data.FastLog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,10 +12,11 @@ import java.util.List;
 /**
  * Works out when an {@link Alarm} fires next.
  *
- * <p>Every repeat rule is evaluated with the same day-by-day walk forward from "now": for each
- * candidate day we build the alarm instant and ask the rule whether that day counts. It is a few
- * hundred cheap iterations at worst and it keeps Gregorian months, Hijri months, leap years and
- * DST handling in one place instead of spread across per-rule arithmetic.</p>
+ * <p>An occasion rule is evaluated with a day-by-day walk forward from "now": for each candidate
+ * day we build the alarm instant and ask whether that day is one of the occasion's. It is a few
+ * hundred cheap iterations at worst and it keeps Hijri months, leap years and DST handling in one
+ * place instead of spread across per-rule arithmetic. A date rule needs no walk at all — the days
+ * are already written down.</p>
  *
  * <p>Hijri corrections are resolved inside {@link HijriDates}, so nothing here has to thread an
  * offset through.</p>
@@ -25,8 +27,8 @@ public final class Occurrences {
     public static final long NONE = -1L;
 
     /**
-     * A monthly rule always hits within a year. Occasion rules such as Arafah happen once a Hijri
-     * year, so the window has to clear a full year plus the Gregorian/Hijri drift.
+     * Occasion rules such as Arafah happen once a Hijri year, so the window has to clear a full
+     * year plus the Gregorian/Hijri drift.
      */
     private static final int MAX_LOOKAHEAD_DAYS = 400;
 
@@ -49,10 +51,17 @@ public final class Occurrences {
             return result;
         }
 
-        if (alarm.repeatMode == Alarm.REPEAT_ONCE) {
-            long once = onceInstantAfter(alarm, fromMillis);
-            if (once != NONE && !isSkipped(alarm, once)) {
-                result.add(once);
+        // A date alarm is answered from its own list. Walking the calendar would cap it at the
+        // lookahead window, and the calendar lets you pick a day years out.
+        if (alarm.repeatMode == Alarm.REPEAT_DATES) {
+            for (int dateKey : alarm.dateKeyList()) {
+                long instant = instantOfDateKey(dateKey, alarm.hour, alarm.minute);
+                if (instant > fromMillis && !isSkipped(alarm, instant)) {
+                    result.add(instant);
+                    if (result.size() >= count) {
+                        break;
+                    }
+                }
             }
             return result;
         }
@@ -77,7 +86,7 @@ public final class Occurrences {
 
     /**
      * The next moment an advance reminder should be posted, or {@link #NONE} when the alarm has no
-     * further reminders (reminders disabled, or a one-off whose reminder time has passed).
+     * further reminders (reminders disabled, or every remaining day already past its reminder).
      */
     public static long nextReminder(@NonNull Alarm alarm, long fromMillis) {
         if (!alarm.preReminderEnabled) {
@@ -107,11 +116,6 @@ public final class Occurrences {
 
     /** True when the day before {@code occurrenceMillis} is itself a firing day of this alarm. */
     public static boolean startsMidRun(@NonNull Alarm alarm, long occurrenceMillis) {
-        // A one-off has no run, and every day of a daily alarm would count as mid-run, which would
-        // silently cancel its reminders instead of delivering the ones the user asked for.
-        if (alarm.repeatMode == Alarm.REPEAT_ONCE || alarm.repeatMode == Alarm.REPEAT_DAILY) {
-            return false;
-        }
         Calendar previous = Calendar.getInstance();
         previous.setTimeInMillis(occurrenceMillis);
         previous.add(Calendar.DAY_OF_MONTH, -1);
@@ -121,7 +125,7 @@ public final class Occurrences {
 
     /**
      * Days on which fasting is not permitted — Eid al-Fitr, Eid al-Adha and the days of Tashreeq.
-     * This is what stops a "13th, 14th, 15th" Hijri rule from ringing on 13 Dhul-Hijjah.
+     * This is what stops a White Days alarm from ringing on 13 Dhu al-Hijjah.
      */
     public static boolean isSkipped(@NonNull Alarm alarm, long instantMillis) {
         return alarm.skipForbiddenDays && Occasions.isFastingForbidden(instantMillis);
@@ -130,92 +134,33 @@ public final class Occurrences {
     /** Does the calendar day of {@code day} satisfy the alarm's repeat rule? */
     public static boolean matchesDay(@NonNull Alarm alarm, @NonNull Calendar day) {
         switch (alarm.repeatMode) {
-            case Alarm.REPEAT_DAILY:
-                return true;
-
-            case Alarm.REPEAT_WEEKLY: {
-                List<Integer> weekDays = alarm.weekDayList();
-                // An empty selection behaves like "every day" rather than "never".
-                return weekDays.isEmpty() || weekDays.contains(day.get(Calendar.DAY_OF_WEEK));
-            }
-
             case Alarm.REPEAT_OCCASION: {
                 Occasion occasion = Occasion.fromId(alarm.occasionId);
                 if (occasion == null) {
                     return false;
                 }
                 if (occasion == Occasion.MONDAY_THURSDAY) {
-                    // Retired from the occasion list, but alarms saved against it still ring.
+                    // Retired from the shortcut list, but alarms saved against it still ring.
                     int weekday = day.get(Calendar.DAY_OF_WEEK);
                     return weekday == Calendar.MONDAY || weekday == Calendar.THURSDAY;
                 }
                 return Occasions.matches(occasion, day.getTimeInMillis());
             }
 
-            case Alarm.REPEAT_MONTHLY: {
-                List<Integer> wanted = alarm.monthDayList();
-                if (wanted.isEmpty()) {
-                    return false;
-                }
-                long millis = day.getTimeInMillis();
-                final int dayOfMonth;
-                final int lastDayOfMonth;
-                if (alarm.calendarType == Alarm.CALENDAR_HIJRI) {
-                    HijriDates.Snapshot hijri = HijriDates.snapshot(millis);
-                    dayOfMonth = hijri.day;
-                    lastDayOfMonth = hijri.monthLength;
-                } else {
-                    dayOfMonth = day.get(Calendar.DAY_OF_MONTH);
-                    lastDayOfMonth = day.getActualMaximum(Calendar.DAY_OF_MONTH);
-                }
-                if (wanted.contains(dayOfMonth)) {
-                    return true;
-                }
-                // "31st" in a 30 day month falls back to the last day when clamping is on.
-                if (alarm.clampToMonthEnd && dayOfMonth == lastDayOfMonth) {
-                    for (int wantedDay : wanted) {
-                        if (wantedDay > lastDayOfMonth) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
+            case Alarm.REPEAT_DATES:
+                return alarm.dateKeyList().contains(FastLog.dateKeyOf(day));
 
-            case Alarm.REPEAT_ONCE:
             default:
                 return false;
         }
     }
 
-    /** The instant a {@link Alarm#REPEAT_ONCE} alarm names: its chosen date, at its time. */
-    public static long onceInstant(@NonNull Alarm alarm) {
+    /** Local midnight of a {@code yyyyMMdd} day, moved to the alarm's time of day. */
+    public static long instantOfDateKey(int dateKey, int hour, int minute) {
         Calendar cal = Calendar.getInstance();
-        if (alarm.onceDateMillis > 0L) {
-            cal.setTimeInMillis(alarm.onceDateMillis);
-        }
-        applyTime(cal, alarm.hour, alarm.minute);
-        return cal.getTimeInMillis();
-    }
-
-    /**
-     * When a one-off alarm actually rings, or {@link #NONE} if it cannot.
-     *
-     * <p>Picking today and a time that has already gone by is not an error: as on any alarm clock,
-     * the alarm rings at that time tomorrow. Only a date that is genuinely past has no firing.</p>
-     */
-    public static long onceInstantAfter(@NonNull Alarm alarm, long fromMillis) {
-        long instant = onceInstant(alarm);
-        if (instant > fromMillis) {
-            return instant;
-        }
-        long chosenDate = alarm.onceDateMillis > 0L ? alarm.onceDateMillis : fromMillis;
-        if (!isSameLocalDay(chosenDate, fromMillis)) {
-            return NONE;
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(instant);
-        cal.add(Calendar.DAY_OF_MONTH, 1);
+        cal.clear();
+        cal.set(dateKey / 10000, ((dateKey / 100) % 100) - 1, dateKey % 100);
+        applyTime(cal, hour, minute);
         return cal.getTimeInMillis();
     }
 

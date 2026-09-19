@@ -29,9 +29,19 @@ public final class Prefs {
         return context.getApplicationContext().getSharedPreferences(FILE, Context.MODE_PRIVATE);
     }
 
+    /**
+     * Where the Hijri date starts before the user corrects it.
+     *
+     * <p>The calculation the app uses is Umm al-Qura, which is the Saudi civil calendar. Pakistan
+     * goes by local moon sighting and has been running two days behind it, so the app would
+     * otherwise open on the wrong date for the people it is built for. "Set today's date" on the
+     * calendar screen replaces this with whatever their own calendar says.</p>
+     */
+    public static final int DEFAULT_HIJRI_OFFSET = -2;
+
     /** Days to shift the Hijri conversion by, to match the local moon sighting. */
     public static int hijriOffset(@NonNull Context context) {
-        return prefs(context).getInt(KEY_HIJRI_OFFSET, 0);
+        return prefs(context).getInt(KEY_HIJRI_OFFSET, DEFAULT_HIJRI_OFFSET);
     }
 
     public static void setHijriOffset(@NonNull Context context, int offsetDays) {

@@ -24,8 +24,8 @@ import com.afzal.rozaalarm.databinding.ActivityMainBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
- * Hosts the three tabs — Alarms, Calendar and History — and owns the permission prompts, which
- * belong to the app as a whole rather than to any one tab.
+ * Hosts the two tabs — the calendar, which is where everything is done, and the history — and owns
+ * the permission prompts, which belong to the app as a whole rather than to any one tab.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String STATE_TAB = "selected_tab";
 
     private ActivityMainBinding binding;
-    private int selectedTabId = R.id.tab_alarms;
+    private int selectedTabId = R.id.tab_calendar;
 
     private final ActivityResultLauncher<String> notificationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState != null) {
-            selectedTabId = savedInstanceState.getInt(STATE_TAB, R.id.tab_alarms);
+            selectedTabId = savedInstanceState.getInt(STATE_TAB, R.id.tab_calendar);
         }
         if (getIntent().hasExtra(EXTRA_SHOW_HIJRI_MONTH)) {
             selectedTabId = R.id.tab_calendar;
@@ -117,18 +117,15 @@ public class MainActivity extends AppCompatActivity {
 
     @NonNull
     private Fragment createFragment(int itemId) {
-        if (itemId == R.id.tab_calendar) {
-            int year = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_YEAR, -1);
-            int month = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_MONTH, -1);
-            // Consume the request so rotating the device does not jump back to that month.
-            getIntent().removeExtra(EXTRA_SHOW_HIJRI_YEAR);
-            getIntent().removeExtra(EXTRA_SHOW_HIJRI_MONTH);
-            return CalendarFragment.newInstance(year, month);
-        }
         if (itemId == R.id.tab_history) {
             return new HistoryFragment();
         }
-        return new AlarmsFragment();
+        int year = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_YEAR, -1);
+        int month = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_MONTH, -1);
+        // Consume the request so rotating the device does not jump back to that month.
+        getIntent().removeExtra(EXTRA_SHOW_HIJRI_YEAR);
+        getIntent().removeExtra(EXTRA_SHOW_HIJRI_MONTH);
+        return CalendarFragment.newInstance(year, month);
     }
 
 

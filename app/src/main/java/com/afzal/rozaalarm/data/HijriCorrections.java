@@ -93,23 +93,6 @@ public class HijriCorrections {
         });
     }
 
-    /**
-     * Derives the global correction from the user telling us what today's Hijri date really is.
-     *
-     * @return the offset that was applied, or {@link Integer#MIN_VALUE} when no correction within
-     *         ±{@link HijriDates#MAX_OFFSET} days produces that date.
-     */
-    public int correctToday(int actualHijriDay, @Nullable Runnable onApplied) {
-        long now = System.currentTimeMillis();
-        for (int candidate = -HijriDates.MAX_OFFSET; candidate <= HijriDates.MAX_OFFSET; candidate++) {
-            if (HijriDates.dayOfMonth(now, candidate) == actualHijriDay) {
-                setGlobalOffset(candidate, onApplied);
-                return candidate;
-            }
-        }
-        return Integer.MIN_VALUE;
-    }
-
     /** Corrects one Hijri month on top of the global correction. Zero removes the correction. */
     public void setMonthOffset(int hijriYear, int hijriMonth, int offsetDays,
                                @Nullable Runnable onApplied) {

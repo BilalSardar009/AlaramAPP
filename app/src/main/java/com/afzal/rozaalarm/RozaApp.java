@@ -39,8 +39,8 @@ public class RozaApp extends Application {
 
     /**
      * First launch starts with the alarm this app exists for: Ayyam al-Beed, the 13th, 14th and
-     * 15th of every Islamic month, with a reminder the evening before. It is stored as an occasion
-     * rule, so it follows the Hijri calendar and never lands on a day fasting is not permitted.
+     * 15th of every Islamic month, with a reminder the evening before. It follows the Hijri
+     * calendar and never lands on a day fasting is not permitted.
      */
     private void seedWhiteDaysAlarm(AlarmRepository repository) {
         Alarm alarm = new Alarm();
@@ -49,8 +49,6 @@ public class RozaApp extends Application {
         alarm.minute = 0;
         alarm.repeatMode = Alarm.REPEAT_OCCASION;
         alarm.occasionId = Occasion.WHITE_DAYS.id();
-        alarm.calendarType = Alarm.CALENDAR_HIJRI;
-        alarm.setMonthDayList(java.util.Arrays.asList(13, 14, 15));
         alarm.skipForbiddenDays = true;
         alarm.enabled = true;
         alarm.vibrate = true;

@@ -45,12 +45,6 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".ui.AlarmEditActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.MainActivity"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".ui.SettingsActivity"
             android:exported="false"
             android:parentActivityName=".ui.MainActivity" />

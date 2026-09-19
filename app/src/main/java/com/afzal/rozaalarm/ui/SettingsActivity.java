@@ -102,43 +102,14 @@ public class SettingsActivity extends AppCompatActivity {
 
     /** Asks what today's date really is, and derives the global correction from the answer. */
     private void showCorrectTodayDialog() {
-        long now = System.currentTimeMillis();
-        int calculated = HijriDates.dayOfMonth(now);
-
-        // A Hijri month runs to 30 days, so every possible answer is offered.
-        String[] days = new String[30];
-        for (int i = 0; i < days.length; i++) {
-            days[i] = String.valueOf(i + 1);
-        }
-
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.hijri_correct_title)
-                .setMessage(getString(R.string.hijri_correct_message,
-                        HijriDates.formatEnglish(now)))
-                .setSingleChoiceItems(days, calculated - 1, (dialog, which) -> {
-                    dialog.dismiss();
-                    applyTodayCorrection(which + 1);
-                })
-                .setNegativeButton(R.string.perm_later, null)
-                .show();
-    }
-
-    private void applyTodayCorrection(int actualHijriDay) {
-        int applied = corrections.correctToday(actualHijriDay, () -> {
+        HijriDateDialog.show(this, corrections, offset -> {
             updateHijriPreview();
             Snackbar.make(binding.settingsRoot,
-                    getString(R.string.hijri_correct_applied, HijriDates.globalOffset(),
+                    getString(R.string.hijri_set_applied,
                             HijriDates.formatEnglish(System.currentTimeMillis())),
                     Snackbar.LENGTH_LONG).show();
         });
-        if (applied == Integer.MIN_VALUE) {
-            Snackbar.make(binding.settingsRoot,
-                    getString(R.string.hijri_correct_impossible, HijriDates.MAX_OFFSET),
-                    Snackbar.LENGTH_LONG).show();
-        }
     }
-
-
 
     // ---- permission rows ----------------------------------------------------------------------
 

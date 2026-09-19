@@ -2,6 +2,7 @@ package com.afzal.rozaalarm.data;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -13,20 +14,25 @@ import java.util.List;
 /**
  * A single alarm definition.
  *
- * <p>An alarm is described by a time of day plus a repeat rule. For monthly rules the days are
- * stored as a comma separated list of days-of-month (e.g. {@code "13,14,15"} for Ayyam al-Beed)
- * and may be interpreted against either the Gregorian or the Hijri calendar.</p>
+ * <p>There are only two kinds of alarm, and both come from the calendar screen: one that follows a
+ * named fasting occasion ({@link #REPEAT_OCCASION} — Ramadan, Ashura, the White Days …) and one
+ * that rings on a set of dates the user picked off the grid ({@link #REPEAT_DATES}).</p>
  */
 @Entity(tableName = "alarms")
 public class Alarm {
 
     // ---- repeat modes -------------------------------------------------------------------------
+    /**
+     * Retired. Version 1 stored a single date here; {@link AppDatabase#MIGRATION_2_3} rewrites
+     * those rows as {@link #REPEAT_DATES}, so nothing reads this value any more.
+     */
     public static final int REPEAT_ONCE = 0;
-    public static final int REPEAT_DAILY = 1;
-    public static final int REPEAT_WEEKLY = 2;
-    public static final int REPEAT_MONTHLY = 3;
+
     /** Fires on every day matching a named Islamic occasion (Ramadan, Arafah, Ashura …). */
     public static final int REPEAT_OCCASION = 4;
+
+    /** Fires on each of the specific days listed in {@link #dateKeys}. */
+    public static final int REPEAT_DATES = 5;
 
     // ---- calendar systems ---------------------------------------------------------------------
     public static final int CALENDAR_GREGORIAN = 0;
@@ -46,27 +52,7 @@ public class Alarm {
     public int minute = 0;
 
     /** One of the {@code REPEAT_*} constants. */
-    public int repeatMode = REPEAT_MONTHLY;
-
-    /** One of the {@code CALENDAR_*} constants. Only meaningful for {@link #REPEAT_MONTHLY}. */
-    public int calendarType = CALENDAR_GREGORIAN;
-
-    /** Comma separated days of month for {@link #REPEAT_MONTHLY}, e.g. "13,14,15". */
-    @NonNull
-    public String monthDays = "13,14,15";
-
-    /**
-     * Comma separated days of week for {@link #REPEAT_WEEKLY} using
-     * {@link java.util.Calendar#DAY_OF_WEEK} values (1 = Sunday … 7 = Saturday).
-     */
-    @NonNull
-    public String weekDays = "";
-
-    /**
-     * When a selected day does not exist in a short month (e.g. the 31st in February) fire on the
-     * last day of that month instead of skipping it.
-     */
-    public boolean clampToMonthEnd = true;
+    public int repeatMode = REPEAT_OCCASION;
 
     /**
      * The {@link com.afzal.rozaalarm.util.Occasion} id this alarm follows, for
@@ -76,14 +62,19 @@ public class Alarm {
     public String occasionId = null;
 
     /**
+     * Comma separated {@code yyyyMMdd} days for {@link #REPEAT_DATES}, e.g.
+     * {@code "20260921,20260922"}. These are local calendar days, so the Hijri date they show on
+     * the calendar stays put even if the Hijri correction changes later.
+     */
+    @NonNull
+    @ColumnInfo(defaultValue = "")
+    public String dateKeys = "";
+
+    /**
      * Skip Eid al-Fitr, Eid al-Adha and the days of Tashreeq, on which fasting is not permitted.
-     * This is what keeps a "13th, 14th, 15th" rule from ringing on 13 Dhul-Hijjah.
+     * This is what keeps a White Days alarm from ringing on 13 Dhu al-Hijjah.
      */
     public boolean skipForbiddenDays = true;
-
-    /** Epoch millis of the chosen date for {@link #REPEAT_ONCE}; the time of day comes from
-     *  {@link #hour}/{@link #minute}. */
-    public long onceDateMillis = 0L;
 
     public boolean enabled = true;
 
@@ -117,6 +108,33 @@ public class Alarm {
     /** Epoch millis this alarm last rang, or 0. */
     public long lastTriggeredAt = 0L;
 
+    // ---- retired columns ----------------------------------------------------------------------
+    // The daily, weekly and monthly rules were removed in version 3. Their columns stay on the
+    // entity because the table still has them: dropping a column means rebuilding the table, and
+    // the fasting history lives in the same database. Nothing reads them.
+
+    /** @deprecated retired with the monthly rule; kept only so the table schema still matches. */
+    @Deprecated
+    public int calendarType = CALENDAR_GREGORIAN;
+
+    /** @deprecated retired with the monthly rule; kept only so the table schema still matches. */
+    @Deprecated
+    @NonNull
+    public String monthDays = "";
+
+    /** @deprecated retired with the weekly rule; kept only so the table schema still matches. */
+    @Deprecated
+    @NonNull
+    public String weekDays = "";
+
+    /** @deprecated retired with the monthly rule; kept only so the table schema still matches. */
+    @Deprecated
+    public boolean clampToMonthEnd = true;
+
+    /** @deprecated retired with the one-off rule; kept only so the table schema still matches. */
+    @Deprecated
+    public long onceDateMillis = 0L;
+
     public Alarm() {
     }
 
@@ -131,13 +149,9 @@ public class Alarm {
         copy.hour = source.hour;
         copy.minute = source.minute;
         copy.repeatMode = source.repeatMode;
-        copy.calendarType = source.calendarType;
-        copy.monthDays = source.monthDays;
-        copy.weekDays = source.weekDays;
-        copy.clampToMonthEnd = source.clampToMonthEnd;
         copy.occasionId = source.occasionId;
+        copy.dateKeys = source.dateKeys;
         copy.skipForbiddenDays = source.skipForbiddenDays;
-        copy.onceDateMillis = source.onceDateMillis;
         copy.enabled = source.enabled;
         copy.vibrate = source.vibrate;
         copy.toneUri = source.toneUri;
@@ -151,35 +165,32 @@ public class Alarm {
         return copy;
     }
 
+    /**
+     * A copy that is still the same row, for editing an alarm the list is currently showing.
+     *
+     * <p>The list is diffed against what it already holds, so editing the object it is holding
+     * would leave nothing for the diff to notice and the row would keep showing the old time.</p>
+     */
     @Ignore
     @NonNull
-    public List<Integer> monthDayList() {
-        return parseCsv(monthDays, 1, 31);
+    public static Alarm editableCopy(@NonNull Alarm source) {
+        Alarm copy = copyOf(source);
+        copy.id = source.id;
+        copy.createdAt = source.createdAt;
+        copy.lastTriggeredAt = source.lastTriggeredAt;
+        return copy;
     }
 
+    /** The {@code yyyyMMdd} days this alarm rings on, ascending. */
     @Ignore
     @NonNull
-    public List<Integer> weekDayList() {
-        return parseCsv(weekDays, 1, 7);
+    public List<Integer> dateKeyList() {
+        return parseCsv(dateKeys, 10000101, 99991231);
     }
 
     @Ignore
-    public void setMonthDayList(@NonNull List<Integer> days) {
-        monthDays = joinCsv(days);
-    }
-
-    @Ignore
-    public void setWeekDayList(@NonNull List<Integer> days) {
-        weekDays = joinCsv(days);
-    }
-
-    /** True when this alarm is the classic "white days" (13th, 14th, 15th) fasting rule. */
-    @Ignore
-    public boolean isAyyamAlBeed() {
-        List<Integer> days = monthDayList();
-        return repeatMode == REPEAT_MONTHLY
-                && days.size() == 3
-                && days.contains(13) && days.contains(14) && days.contains(15);
+    public void setDateKeyList(@NonNull List<Integer> keys) {
+        dateKeys = joinCsv(keys);
     }
 
     @Ignore
