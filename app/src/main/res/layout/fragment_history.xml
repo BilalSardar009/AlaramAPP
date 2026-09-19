@@ -62,8 +62,10 @@
                         tools:text="128" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="2"
                         android:text="@string/history_total"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
                         android:textColor="@color/ink_muted"
@@ -93,8 +95,10 @@
                         tools:text="31" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="2"
                         android:text="@string/history_this_year"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
                         android:textColor="@color/ink_muted"
@@ -124,8 +128,10 @@
                         tools:text="3" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="2"
                         android:text="@string/history_streak"
                         android:textAppearance="@style/TextAppearance.Roza.Caption"
                         android:textColor="@color/ink_muted"

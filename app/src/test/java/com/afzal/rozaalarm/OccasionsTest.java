@@ -228,19 +228,81 @@ public class OccasionsTest {
         }
     }
 
-    /** Ramadan and the two Muharram days are the shortcuts people ask for first. */
     @Test
-    public void theShortcutListLeadsWithRamadanAndMuharram() {
-        List<Occasion> shortcuts = com.afzal.rozaalarm.util.OccasionText.schedulable();
+    public void theFastListLeadsWithRamadan() {
+        List<Occasion> offered = com.afzal.rozaalarm.util.OccasionText.schedulable();
 
-        assertEquals(Occasion.RAMADAN, shortcuts.get(0));
-        assertEquals(Occasion.MUHARRAM_9_10, shortcuts.get(1));
-        assertTrue(shortcuts.contains(Occasion.WHITE_DAYS));
-        assertFalse(shortcuts.contains(Occasion.MONDAY_THURSDAY));
-        for (Occasion occasion : Occasion.values()) {
-            assertEquals(occasion.name(), occasion.isSchedulable(), shortcuts.contains(occasion));
+        assertEquals(Occasion.RAMADAN, offered.get(0));
+        assertEquals(Occasion.MUHARRAM_9_10, offered.get(1));
+        assertTrue(offered.contains(Occasion.WHITE_DAYS));
+        assertFalse(offered.contains(Occasion.MONDAY_THURSDAY));
+        assertEquals(new java.util.HashSet<>(offered).size(), offered.size());
+        for (Occasion occasion : offered) {
+            assertTrue(occasion.name(), occasion.isSchedulable());
         }
-        assertEquals(new java.util.HashSet<>(shortcuts).size(), shortcuts.size());
+    }
+
+    /**
+     * No fast on the home screen may sit inside another one.
+     *
+     * <p>This is the rule the list is built on. Arafah is the ninth of Dhu al-Hijjah, Ashura is
+     * the tenth of Muharram, 15 Sha'ban is a White Day: offering any of them next to the fast that
+     * already contains it reads as two separate fasts and sets the same alarm twice. Adding one
+     * back, or widening an existing fast until it swallows another, fails here.</p>
+     */
+    @Test
+    public void theFastListNeverRepeatsItself() {
+        List<Occasion> offered = com.afzal.rozaalarm.util.OccasionText.schedulable();
+
+        for (Occasion inner : offered) {
+            for (Occasion outer : offered) {
+                if (inner == outer) {
+                    continue;
+                }
+                boolean everyDayOfInnerIsAlsoOuter = true;
+                boolean innerHasAnyDay = false;
+                for (int month = 0; month <= 11; month++) {
+                    for (int day = 1; day <= 30; day++) {
+                        if (!Occasions.covers(inner, month, day)) {
+                            continue;
+                        }
+                        innerHasAnyDay = true;
+                        if (!Occasions.covers(outer, month, day)) {
+                            everyDayOfInnerIsAlsoOuter = false;
+                        }
+                    }
+                }
+                assertFalse(inner + " sits entirely inside " + outer,
+                        innerHasAnyDay && everyDayOfInnerIsAlsoOuter);
+            }
+        }
+    }
+
+    /** Every fast on the list has days of its own to offer. */
+    @Test
+    public void everyFastOnTheListFallsSomewhere() {
+        for (Occasion occasion : com.afzal.rozaalarm.util.OccasionText.schedulable()) {
+            boolean found = false;
+            for (int month = 0; month <= 11 && !found; month++) {
+                for (int day = 1; day <= 30; day++) {
+                    if (Occasions.covers(occasion, month, day)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            assertTrue(occasion.name() + " never falls on any day", found);
+        }
+    }
+
+    /** Whatever is dropped from the list is still drawn and named on the calendar. */
+    @Test
+    public void theFastsLeftOutOfTheListAreStillLabelled() {
+        assertTrue(on(Occasions.DHUL_HIJJAH, 9).contains(Occasion.ARAFAH));
+        assertTrue(on(Occasions.MUHARRAM, 10).contains(Occasion.ASHURA));
+        assertTrue(on(Occasions.MUHARRAM, 9).contains(Occasion.TASUA));
+        assertTrue(on(Occasions.SHABAN, 15).contains(Occasion.SHABAN_MID));
+        assertTrue(on(Occasions.MUHARRAM, 5).contains(Occasion.MUHARRAM));
     }
 
     @Test

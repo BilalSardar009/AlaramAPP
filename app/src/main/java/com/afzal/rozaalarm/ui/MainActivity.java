@@ -24,19 +24,21 @@ import com.afzal.rozaalarm.databinding.ActivityMainBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
- * Hosts the two tabs — the calendar, which is where everything is done, and the history — and owns
- * the permission prompts, which belong to the app as a whole rather than to any one tab.
+ * Hosts the three tabs — the alarms, the calendar and the history — and owns the permission
+ * prompts, which belong to the app as a whole rather than to any one tab.
  */
 public class MainActivity extends AppCompatActivity {
 
     /** Ask the Calendar tab to open on a particular Hijri month. */
     public static final String EXTRA_SHOW_HIJRI_YEAR = "com.afzal.rozaalarm.extra.HIJRI_YEAR";
     public static final String EXTRA_SHOW_HIJRI_MONTH = "com.afzal.rozaalarm.extra.HIJRI_MONTH";
+    /** Days to arrive already selected, as {@code yyyyMMdd} keys. */
+    public static final String EXTRA_SELECT_DAYS = "com.afzal.rozaalarm.extra.SELECT_DAYS";
 
     private static final String STATE_TAB = "selected_tab";
 
     private ActivityMainBinding binding;
-    private int selectedTabId = R.id.tab_calendar;
+    private int selectedTabId = R.id.tab_home;
 
     private final ActivityResultLauncher<String> notificationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState != null) {
-            selectedTabId = savedInstanceState.getInt(STATE_TAB, R.id.tab_calendar);
+            selectedTabId = savedInstanceState.getInt(STATE_TAB, R.id.tab_home);
         }
         if (getIntent().hasExtra(EXTRA_SHOW_HIJRI_MONTH)) {
             selectedTabId = R.id.tab_calendar;
@@ -89,10 +91,37 @@ public class MainActivity extends AppCompatActivity {
         requestPermissionsIfNeeded();
     }
 
-    /** Jump to the Calendar tab focused on one Hijri month. Used by the History tab. */
-    public void showCalendarMonth(int hijriYear, int hijriMonth) {
-        getIntent().putExtra(EXTRA_SHOW_HIJRI_YEAR, hijriYear);
-        getIntent().putExtra(EXTRA_SHOW_HIJRI_MONTH, hijriMonth);
+    /** Jump to the Calendar tab as it stands. */
+    public void showCalendar() {
+        showCalendarMonth(-1, -1, null);
+    }
+
+    /**
+     * Jump to the Calendar tab focused on one Hijri month, optionally with days already selected.
+     *
+     * <p>Used by the History tab to open a month, and by the home screen's fasting days, which
+     * hand over the days of that fast so an alarm is always set from days you can see.</p>
+     */
+    public void showCalendarMonth(int hijriYear, int hijriMonth,
+                                  @Nullable java.util.List<Integer> selectDayKeys) {
+        Intent intent = getIntent();
+        intent.putExtra(EXTRA_SHOW_HIJRI_YEAR, hijriYear);
+        intent.putExtra(EXTRA_SHOW_HIJRI_MONTH, hijriMonth);
+        if (selectDayKeys == null || selectDayKeys.isEmpty()) {
+            intent.removeExtra(EXTRA_SELECT_DAYS);
+        } else {
+            int[] keys = new int[selectDayKeys.size()];
+            for (int i = 0; i < keys.length; i++) {
+                keys[i] = selectDayKeys.get(i);
+            }
+            intent.putExtra(EXTRA_SELECT_DAYS, keys);
+        }
+
+        // The calendar is rebuilt so it picks the request up even when the tab already exists.
+        Fragment existing = getSupportFragmentManager().findFragmentByTag("tab:" + R.id.tab_calendar);
+        if (existing != null) {
+            getSupportFragmentManager().beginTransaction().remove(existing).commitNow();
+        }
         binding.bottomNav.setSelectedItemId(R.id.tab_calendar);
         showTab(R.id.tab_calendar);
     }
@@ -120,12 +149,17 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.tab_history) {
             return new HistoryFragment();
         }
+        if (itemId == R.id.tab_home) {
+            return new HomeFragment();
+        }
         int year = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_YEAR, -1);
         int month = getIntent().getIntExtra(EXTRA_SHOW_HIJRI_MONTH, -1);
+        int[] days = getIntent().getIntArrayExtra(EXTRA_SELECT_DAYS);
         // Consume the request so rotating the device does not jump back to that month.
         getIntent().removeExtra(EXTRA_SHOW_HIJRI_YEAR);
         getIntent().removeExtra(EXTRA_SHOW_HIJRI_MONTH);
-        return CalendarFragment.newInstance(year, month);
+        getIntent().removeExtra(EXTRA_SELECT_DAYS);
+        return CalendarFragment.newInstance(year, month, days);
     }
 
 

@@ -209,15 +209,12 @@
     <string name="calendar_legend_recommended">Fasting day</string>
     <string name="calendar_legend_obligatory">Ramadan</string>
     <string name="calendar_legend_forbidden">Not permitted</string>
-    <string name="calendar_gregorian_span">%1$s – %2$s</string>
     <string name="calendar_adjust_month">Adjust this month</string>
     <string name="calendar_adjust_none">No adjustment</string>
     <string name="calendar_no_occasion">No special fast on this day</string>
 
     <!-- ======================= Day sheet ======================= -->
-    <string name="day_sheet_record">Record a fast</string>
     <string name="day_sheet_remove">Remove record</string>
-    <string name="day_sheet_missed">Mark as missed</string>
     <string name="day_sheet_missed_recorded">Marked as missed</string>
     <string name="day_sheet_forbidden_warning">Fasting is not permitted on this day.</string>
     <string name="fast_logged">Fast recorded for %1$s</string>
@@ -256,13 +253,11 @@
 
     <!-- Month picker, selection and shortcuts -->
     <string name="calendar_month_label">Islamic month</string>
-    <string name="calendar_year_label">Year</string>
     <string name="calendar_selection_none">No days selected</string>
     <string name="calendar_selection_span">%1$s – %2$s</string>
     <string name="calendar_clear_selection">Clear</string>
     <string name="calendar_set_alarm">Set an alarm</string>
     <string name="calendar_some_forbidden">Some of these are Eid or Tashreeq days — fasting is not permitted on them, so they are left out.</string>
-    <string name="calendar_alarms_title">Your alarms</string>
     <string name="alarm_label_single_day">Roza · %1$s</string>
     <string name="action_rename">Rename</string>
     <string name="action_change_time">Change time</string>
@@ -280,13 +275,8 @@
     <!-- Sections of the calendar screen, each one saying what it is for -->
     <string name="calendar_today_question">Is this the date your calendar shows?</string>
     <string name="calendar_set_date">Change today\'s date</string>
-    <string name="calendar_step_month">1 · Choose a month</string>
     <string name="calendar_step_days">2 · Pick your days</string>
     <string name="calendar_step_days_hint">Tap any day on the calendar to select it, then tap more days to add them — they can be in different months. Tap a selected day again to take it off.</string>
-    <string name="calendar_step_shortcuts">3 · Or tap a ready-made fast</string>
-    <string name="calendar_shortcuts_hint">One tap sets an alarm that follows this fast every year, for good. Tap the same one again to change its time.</string>
-    <string name="calendar_alarms_hint">Tap an alarm to change its time. Press and hold it to rename or delete it.</string>
-    <string name="calendar_alarms_empty">No alarms yet. Pick days above, or tap one of the fasts.</string>
     <string name="calendar_selection_none_hint">Tap a day on the calendar above to begin.</string>
     <string name="calendar_set_alarm_for">Set one alarm for these %1$d days</string>
     <string name="calendar_month_corrected">This month is shifted by %1$+d day</string>
@@ -302,4 +292,22 @@
     <string name="hijri_set_option_current">%1$s\n(what the app shows now)</string>
     <string name="hijri_set_applied">Today is now %1$s</string>
     <string name="calendar_adjust_month_message">If %1$s was announced a day earlier or later than the app calculates, shift just that month here. This is on top of the date you set for today.</string>
+
+    <!-- Home screen -->
+    <string name="tab_alarms">Alarms</string>
+    <string name="next_alarm_caption">RINGS NEXT</string>
+    <string name="next_alarm_none">No alarm set</string>
+    <string name="next_alarm_none_hint">Tap a fasting day below, or open the calendar and pick your own days.</string>
+    <string name="home_fasts_title">Fasting days</string>
+    <string name="home_fasts_hint">Tap one to open the calendar on the month it falls in, with its days already chosen. You set the alarm from there.</string>
+    <string name="home_open_calendar">Open the calendar</string>
+    <string name="home_alarms_title">Your alarms</string>
+    <string name="home_alarms_hint">Tap an alarm to change its time. Press and hold it to rename or delete it.</string>
+    <string name="home_alarms_empty">No alarms yet.</string>
+
+    <!-- Calendar -->
+    <string name="calendar_step_month">Month</string>
+    <string name="calendar_year_span">%1$d AH  ·  %2$s – %3$s</string>
+    <string name="day_sheet_record">Mark kept</string>
+    <string name="day_sheet_missed">Mark missed</string>
 </resources>

@@ -9,7 +9,6 @@ import androidx.annotation.StringRes;
 
 import com.afzal.rozaalarm.R;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -152,38 +151,27 @@ public final class OccasionText {
     }
 
     /**
-     * The fasting shortcuts offered on the calendar screen, most asked-for first.
+     * The fasting days offered on the home screen, most asked-for first.
+     *
+     * <p>No entry sits inside another, which is what {@code theFastListNeverRepeatsItself} holds
+     * it to. That rule removes five: the Day of Arafah is the ninth of Dhu al-Hijjah, already in
+     * the first nine; Ashura and Tasu'a are the tenth and ninth of Muharram, already in "9 &amp; 10
+     * Muharram"; 15 Sha'ban is a White Day; and fasting all of Muharram contains the 9th and 10th.
+     * Offering those made the list read as if they were separate fasts.</p>
+
+     * <p>All of them are still drawn and named on the calendar, and any of them can be set by
+     * picking the days there. They are simply not a second way to set the same alarm.</p>
      *
      * <p>The order is written out rather than taken from {@link Occasion#values()} so the list
-     * reads the way people think of the year — Ramadan, then the Muharram fasts, then the rest —
-     * instead of the order the enum happens to be declared in.</p>
+     * reads the way people think of the year, instead of the order the enum is declared in.</p>
      */
     @NonNull
     public static List<Occasion> schedulable() {
-        List<Occasion> ordered = Arrays.asList(
+        return Arrays.asList(
                 Occasion.RAMADAN,
                 Occasion.MUHARRAM_9_10,
-                Occasion.ASHURA,
-                Occasion.TASUA,
-                Occasion.ARAFAH,
                 Occasion.WHITE_DAYS,
                 Occasion.SHAWWAL_SIX,
-                Occasion.DHUL_HIJJAH_FIRST_NINE,
-                Occasion.SHABAN_MID,
-                Occasion.MUHARRAM);
-
-        List<Occasion> out = new ArrayList<>(ordered.size());
-        for (Occasion occasion : ordered) {
-            if (occasion.isSchedulable()) {
-                out.add(occasion);
-            }
-        }
-        // Anything added to the enum later still shows up, just at the end of the row.
-        for (Occasion occasion : Occasion.values()) {
-            if (occasion.isSchedulable() && !out.contains(occasion)) {
-                out.add(occasion);
-            }
-        }
-        return out;
+                Occasion.DHUL_HIJJAH_FIRST_NINE);
     }
 }

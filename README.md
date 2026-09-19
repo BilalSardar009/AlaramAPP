@@ -12,28 +12,30 @@
 
 A normal alarm clock can do "every Monday". It cannot do **"Ramadan, at 3:00 AM, every year"**, or
 **"these five days I just tapped on the Islamic calendar"** — which is exactly what keeping the
-fasts needs. The whole app is one calendar screen, and everything is done from it.
+fasts needs.
 
+* **A home screen** — today's Islamic date, the alarm that rings next with a live countdown, the
+  fasting days, and every alarm you have set.
+* **Fasting days that show you the days** — tap *Ramadan*, *9 & 10 Muharram*, the *White Days*, the
+  *six of Shawwal* or the *first nine of Dhu al-Hijjah* and the calendar opens on the month that
+  fast falls in with its days already chosen. You set the alarm from there, so an alarm is never
+  made for days you have not seen. No two entries overlap, so the same fast is never offered twice
+  under different names.
 * **One Islamic calendar** — a whole Hijri month at a glance, picked from a dropdown of the twelve
-  Islamic month names, with the English date in the corner of every cell and each fasting day
-  marked and colour-coded by ruling.
+  month names, with the English date in the corner of every cell and each fasting day marked and
+  colour-coded by ruling.
 * **Pick days, set one alarm** — tap as many days as you like, across as many months as you like,
   then set a single alarm that rings on every one of them.
-* **Fasting-day shortcuts** — one tap sets the alarm for *Ramadan*, *9 & 10 Muharram*, *Ashura*,
-  *Tasu'a*, the *Day of Arafah*, the *White Days*, the *six of Shawwal*, the *first nine of Dhu
-  al-Hijjah*, *15 Sha'ban* or *Muharram*. The app works out the dates every year, forever. Tap the
-  same shortcut again to move its time rather than stacking a second alarm on top of it.
 * **Set today's date** — the calculated calendar and local moon sighting rarely agree. Tell the app
-  what today's Islamic date really is on your own calendar and every other date moves with it. It
-  ships set to what Pakistan goes by, which runs two days behind the Umm al-Qura calculation.
+  what today's Islamic date really is and every other date moves with it. It ships set to what
+  Pakistan goes by, which runs two days behind the Umm al-Qura calculation.
 * **Days fasting is not permitted are never scheduled** — Eid al-Fitr, Eid al-Adha and the days of
   Tashreeq. This is why a White Days alarm rings on the 14th and 15th of Dhu al-Hijjah but not the
   13th, which is a day of Tashreeq.
 * **Advance reminders** — a notification the evening before (1–7 days before, at any time) so
   Suhoor is planned, not rushed. A run like 13–15 gives **one** reminder on the 12th, not three.
 * **History** — how many fasts you kept, month by month, in Islamic or English months. Tap a month
-  to see the exact dates, or jump straight to it on the calendar. Totals, this year's count and
-  your current streak sit on top.
+  to see the exact dates, or jump straight to it on the calendar.
 * **Bilingual notifications** — every alarm and reminder is written in **English and Urdu**, and
   reminders name the occasion. The interface itself stays in simple English.
 * **Full-screen alarm** — rings over the lock screen with a fade-in tone, vibration, snooze and
@@ -41,14 +43,15 @@ fasts needs. The whole app is one calendar screen, and everything is done from i
 
 ## Screens
 
-Two tabs, plus the alarm itself.
+Three tabs, plus the alarm itself.
 
-| Calendar | History | Ringing |
-| --- | --- | --- |
-| Today's date, the month dropdown, the grid, whatever you have selected, the fasting shortcuts and your alarms — the whole app on one screen | Fasts per month, expandable to the exact dates, with totals and streak | Breathing rings, bilingual message, snooze / dismiss |
+| Alarms | Calendar | History | Ringing |
+| --- | --- | --- | --- |
+| Today's date, what rings next, the fasting days, and every alarm you have set | A Hijri month per screen, days selected by tapping, and what to do with the selection | Fasts per month, expandable to the exact dates, with totals and streak | Breathing rings, bilingual message, snooze / dismiss |
 
-The splash screen draws a procedural starfield with twinkling stars and shooting stars behind an
-animated crescent — no image assets involved.
+Each screen does one thing. The calendar chooses days; the home screen holds the alarms those days
+produced. The splash screen draws a procedural starfield behind an animated crescent — no image
+assets involved.
 
 ## How the scheduling works
 
@@ -78,25 +81,29 @@ There are two kinds of alarm and nothing else
 takes the Hijri date as plain numbers rather than an instant, so the rules are unit-tested without
 a calendar in the way:
 
-| Occasion | When | Ruling |
-| --- | --- | --- |
-| Ramadan | the whole month | obligatory |
-| Day of Arafah | 9 Dhu al-Hijjah | highly recommended |
-| Ashura | 10 Muharram | highly recommended |
-| Tasu'a | 9 Muharram | voluntary |
-| 9 &amp; 10 Muharram | 9 and 10 Muharram, as one shortcut | highly recommended |
-| First nine of Dhu al-Hijjah | 1–9 Dhu al-Hijjah | voluntary |
-| Muharram | the whole month | voluntary |
-| 15 Sha'ban | 15 Sha'ban | voluntary |
-| Six of Shawwal | any six days after Eid; 2–7 shown | voluntary |
-| White Days | 13th, 14th, 15th of every month | voluntary |
-| Eid al-Fitr | 1 Shawwal | **not permitted** |
-| Eid al-Adha | 10 Dhu al-Hijjah | **not permitted** |
-| Days of Tashreeq | 11–13 Dhu al-Hijjah | **not permitted** |
+Everything below is drawn and named on the calendar. The home screen offers a shorter list — the
+five marked **listed**, chosen so that no entry sits inside another. The rest are reached by
+picking their days on the calendar, which is the same alarm by a shorter route.
+
+| Occasion | When | Ruling | |
+| --- | --- | --- | --- |
+| Ramadan | the whole month | obligatory | **listed** |
+| Day of Arafah | 9 Dhu al-Hijjah | highly recommended | inside the first nine |
+| Ashura | 10 Muharram | highly recommended | inside 9 & 10 Muharram |
+| Tasu'a | 9 Muharram | voluntary | inside 9 & 10 Muharram |
+| 9 &amp; 10 Muharram | 9 and 10 Muharram, as one shortcut | highly recommended | **listed** |
+| First nine of Dhu al-Hijjah | 1–9 Dhu al-Hijjah | voluntary | **listed** |
+| Muharram | the whole month | voluntary | contains 9 & 10 Muharram |
+| 15 Sha'ban | 15 Sha'ban | voluntary | inside the White Days |
+| Six of Shawwal | any six days after Eid; 2–7 shown | voluntary | **listed** |
+| White Days | 13th, 14th, 15th of every month | voluntary | **listed** |
+| Eid al-Fitr | 1 Shawwal | **not permitted** | |
+| Eid al-Adha | 10 Dhu al-Hijjah | **not permitted** | |
+| Days of Tashreeq | 11–13 Dhu al-Hijjah | **not permitted** | |
 
 Ramadan supersedes every voluntary fast, and nothing voluntary is ever listed next to a day
-fasting is not permitted on. *9 & 10 Muharram* is a shortcut rather than a label: those two days
-are already drawn as Tasu'a and Ashura, so it never adds a third marker of its own.
+fasting is not permitted on. *9 & 10 Muharram* is offered rather than labelled: those two days are
+already drawn as Tasu'a and Ashura, so it never adds a third marker of its own.
 
 ## Look and feel
 
@@ -179,7 +186,7 @@ cd AlaramAPP
 app/src/main/java/com/afzal/rozaalarm/
 ├── alarm/      AlarmScheduler, receivers, the ringing foreground service
 ├── data/       Room entities (alarms, fast log, Hijri corrections), DAOs, repositories
-├── ui/         Splash, the two tabs, Ringing, Settings + the animated views
+├── ui/         Splash, the three tabs, Ringing, Settings + the animated views
 └── util/       Occurrences (repeat rules), Occasions (the fasting calendar), HijriDates,
                 Notifications, Prefs, TimeText
 ```

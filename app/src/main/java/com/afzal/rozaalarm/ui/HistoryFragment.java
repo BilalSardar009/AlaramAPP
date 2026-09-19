@@ -147,7 +147,7 @@ public class HistoryFragment extends Fragment implements HistoryMonthAdapter.Lis
             return;
         }
         if (requireActivity() instanceof MainActivity) {
-            ((MainActivity) requireActivity()).showCalendarMonth(group.year, group.month);
+            ((MainActivity) requireActivity()).showCalendarMonth(group.year, group.month, null);
         }
     }
 }

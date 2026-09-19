@@ -72,7 +72,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="2dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"

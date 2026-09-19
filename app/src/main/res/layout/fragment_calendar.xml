@@ -143,7 +143,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.8"
+                    android:layout_weight="1"
                     android:hint="@string/calendar_month_label">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -151,24 +151,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
-                        android:textSize="15sp"
-                        tools:ignore="LabelFor" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:hint="@string/calendar_year_label">
-
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/yearPicker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         tools:ignore="LabelFor" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -317,13 +300,34 @@
                     android:orientation="vertical"
                     android:padding="18dp">
 
-                    <TextView
-                        android:id="@+id/selectionTitle"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorOnSurface"
-                        tools:text="Saturday, 19 September 2026" />
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/selectionTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:textColor="?attr/colorOnSurface"
+                            tools:text="Saturday, 19 September 2026" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/clearButton"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:minWidth="0dp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="@string/calendar_clear_selection"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/selectionSubtitle"
@@ -369,110 +373,57 @@
                         android:id="@+id/alarmButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:minHeight="54dp"
+                        android:layout_marginTop="16dp"
+                        android:minHeight="56dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="@string/calendar_set_alarm"
-                        app:cornerRadius="27dp"
+                        app:cornerRadius="28dp"
                         app:icon="@drawable/ic_alarm"
                         app:iconGravity="textStart" />
 
+                    <!--
+                      Two buttons to a row rather than three. At three, "Mark as kept" had about
+                      70dp to sit in on a small phone and came out as "Mark as…".
+                    -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
+                        android:baselineAligned="false"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/recordButton"
-                            style="@style/Widget.Material3.Button.TextButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:minHeight="50dp"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
                             android:text="@string/day_sheet_record"
-                            android:textSize="12sp" />
+                            android:textSize="13sp"
+                            app:cornerRadius="25dp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/missedButton"
-                            style="@style/Widget.Material3.Button.TextButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
                             android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:minHeight="50dp"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
                             android:text="@string/day_sheet_missed"
-                            android:textSize="12sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/clearButton"
-                            style="@style/Widget.Material3.Button.TextButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/calendar_clear_selection"
-                            android:textSize="12sp" />
+                            android:textSize="13sp"
+                            app:cornerRadius="25dp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ============ 3 · Ready-made fasts ============ -->
-            <TextView
-                style="@style/Widget.Roza.SectionLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/calendar_step_shortcuts" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/calendar_shortcuts_hint"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/shortcutChips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:singleLine="false" />
-
-            <!-- ============ Your alarms ============ -->
-            <TextView
-                style="@style/Widget.Roza.SectionLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/calendar_alarms_title" />
-
-            <TextView
-                android:id="@+id/alarmsHint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/calendar_alarms_hint"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant" />
-
-            <TextView
-                android:id="@+id/alarmsEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/calendar_alarms_empty"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/alarmList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                tools:itemCount="2"
-                tools:listitem="@layout/item_alarm" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
