@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Text only. An icon in this bar has to stand for a whole sentence, and none of them did. -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_today"
-        android:icon="@drawable/ic_crescent"
-        android:title="@string/calendar_today"
-        app:iconTint="@color/ink"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/action_set_date"
-        android:icon="@drawable/ic_edit_calendar"
         android:title="@string/calendar_set_date"
-        app:iconTint="@color/ink"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_adjust_month"
         android:title="@string/calendar_adjust_month"

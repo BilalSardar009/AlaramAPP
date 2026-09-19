@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A title, an explanation and a list of choices in one dialog.
+
+  AlertDialog cannot do this on its own: setting a message makes it drop the list entirely, so a
+  dialog built with both shows the explanation and nothing to tap.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/choiceMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        tools:text="Pick the line that matches the calendar you follow." />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/choiceScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+
+        <RadioGroup
+            android:id="@+id/choiceOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="4dp" />
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

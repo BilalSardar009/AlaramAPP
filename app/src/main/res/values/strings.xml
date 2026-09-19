@@ -210,13 +210,9 @@
     <string name="calendar_legend_obligatory">Ramadan</string>
     <string name="calendar_legend_forbidden">Not permitted</string>
     <string name="calendar_gregorian_span">%1$s – %2$s</string>
-    <string name="calendar_month_corrected">Adjusted by %1$+d day</string>
     <string name="calendar_adjust_month">Adjust this month</string>
-    <string name="calendar_adjust_month_title">Adjust %1$s</string>
-    <string name="calendar_adjust_month_message">If this month was announced earlier or later than calculated, shift it here. This affects alarms that use the Islamic calendar.</string>
     <string name="calendar_adjust_none">No adjustment</string>
     <string name="calendar_no_occasion">No special fast on this day</string>
-    <string name="calendar_tap_hint">Tap days to select them — pick as many as you like, then set one alarm for all of them.</string>
 
     <!-- ======================= Day sheet ======================= -->
     <string name="day_sheet_record">Record a fast</string>
@@ -248,8 +244,6 @@
     <!-- ======================= Hijri correction ======================= -->
     <string name="settings_hijri_correct">Correct today\'s Hijri date</string>
     <string name="settings_hijri_correct_desc">Tell the app what today\'s date really is and it works out the adjustment for you.</string>
-    <string name="hijri_correct_applied">Adjusted by %1$+d day — today is now %2$s</string>
-    <string name="hijri_correct_impossible">That date is more than %1$d days away from the calculated one.</string>
 
     <!-- Day names used inside notification and summary text -->
     <string name="day_short_sun">Sun</string>
@@ -264,16 +258,11 @@
     <string name="calendar_month_label">Islamic month</string>
     <string name="calendar_year_label">Year</string>
     <string name="calendar_selection_none">No days selected</string>
-    <string name="calendar_selection_none_hint">Tap a day on the calendar above to begin.</string>
     <string name="calendar_selection_span">%1$s – %2$s</string>
     <string name="calendar_clear_selection">Clear</string>
     <string name="calendar_set_alarm">Set an alarm</string>
-    <string name="calendar_set_alarm_for">Set one alarm for %1$d days</string>
     <string name="calendar_some_forbidden">Some of these are Eid or Tashreeq days — fasting is not permitted on them, so they are left out.</string>
-    <string name="calendar_shortcuts_title">Fasting days</string>
-    <string name="calendar_shortcuts_hint">Tap a fast to set its alarm. Tap it again to change the time.</string>
     <string name="calendar_alarms_title">Your alarms</string>
-    <string name="calendar_alarms_empty">No alarms yet. Pick days above, or tap one of the fasting days.</string>
     <string name="calendar_set_date">Set today\'s date</string>
     <string name="alarm_label_single_day">Roza · %1$s</string>
     <string name="action_rename">Rename</string>
@@ -281,16 +270,37 @@
 
     <!-- Set today\'s Islamic date -->
     <string name="hijri_set_title">Set today\'s Islamic date</string>
-    <string name="hijri_set_message">The app reads today as %1$s. Set it to the date your own calendar shows and every other date moves with it.</string>
-    <string name="hijri_set_day">Day</string>
-    <string name="hijri_set_month">Month</string>
     <string name="hijri_set_apply">Set date</string>
-    <string name="hijri_set_preview">Islamic dates shift by %1$+d day.</string>
-    <string name="hijri_set_preview_none">This is the date the app already shows.</string>
 
     <!-- Muharram 9 and 10 -->
     <string name="occ_muharram_9_10_en">9 &amp; 10 Muharram</string>
     <string name="occ_muharram_9_10_ur">۹ اور ۱۰ محرم</string>
     <string name="occ_muharram_9_10_note_en">Tasu\'a and Ashura, kept together</string>
     <string name="occ_muharram_9_10_note_ur">تاسوعا اور عاشورا، دونوں روزے</string>
+
+    <!-- Sections of the calendar screen, each one saying what it is for -->
+    <string name="calendar_today_question">Is this the date your calendar shows?</string>
+    <string name="calendar_set_date">Change today\'s date</string>
+    <string name="calendar_step_month">1 · Choose a month</string>
+    <string name="calendar_step_days">2 · Pick your days</string>
+    <string name="calendar_step_days_hint">Tap any day on the calendar to select it, then tap more days to add them — they can be in different months. Tap a selected day again to take it off.</string>
+    <string name="calendar_step_shortcuts">3 · Or tap a ready-made fast</string>
+    <string name="calendar_shortcuts_hint">One tap sets an alarm that follows this fast every year, for good. Tap the same one again to change its time.</string>
+    <string name="calendar_alarms_hint">Tap an alarm to change its time. Press and hold it to rename or delete it.</string>
+    <string name="calendar_alarms_empty">No alarms yet. Pick days above, or tap one of the fasts.</string>
+    <string name="calendar_selection_none_hint">Tap a day on the calendar above to begin.</string>
+    <string name="calendar_set_alarm_for">Set one alarm for these %1$d days</string>
+    <string name="calendar_month_corrected">This month is shifted by %1$+d day</string>
+
+    <!-- The legend under the grid -->
+    <string name="calendar_marks_title">What the marks mean</string>
+    <string name="calendar_legend_kept">Fast kept</string>
+    <string name="calendar_legend_missed">Missed</string>
+    <string name="calendar_legend_alarm">Alarm set</string>
+
+    <!-- Set today\'s date -->
+    <string name="hijri_set_message">The app works the Islamic date out by calculation, and your local moon sighting may be a day or two away from it. Pick the line that matches the calendar you follow — everything else in the app moves with it.</string>
+    <string name="hijri_set_option_current">%1$s\n(what the app shows now)</string>
+    <string name="hijri_set_applied">Today is now %1$s</string>
+    <string name="calendar_adjust_month_message">If %1$s was announced a day earlier or later than the app calculates, shift just that month here. This is on top of the date you set for today.</string>
 </resources>

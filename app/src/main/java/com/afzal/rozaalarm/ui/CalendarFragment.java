@@ -66,8 +66,9 @@ public class CalendarFragment extends Fragment
 
     private static final int COLUMNS = 7;
 
-    /** How far either side of the shown year the year dropdown reaches. */
-    private static final int YEAR_SPAN = 5;
+    /** How far either side of this Hijri year the year dropdown reaches. */
+    private static final int YEARS_BACK = 3;
+    private static final int YEARS_FORWARD = 20;
 
     private FragmentCalendarBinding binding;
     private CalendarDayAdapter dayAdapter;
@@ -81,6 +82,9 @@ public class CalendarFragment extends Fragment
 
     /** Set while the dropdowns are being filled in, so their listeners do not fire back. */
     private boolean bindingPickers;
+
+    /** The Hijri year the first entry of the year dropdown stands for. */
+    private int yearListBase;
 
     private final List<CalendarDay> gridDays = new ArrayList<>();
     private final Set<Integer> keptDateKeys = new HashSet<>();
@@ -180,14 +184,23 @@ public class CalendarFragment extends Fragment
     private void wireControls() {
         binding.prevMonth.setOnClickListener(v -> stepMonth(-1));
         binding.nextMonth.setOnClickListener(v -> stepMonth(1));
+        binding.todayButton.setOnClickListener(v -> goToToday());
         binding.setDateButton.setOnClickListener(v -> showSetDateDialog());
+
+        // The month list never changes, so it is filled in once rather than on every redraw.
+        bindingPickers = true;
+        binding.monthPicker.setSimpleItems(HijriDates.MONTHS_EN.clone());
+        int baseYear = HijriDates.year(System.currentTimeMillis()) - YEARS_BACK;
+        String[] years = new String[YEARS_BACK + YEARS_FORWARD + 1];
+        for (int i = 0; i < years.length; i++) {
+            years[i] = String.valueOf(baseYear + i);
+        }
+        yearListBase = baseYear;
+        binding.yearPicker.setSimpleItems(years);
+        bindingPickers = false;
 
         binding.toolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.action_today) {
-                goToToday();
-                return true;
-            }
             if (id == R.id.action_set_date) {
                 showSetDateDialog();
                 return true;
@@ -215,7 +228,7 @@ public class CalendarFragment extends Fragment
             if (bindingPickers) {
                 return;
             }
-            shownYear = (shownYear - YEAR_SPAN) + position;
+            shownYear = yearListBase + position;
             rebuildMonth();
         });
 
@@ -342,14 +355,7 @@ public class CalendarFragment extends Fragment
 
     private void updateMonthHeader(long monthStart, int monthLength) {
         bindingPickers = true;
-        binding.monthPicker.setSimpleItems(HijriDates.MONTHS_EN);
         binding.monthPicker.setText(HijriDates.monthNameEnglish(shownMonth), false);
-
-        String[] years = new String[YEAR_SPAN * 2 + 1];
-        for (int i = 0; i < years.length; i++) {
-            years[i] = String.valueOf(shownYear - YEAR_SPAN + i);
-        }
-        binding.yearPicker.setSimpleItems(years);
         binding.yearPicker.setText(String.valueOf(shownYear), false);
         bindingPickers = false;
 
@@ -739,7 +745,7 @@ public class CalendarFragment extends Fragment
                 return;
             }
             goToToday();
-            showSnack(getString(R.string.hijri_correct_applied, offset,
+            showSnack(getString(R.string.hijri_set_applied,
                     HijriDates.formatEnglish(System.currentTimeMillis())));
         });
     }
@@ -760,20 +766,15 @@ public class CalendarFragment extends Fragment
         final int year = shownYear;
         final int month = shownMonth;
 
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.calendar_adjust_month_title,
-                        HijriDates.monthTitleEnglish(year, month)))
-                .setMessage(R.string.calendar_adjust_month_message)
-                .setSingleChoiceItems(options, current, (dialog, which) -> {
-                    dialog.dismiss();
-                    corrections.setMonthOffset(year, month, which - span, () -> {
-                        if (isAdded()) {
-                            rebuildMonth();
-                        }
-                    });
-                })
-                .setNegativeButton(R.string.perm_later, null)
-                .show();
+        ChoiceDialog.show(requireContext(), R.string.calendar_adjust_month,
+                getString(R.string.calendar_adjust_month_message,
+                        HijriDates.monthTitleEnglish(year, month)),
+                options, current, R.string.hijri_set_apply,
+                index -> corrections.setMonthOffset(year, month, index - span, () -> {
+                    if (isAdded()) {
+                        rebuildMonth();
+                    }
+                }));
     }
 
     // ---- helpers ------------------------------------------------------------------------------
@@ -818,27 +819,50 @@ public class CalendarFragment extends Fragment
     }
 
     private void buildLegend() {
-        binding.legendRow.removeAllViews();
-        addLegendItem(R.string.calendar_legend_obligatory, Occasion.Category.OBLIGATORY);
-        addLegendItem(R.string.calendar_legend_recommended, Occasion.Category.RECOMMENDED);
-        addLegendItem(R.string.calendar_legend_forbidden, Occasion.Category.FORBIDDEN);
+        binding.legendColours.removeAllViews();
+        addLegendDot(R.string.calendar_legend_obligatory, Occasion.Category.OBLIGATORY);
+        addLegendDot(R.string.calendar_legend_recommended, Occasion.Category.RECOMMENDED);
+        addLegendDot(R.string.calendar_legend_forbidden, Occasion.Category.FORBIDDEN);
+
+        // The marks on a day mean nothing on their own, so each one is spelled out.
+        binding.legendMarkers.removeAllViews();
+        addLegendIcon(R.drawable.ic_check_circle, R.color.brand_green,
+                R.string.calendar_legend_kept);
+        addLegendIcon(R.drawable.ic_block, R.color.danger, R.string.calendar_legend_missed);
+        addLegendIcon(R.drawable.ic_alarm, R.color.brand_gold, R.string.calendar_legend_alarm);
     }
 
-    private void addLegendItem(int labelRes, @NonNull Occasion.Category category) {
+    private void addLegendDot(int labelRes, @NonNull Occasion.Category category) {
+        View dot = new View(requireContext());
+        dot.setBackgroundResource(R.drawable.bg_dot);
+        dot.getBackground().setTint(MaterialColors.getColor(binding.getRoot(),
+                OccasionText.categoryColorAttr(category)));
+        int size = Math.round(getResources().getDisplayMetrics().density * 8);
+        LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(size, size);
+        dotParams.rightMargin = size;
+        dot.setLayoutParams(dotParams);
+        binding.legendColours.addView(legendItem(dot, labelRes));
+    }
+
+    private void addLegendIcon(int iconRes, int tintRes, int labelRes) {
+        android.widget.ImageView icon = new android.widget.ImageView(requireContext());
+        icon.setImageResource(iconRes);
+        icon.setImageTintList(
+                androidx.core.content.ContextCompat.getColorStateList(requireContext(), tintRes));
+        int size = Math.round(getResources().getDisplayMetrics().density * 14);
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(size, size);
+        iconParams.rightMargin = Math.round(getResources().getDisplayMetrics().density * 5);
+        icon.setLayoutParams(iconParams);
+        binding.legendMarkers.addView(legendItem(icon, labelRes));
+    }
+
+    @NonNull
+    private LinearLayout legendItem(@NonNull View mark, int labelRes) {
         LinearLayout item = new LinearLayout(requireContext());
         item.setOrientation(LinearLayout.HORIZONTAL);
         item.setGravity(Gravity.CENTER_VERTICAL);
         item.setLayoutParams(new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-
-        View dot = new View(requireContext());
-        dot.setBackgroundResource(R.drawable.bg_dot);
-        dot.getBackground().setTint(MaterialColors.getColor(binding.getRoot(),
-                OccasionText.categoryColorAttr(category)));
-        int size = Math.round(getResources().getDisplayMetrics().density * 7);
-        LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(size, size);
-        dotParams.rightMargin = size;
-        dot.setLayoutParams(dotParams);
 
         TextView label = new TextView(requireContext());
         label.setText(labelRes);
@@ -848,8 +872,8 @@ public class CalendarFragment extends Fragment
         label.setTextColor(MaterialColors.getColor(binding.getRoot(),
                 com.google.android.material.R.attr.colorOnSurfaceVariant));
 
-        item.addView(dot);
+        item.addView(mark);
         item.addView(label);
-        binding.legendRow.addView(item);
+        return item;
     }
 }

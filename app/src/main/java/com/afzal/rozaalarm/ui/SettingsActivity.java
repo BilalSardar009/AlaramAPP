@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
         HijriDateDialog.show(this, corrections, offset -> {
             updateHijriPreview();
             Snackbar.make(binding.settingsRoot,
-                    getString(R.string.hijri_correct_applied, offset,
+                    getString(R.string.hijri_set_applied,
                             HijriDates.formatEnglish(System.currentTimeMillis())),
                     Snackbar.LENGTH_LONG).show();
         });
